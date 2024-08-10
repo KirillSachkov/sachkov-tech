@@ -1,4 +1,6 @@
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Domain.Module;
 
 namespace SachkovTech.API.Controllers;
 
@@ -6,27 +8,29 @@ namespace SachkovTech.API.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
+    [HttpGet]
+    public IActionResult Get(string title, string description)
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        var moduleResult = Module.Create(title, description);
 
-    private readonly ILogger<WeatherForecastController> _logger;
+        if (moduleResult.IsFailure)
+            return BadRequest(moduleResult.Error);
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
+        var result = Save(moduleResult.Value);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok();
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    public Result Save(Module module)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        if (true)
+        {
+            return Result.Success();
+        }
+
+        return Result.Failure("fdjslkfsj");
     }
 }
