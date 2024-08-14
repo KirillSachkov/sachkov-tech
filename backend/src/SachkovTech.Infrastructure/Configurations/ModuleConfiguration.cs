@@ -18,13 +18,21 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
                 id => id.Value,
                 value => ModuleId.Create(value));
 
-        builder.Property(m => m.Title)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        builder.ComplexProperty(m => m.Title, tb =>
+        {
+            tb.Property(t => t.Value)
+                .IsRequired()
+                .HasMaxLength(Title.MAX_LENGTH)
+                .HasColumnName("title");
+        });
 
-        builder.Property(m => m.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(m => m.Description, tb =>
+        {
+            tb.Property(d => d.Value)
+                .IsRequired()
+                .HasMaxLength(Description.MAX_LENGTH)
+                .HasColumnName("description");
+        });
 
         builder.HasMany(m => m.Issues)
             .WithOne()

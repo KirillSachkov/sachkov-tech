@@ -7,11 +7,9 @@ public record IssueId
         Value = value;
     }
 
-    public Guid Value { get; }
+    public Guid Value { get; init; }
 
-    public static IssueId NewModuleId() => new(Guid.NewGuid());
-
+    public static IssueId NewIssueId() => new(Guid.NewGuid());
     public static IssueId Empty() => new(Guid.Empty);
-
     public static IssueId Create(Guid id) => new(id);
 }

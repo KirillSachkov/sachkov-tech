@@ -10,7 +10,7 @@ public record File
     }
 
     public string PathToStorage { get; }
-
+    
     public static Result<File> Create(string pathToStorage)
     {
         if (string.IsNullOrWhiteSpace(pathToStorage))

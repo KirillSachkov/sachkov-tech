@@ -2,7 +2,7 @@ using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.Modules;
 
-public sealed class Module : Shared.Entity<ModuleId>
+public sealed class Module : Entity<ModuleId>
 {
     private readonly List<Issue> _issues = [];
 
@@ -11,16 +11,16 @@ public sealed class Module : Shared.Entity<ModuleId>
     {
     }
 
-    private Module(ModuleId moduleId, string title, string description)
+    private Module(ModuleId moduleId, Title title, Description description)
         : base(moduleId)
     {
         Title = title;
         Description = description;
     }
 
-    public string Title { get; private set; } = default!;
+    public Title Title { get; private set; } = default!;
 
-    public string Description { get; private set; } = default!;
+    public Description Description { get; private set; } = default!;
 
     public IReadOnlyList<Issue> Issues => _issues;
 
@@ -32,16 +32,8 @@ public sealed class Module : Shared.Entity<ModuleId>
         _issues.Add(issue);
     }
 
-    public static Result<Module> Create(ModuleId moduleId, string title, string description)
+    public static Result<Module> Create(ModuleId moduleId, Title title, Description description)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            return "Title can not be empty";
-
-        if (string.IsNullOrWhiteSpace(description))
-            return "Description can not be empty";
-
-        var module = new Module(moduleId, title, description);
-
-        return module;
+        return new Module(moduleId, title, description);
     }
 }
