@@ -18,16 +18,29 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                 id => id.Value,
                 value => IssueId.Create(value));
 
-        builder.Property(i => i.LessonId)
-            .IsRequired(false);
+        builder.ComplexProperty(i => i.LessonId,
+            lb =>
+            {
+                lb.Property(l => l.Value)
+                    .IsRequired(false)
+                    .HasColumnName("lesson_id");
+            });
 
-        builder.Property(i => i.Title)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        builder.ComplexProperty(m => m.Title, tb =>
+        {
+            tb.Property(t => t.Value)
+                .IsRequired()
+                .HasMaxLength(Title.MAX_LENGTH)
+                .HasColumnName("title");
+        });
 
-        builder.Property(i => i.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(m => m.Description, tb =>
+        {
+            tb.Property(d => d.Value)
+                .IsRequired()
+                .HasMaxLength(Description.MAX_LENGTH)
+                .HasColumnName("description");
+        });
 
         builder.HasOne(i => i.ParentIssue)
             .WithMany(p => p.SubIssues)

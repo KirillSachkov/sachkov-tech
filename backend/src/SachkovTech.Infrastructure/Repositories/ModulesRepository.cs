@@ -1,10 +1,12 @@
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using SachkovTech.Application.Modules;
 using SachkovTech.Domain.Modules;
 using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Infrastructure.Repositories;
 
-public class ModulesRepository
+public class ModulesRepository : IModulesRepository
 {
     private readonly ApplicationDbContext _dbContext;
 
@@ -22,7 +24,7 @@ public class ModulesRepository
         return module.Id;
     }
 
-    public async Task<Result<Module>> GetById(ModuleId moduleId)
+    public async Task<Result<Module, Error>> GetById(ModuleId moduleId)
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
@@ -30,7 +32,20 @@ public class ModulesRepository
             .FirstOrDefaultAsync(m => m.Id == moduleId);
 
         if (module is null)
-            return "Module not found";
+            return Errors.General.NotFound(moduleId);
+
+        return module;
+    }
+
+    public async Task<Result<Module, Error>> GetByTitle(Title title)
+    {
+        var module = await _dbContext.Modules
+            .Include(m => m.Issues)
+            .ThenInclude(i => i.SubIssues)
+            .FirstOrDefaultAsync(m => m.Title == title);
+
+        if (module is null)
+            return Errors.General.NotFound();
 
         return module;
     }

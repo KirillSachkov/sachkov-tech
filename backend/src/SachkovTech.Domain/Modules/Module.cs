@@ -1,8 +1,9 @@
+using CSharpFunctionalExtensions;
 using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.Modules;
 
-public sealed class Module : Entity<ModuleId>
+public sealed class Module : Shared.Entity<ModuleId>
 {
     private readonly List<Issue> _issues = [];
 
@@ -11,7 +12,7 @@ public sealed class Module : Entity<ModuleId>
     {
     }
 
-    private Module(ModuleId moduleId, Title title, Description description)
+    public Module(ModuleId moduleId, Title title, Description description)
         : base(moduleId)
     {
         Title = title;
@@ -26,14 +27,11 @@ public sealed class Module : Entity<ModuleId>
 
     public int GetNumberOfIssues() => _issues.Count;
 
-    public void AddIssue(Issue issue)
+    public UnitResult<Error> AddIssue(Issue issue)
     {
         // валидация
         _issues.Add(issue);
-    }
 
-    public static Result<Module> Create(ModuleId moduleId, Title title, Description description)
-    {
-        return new Module(moduleId, title, description);
+        return Result.Success<Error>();
     }
 }

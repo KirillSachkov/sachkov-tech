@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.Modules;
@@ -13,10 +14,10 @@ public record Title
         Value = value;
     }
 
-    public static Result<Title> Create(string value)
+    public static Result<Title, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value) || value.Length > MAX_LENGTH)
-            return "Title is invalid";
+            return Errors.General.ValueIsInvalid("Title");
 
         return new Title(value);
     }

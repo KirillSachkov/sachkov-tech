@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.Modules;
@@ -13,10 +14,10 @@ public record Description
         Value = value;
     }
 
-    public static Result<Description> Create(string value)
+    public static Result<Description, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value) || value.Length > MAX_LENGTH)
-            return "Description is invalid";
+            return Errors.General.ValueIsInvalid("Description");
 
         return new Description(value);
     }
