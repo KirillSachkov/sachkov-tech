@@ -27,10 +27,10 @@ public sealed class Module : Shared.Entity<ModuleId>
 
     public int GetNumberOfIssues() => _issues.Count;
 
-    public UnitResult<Error> AddIssue(Issue issue)
+    public UnitResult<Error> AddIssues(IEnumerable<Issue> issues)
     {
         // валидация
-        _issues.Add(issue);
+        _issues.AddRange(issues);
 
         return Result.Success<Error>();
     }

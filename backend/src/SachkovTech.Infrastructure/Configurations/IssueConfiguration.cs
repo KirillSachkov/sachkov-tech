@@ -48,13 +48,13 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.OwnsOne(i => i.Details, ib =>
+        builder.OwnsOne(i => i.FilesList, fb =>
         {
-            ib.ToJson();
+            fb.ToJson();
 
-            ib.OwnsMany(d => d.Files, fb =>
+            fb.OwnsMany(d => d.Files, fileBuilder =>
             {
-                fb.Property(f => f.PathToStorage)
+                fileBuilder.Property(f => f.PathToStorage)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
             });

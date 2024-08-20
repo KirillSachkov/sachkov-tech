@@ -16,14 +16,13 @@ public class Issue : Shared.Entity<IssueId>
         Title title,
         Description description,
         LessonId lessonId,
-        Issue? parentIssue,
-        IssueDetails details) : base(id)
+        Issue? parentIssue) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
         ParentIssue = parentIssue;
-        Details = details;
+        // Details = details;
     }
 
     public Title Title { get; private set; } = default!;
@@ -34,10 +33,10 @@ public class Issue : Shared.Entity<IssueId>
     public Issue? ParentIssue { get; private set; }
     public IReadOnlyList<Issue> SubIssues => _subIssues;
 
-    public IssueDetails? Details { get; private set; }
+    public FilesList? FilesList { get; private set; }
 
-    public void AddIssueDetails(IssueDetails details) =>
-        Details = details;
+    public void UpdateFilesList(FilesList filesList) =>
+        FilesList = filesList;
 
     public void AddSubIssue(Issue issue)
     {
@@ -50,9 +49,8 @@ public class Issue : Shared.Entity<IssueId>
         Title title,
         Description description,
         LessonId lessonId,
-        Issue? parentIssue,
-        IssueDetails details)
+        Issue? parentIssue)
     {
-        return new Issue(id, title, description, lessonId, parentIssue, details);
+        return new Issue(id, title, description, lessonId, parentIssue);
     }
 }
