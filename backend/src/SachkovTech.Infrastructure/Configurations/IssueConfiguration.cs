@@ -50,7 +50,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
 
         builder.OwnsOne(i => i.FilesList, fb =>
         {
-            fb.ToJson();
+            fb.ToJson("files");
 
             fb.OwnsMany(d => d.Files, fileBuilder =>
             {

@@ -1,5 +1,3 @@
-using SachkovTech.Domain.Shared;
-
 namespace SachkovTech.API.Response;
 
 public record ResponseError(string? ErrorCode, string? ErrorMessage, string? InvalidField);
