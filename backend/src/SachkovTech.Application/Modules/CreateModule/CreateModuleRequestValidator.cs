@@ -1,4 +1,3 @@
-using System.Data;
 using FluentValidation;
 using SachkovTech.Application.Validation;
 using SachkovTech.Domain.Modules;

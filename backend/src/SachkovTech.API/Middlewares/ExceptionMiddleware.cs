@@ -28,7 +28,6 @@ public class ExceptionMiddleware
             
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            
             await context.Response.WriteAsJsonAsync(envelope);
         }
     }

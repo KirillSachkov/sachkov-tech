@@ -35,7 +35,7 @@ public class CreateModuleHandler
         var moduleToCreate = new Module(moduleId, title, description);
 
         await _modulesRepository.Add(moduleToCreate, cancellationToken);
-        
+
         _logger.LogInformation("Created module {title} with id {moduleId}", title, moduleId);
 
         return (Guid)moduleToCreate.Id;
