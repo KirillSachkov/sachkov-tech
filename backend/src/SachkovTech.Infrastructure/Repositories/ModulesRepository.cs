@@ -24,12 +24,32 @@ public class ModulesRepository : IModulesRepository
         return module.Id;
     }
 
-    public async Task<Result<Module, Error>> GetById(ModuleId moduleId)
+    public async Task<Guid> Save(Module module, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Modules.Attach(module);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return module.Id.Value;
+    }
+
+    public async Task<Guid> Delete(Module module, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Modules.Remove(module);
+        
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return module.Id;
+    }
+
+    public async Task<Result<Module, Error>> GetById(
+        ModuleId moduleId, CancellationToken cancellationToken = default)
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
             .ThenInclude(i => i.SubIssues)
-            .FirstOrDefaultAsync(m => m.Id == moduleId);
+            .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
+
+        var entries1 = _dbContext.ChangeTracker.Entries<Module>();
 
         if (module is null)
             return Errors.General.NotFound(moduleId);
@@ -37,12 +57,13 @@ public class ModulesRepository : IModulesRepository
         return module;
     }
 
-    public async Task<Result<Module, Error>> GetByTitle(Title title)
+    public async Task<Result<Module, Error>> GetByTitle(
+        Title title, CancellationToken cancellationToken = default)
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
             .ThenInclude(i => i.SubIssues)
-            .FirstOrDefaultAsync(m => m.Title == title);
+            .FirstOrDefaultAsync(m => m.Title == title, cancellationToken);
 
         if (module is null)
             return Errors.General.NotFound();

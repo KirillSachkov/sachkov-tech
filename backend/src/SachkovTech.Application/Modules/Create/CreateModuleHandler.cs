@@ -25,7 +25,7 @@ public class CreateModuleHandler
         var title = Title.Create(request.Title).Value;
         var description = Description.Create(request.Description).Value;
 
-        var module = await _modulesRepository.GetByTitle(title);
+        var module = await _modulesRepository.GetByTitle(title, cancellationToken);
 
         if (module.IsSuccess)
             return Errors.Module.AlreadyExist();

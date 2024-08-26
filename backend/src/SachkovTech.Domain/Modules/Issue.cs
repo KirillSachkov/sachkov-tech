@@ -1,9 +1,12 @@
 using CSharpFunctionalExtensions;
+using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.Modules;
 
-public class Issue : Shared.Entity<IssueId>
+public class Issue : Shared.Entity<IssueId>, ISoftDeletable
 {
+    private bool _isDeleted = false;
+
     private readonly List<Issue> _subIssues = [];
 
     //ef core
@@ -52,5 +55,19 @@ public class Issue : Shared.Entity<IssueId>
         Issue? parentIssue)
     {
         return new Issue(id, title, description, lessonId, parentIssue);
+    }
+
+    public void Delete()
+    {
+        if (_isDeleted == false)
+        {
+            _isDeleted = true;
+        }
+    }
+
+    public void Restore()
+    {
+        if (_isDeleted)
+            _isDeleted = false;
     }
 }
