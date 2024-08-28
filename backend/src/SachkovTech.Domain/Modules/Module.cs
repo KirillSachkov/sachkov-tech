@@ -37,16 +37,20 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
     public void Delete()
     {
-        if (_isDeleted == false)
-        {
-            _isDeleted = true;
-        }
+        if (_isDeleted) return;
+
+        _isDeleted = true;
+        foreach (var issue in _issues)
+            issue.Delete();
     }
 
     public void Restore()
     {
-        if (_isDeleted)
-            _isDeleted = false;
+        if (!_isDeleted) return;
+
+        _isDeleted = false;
+        foreach (var issue in _issues)
+            issue.Restore();
     }
 
     public UnitResult<Error> AddIssues(IEnumerable<Issue> issues)

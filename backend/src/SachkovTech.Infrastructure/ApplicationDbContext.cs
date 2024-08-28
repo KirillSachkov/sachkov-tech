@@ -19,7 +19,7 @@ public class ApplicationDbContext(IConfiguration configuration) : DbContext
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
 
-        optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
+        // optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

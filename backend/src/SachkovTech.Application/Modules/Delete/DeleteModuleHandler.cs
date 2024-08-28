@@ -24,8 +24,10 @@ public class DeleteModuleHandler
         var moduleResult = await _modulesRepository.GetById(request.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)
             return moduleResult.Error;
+        
+        moduleResult.Value.Delete();
 
-        var result = await _modulesRepository.Delete(moduleResult.Value, cancellationToken);
+        var result = await _modulesRepository.Save(moduleResult.Value, cancellationToken);
 
         _logger.LogInformation("Updated deleted with id {moduleId}", request.ModuleId);
 
