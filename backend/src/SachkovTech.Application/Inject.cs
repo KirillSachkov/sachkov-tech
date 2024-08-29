@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Application.Modules.CreateModule;
 using SachkovTech.Application.Modules.Delete;
 using SachkovTech.Application.Modules.UpdateMainInfo;
@@ -14,6 +15,7 @@ public static class Inject
         services.AddScoped<CreateModuleHandler>();
         services.AddScoped<UpdateMainInfoHandler>();
         services.AddScoped<DeleteModuleHandler>();
+        services.AddScoped<AddIssueHandler>();
 
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
 

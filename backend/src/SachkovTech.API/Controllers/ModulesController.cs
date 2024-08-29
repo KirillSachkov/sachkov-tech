@@ -1,6 +1,8 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.API.Extensions;
+using SachkovTech.Application.FileProvider;
+using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Application.Modules.CreateModule;
 using SachkovTech.Application.Modules.Delete;
 using SachkovTech.Application.Modules.UpdateMainInfo;
@@ -64,6 +66,25 @@ public class ModulesController : ApplicationController
 
         var result = await handler.Handle(request, cancellationToken);
 
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("issue")]
+    public async Task<ActionResult> AddIssue(
+        IFormFile file,
+        [FromServices] AddIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        await using var stream = file.OpenReadStream();
+
+        var path = Guid.NewGuid().ToString();
+
+        var fileData = new FileData(stream, "photos", path);
+
+        var result = await handler.Handle(fileData, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 
