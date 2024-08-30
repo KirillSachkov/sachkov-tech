@@ -1,10 +1,11 @@
 using CSharpFunctionalExtensions;
-using FluentValidation;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Domain.Modules;
+using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
+using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-namespace SachkovTech.Application.Modules.CreateModule;
+namespace SachkovTech.Application.Modules.Create;
 
 public class CreateModuleHandler
 {

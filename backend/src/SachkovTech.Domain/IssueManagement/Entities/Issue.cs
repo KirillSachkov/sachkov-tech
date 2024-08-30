@@ -1,7 +1,10 @@
 using CSharpFunctionalExtensions;
+using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
+using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-namespace SachkovTech.Domain.Modules;
+namespace SachkovTech.Domain.IssueManagement.Entities;
 
 public class Issue : Shared.Entity<IssueId>, ISoftDeletable
 {
@@ -60,9 +63,7 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
     public void Delete()
     {
         if (_isDeleted == false)
-        {
             _isDeleted = true;
-        }
     }
 
     public void Restore()

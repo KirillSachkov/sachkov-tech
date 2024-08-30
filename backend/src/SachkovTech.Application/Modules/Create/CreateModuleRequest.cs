@@ -1,4 +1,4 @@
-namespace SachkovTech.Application.Modules.CreateModule;
+namespace SachkovTech.Application.Modules.Create;
 
 public record CreateModuleRequest(int Years, FullNameDto FullName, string Title, string Description);
 

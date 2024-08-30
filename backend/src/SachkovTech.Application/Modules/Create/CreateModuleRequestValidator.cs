@@ -1,9 +1,9 @@
 using FluentValidation;
 using SachkovTech.Application.Validation;
-using SachkovTech.Domain.Modules;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
 
-namespace SachkovTech.Application.Modules.CreateModule;
+namespace SachkovTech.Application.Modules.Create;
 
 public class CreateModuleRequestValidator : AbstractValidator<CreateModuleRequest>
 {

@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 
-namespace SachkovTech.Domain.Shared;
+namespace SachkovTech.Domain.Shared.ValueObjects;
 
 public record FullName
 {

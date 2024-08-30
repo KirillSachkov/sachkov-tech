@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using SachkovTech.Domain.Shared;
 
-namespace SachkovTech.Domain.Modules;
+namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
 public record File
 {

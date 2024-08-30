@@ -1,4 +1,4 @@
-namespace SachkovTech.Domain.Modules;
+namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 public record ModuleId
 {

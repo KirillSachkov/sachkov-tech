@@ -1,8 +1,10 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Application.Modules;
-using SachkovTech.Domain.Modules;
+using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
+using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Infrastructure.Repositories;
 

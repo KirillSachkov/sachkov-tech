@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Domain.Modules;
+using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Infrastructure.Interceptors;
 
 namespace SachkovTech.Infrastructure;

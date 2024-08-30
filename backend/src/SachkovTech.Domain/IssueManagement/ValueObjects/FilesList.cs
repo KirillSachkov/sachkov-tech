@@ -1,4 +1,4 @@
-namespace SachkovTech.Domain.Modules;
+namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
 public record FilesList
 {

@@ -1,7 +1,10 @@
 using CSharpFunctionalExtensions;
+using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
+using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-namespace SachkovTech.Domain.Modules;
+namespace SachkovTech.Domain.IssueManagement;
 
 public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 {
@@ -37,9 +40,9 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
     public void Delete()
     {
-        if (_isDeleted) return;
+        if (_isDeleted == false)
+            _isDeleted = true;
 
-        _isDeleted = true;
         foreach (var issue in _issues)
             issue.Delete();
     }
@@ -53,11 +56,10 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
             issue.Restore();
     }
 
-    public UnitResult<Error> AddIssues(IEnumerable<Issue> issues)
+    public UnitResult<Error> AddIssue(Issue issue)
     {
         // валидация
-        _issues.AddRange(issues);
-
+        _issues.Add(issue);
         return Result.Success<Error>();
     }
 }

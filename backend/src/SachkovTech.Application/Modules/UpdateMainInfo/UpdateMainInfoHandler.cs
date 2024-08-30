@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Domain.Modules;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
 
 namespace SachkovTech.Application.Modules.UpdateMainInfo;
 

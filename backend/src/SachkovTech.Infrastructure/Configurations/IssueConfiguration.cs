@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SachkovTech.Domain.Modules;
+using SachkovTech.Domain.IssueManagement;
+using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.Shared;
+using SachkovTech.Domain.Shared.ValueObjects;
+using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Infrastructure.Configurations;
 
