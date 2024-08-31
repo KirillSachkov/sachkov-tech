@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using SachkovTech.API.Contracts;
 using SachkovTech.API.Extensions;
 using SachkovTech.Application.FileProvider;
 using SachkovTech.Application.Modules.AddIssue;
@@ -72,22 +73,42 @@ public class ModulesController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpPost("issue")]
+    [HttpPost("{id:guid}/issue")]
     public async Task<ActionResult> AddIssue(
-        IFormFile file,
+        [FromRoute] Guid id,
+        [FromForm] AddIssueRequest request,
         [FromServices] AddIssueHandler handler,
         CancellationToken cancellationToken)
     {
-        await using var stream = file.OpenReadStream();
+        List<FileDto> filesDto = [];
+        try
+        {
+            foreach (var file in request.Files)
+            {
+                var stream = file.OpenReadStream();
+                filesDto.Add(new FileDto(
+                    stream, file.FileName, file.ContentType));
+            }
 
-        var path = Guid.NewGuid().ToString();
+            var command = new AddIssueCommand(
+                id,
+                request.Title,
+                request.Description,
+                filesDto);
 
-        var fileData = new FileData(stream, "photos", path);
+            var result = await handler.Handle(command, cancellationToken);
 
-        var result = await handler.Handle(fileData, cancellationToken);
-        if (result.IsFailure)
-            return result.Error.ToResponse();
+            if (result.IsFailure)
+                return result.Error.ToResponse();
 
-        return Ok(result.Value);
+            return Ok(result.Value);
+        }
+        finally
+        {
+            foreach (var fileDto in filesDto)
+            {
+                await fileDto.Content.DisposeAsync();
+            }
+        }
     }
 }

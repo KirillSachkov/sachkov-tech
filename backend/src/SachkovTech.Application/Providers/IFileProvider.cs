@@ -6,6 +6,7 @@ namespace SachkovTech.Application.Providers;
 
 public interface IFileProvider
 {
-    Task<Result<string, Error>> UploadFile(
-        FileData fileData, CancellationToken cancellationToken = default);
+    Task<UnitResult<Error>> UploadFiles(
+        FileData fileData,
+        CancellationToken cancellationToken = default);
 }

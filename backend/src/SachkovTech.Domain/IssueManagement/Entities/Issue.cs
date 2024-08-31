@@ -17,18 +17,19 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
     {
     }
 
-    private Issue(
+    public Issue(
         IssueId id,
         Title title,
         Description description,
         LessonId lessonId,
-        Issue? parentIssue) : base(id)
+        Issue? parentIssue,
+        FilesList filesList) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
         ParentIssue = parentIssue;
-        // Details = details;
+        FilesList = filesList;
     }
 
     public Title Title { get; private set; } = default!;
@@ -48,16 +49,6 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
     {
         // logic and validation
         _subIssues.Add(issue);
-    }
-
-    public static Result<Issue> Create(
-        IssueId id,
-        Title title,
-        Description description,
-        LessonId lessonId,
-        Issue? parentIssue)
-    {
-        return new Issue(id, title, description, lessonId, parentIssue);
     }
 
     public void Delete()

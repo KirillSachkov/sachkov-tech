@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Domain.IssueManagement.Entities;
+using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
@@ -58,6 +59,9 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             fb.OwnsMany(d => d.Files, fileBuilder =>
             {
                 fileBuilder.Property(f => f.PathToStorage)
+                    .HasConversion(
+                        p => p.Path,
+                        value => FilePath.Create(value).Value)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
             });

@@ -58,7 +58,7 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
     public UnitResult<Error> AddIssue(Issue issue)
     {
-        // валидация
+        // валидация + логика
         _issues.Add(issue);
         return Result.Success<Error>();
     }

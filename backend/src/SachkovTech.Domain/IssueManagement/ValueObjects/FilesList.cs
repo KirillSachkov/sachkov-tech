@@ -6,10 +6,10 @@ public record FilesList
     {
     }
 
-    public FilesList(IEnumerable<File> files)
+    public FilesList(IEnumerable<IssueFile> files)
     {
         Files = files.ToList();
     }
 
-    public IReadOnlyList<File> Files { get; } = [];
+    public IReadOnlyList<IssueFile> Files { get; }
 }
