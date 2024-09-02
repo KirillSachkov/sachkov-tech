@@ -1,4 +1,6 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Database;
 using SachkovTech.Application.FileProvider;
 using SachkovTech.Application.Providers;
 using SachkovTech.Domain.IssueManagement.Entities;
@@ -15,70 +17,88 @@ public class AddIssueHandler
 
     private readonly IFileProvider _fileProvider;
     private readonly IModulesRepository _modulesRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<AddIssueHandler> _logger;
 
     public AddIssueHandler(
         IFileProvider fileProvider,
-        IModulesRepository modulesRepository)
+        IModulesRepository modulesRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<AddIssueHandler> logger)
     {
         _fileProvider = fileProvider;
         _modulesRepository = modulesRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<Result<Guid, Error>> Handle(
         AddIssueCommand command,
         CancellationToken cancellationToken = default)
     {
-        var moduleResult = await _modulesRepository
-            .GetById(ModuleId.Create(command.ModuleId), cancellationToken);
+        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
 
-        if (moduleResult.IsFailure)
-            return moduleResult.Error;
-
-        var issueId = IssueId.NewIssueId();
-        var title = Title.Create(command.Title).Value;
-        var description = Description.Create(command.Description).Value;
-        var lessonId = LessonId.Empty();
-
-        List<FileContent> fileContents = [];
-        foreach (var file in command.Files)
+        try
         {
-            var extension = Path.GetExtension(file.FileName);
+            var moduleResult = await _modulesRepository
+                .GetById(ModuleId.Create(command.ModuleId), cancellationToken);
 
-            var filePath = FilePath.Create(Guid.NewGuid(), extension);
-            if (filePath.IsFailure)
-                return filePath.Error;
+            if (moduleResult.IsFailure)
+                return moduleResult.Error;
 
-            var fileContent = new FileContent(
-                file.Content, filePath.Value.Path);
+            var issueId = IssueId.NewIssueId();
+            var title = Title.Create(command.Title).Value;
+            var description = Description.Create(command.Description).Value;
+            var lessonId = LessonId.Empty();
 
-            fileContents.Add(fileContent);
+            List<FileData> filesData = [];
+            foreach (var file in command.Files)
+            {
+                var extension = Path.GetExtension(file.FileName);
+
+                var filePath = FilePath.Create(Guid.NewGuid(), extension);
+                if (filePath.IsFailure)
+                    return filePath.Error;
+
+                var fileContent = new FileData(file.Content, filePath.Value, BUCKET_NAME);
+
+                filesData.Add(fileContent);
+            }
+
+            var issueFiles = filesData
+                .Select(f => f.FilePath)
+                .Select(f => new IssueFile(f))
+                .ToList();
+
+            var issue = new Issue(
+                issueId,
+                title,
+                description,
+                lessonId,
+                null,
+                issueFiles);
+
+            moduleResult.Value.AddIssue(issue);
+
+            await _unitOfWork.SaveChanges(cancellationToken);
+
+            var uploadResult = await _fileProvider.UploadFiles(filesData, cancellationToken);
+
+            if (uploadResult.IsFailure)
+                return uploadResult.Error;
+
+            transaction.Commit();
+
+            return issue.Id.Value;
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Can not add issue to module - {id} in transaction", command.ModuleId);
 
-        var fileData = new FileData(fileContents, BUCKET_NAME);
+            transaction.Rollback();
 
-        var uploadResult = await _fileProvider
-            .UploadFiles(fileData, cancellationToken);
-
-        if (uploadResult.IsFailure)
-            return uploadResult.Error;
-
-        var filePaths = command.Files
-            .Select(f => FilePath.Create(Guid.NewGuid(), f.FileName).Value);
-
-        var issueFiles = filePaths.Select(f => new IssueFile(f));
-
-        var issue = new Issue(
-            issueId,
-            title,
-            description,
-            lessonId,
-            null,
-            new FilesList(issueFiles));
-
-        moduleResult.Value.AddIssue(issue);
-
-        await _modulesRepository.Save(moduleResult.Value, cancellationToken);
-
-        return issue.Id.Value;
+            return Error.Failure("Can not add issue to module - {id}", "module.issue.failure");
+        }
     }
 }

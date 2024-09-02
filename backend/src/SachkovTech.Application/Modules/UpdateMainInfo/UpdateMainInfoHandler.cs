@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Database;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 
@@ -8,14 +9,17 @@ namespace SachkovTech.Application.Modules.UpdateMainInfo;
 public class UpdateMainInfoHandler
 {
     private readonly IModulesRepository _modulesRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<UpdateMainInfoHandler> _logger;
 
     public UpdateMainInfoHandler(
         IModulesRepository modulesRepository,
+        IUnitOfWork unitOfWork,
         ILogger<UpdateMainInfoHandler> logger)
     {
         _modulesRepository = modulesRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -31,7 +35,7 @@ public class UpdateMainInfoHandler
 
         moduleResult.Value.UpdateMainInfo(title, description);
 
-        var result = await _modulesRepository.Save(moduleResult.Value, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation(
             "Updated module {title}, {description} with id {moduleId}",
@@ -39,6 +43,6 @@ public class UpdateMainInfoHandler
             description,
             request.ModuleId);
 
-        return result;
+        return moduleResult.Value.Id.Value;
     }
 }

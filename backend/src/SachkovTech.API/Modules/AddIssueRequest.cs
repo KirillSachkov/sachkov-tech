@@ -1,4 +1,4 @@
-namespace SachkovTech.API.Contracts;
+namespace SachkovTech.API.Modules;
 
 public record AddIssueRequest(
     string Title,

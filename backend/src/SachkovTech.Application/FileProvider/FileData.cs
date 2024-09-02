@@ -1,5 +1,5 @@
+using SachkovTech.Domain.IssueManagement.ValueObjects;
+
 namespace SachkovTech.Application.FileProvider;
 
-public record FileData(IEnumerable<FileContent> Files, string BucketName);
-
-public record FileContent(Stream Stream, string ObjectName);
+public record FileData(Stream Stream, FilePath FilePath, string BucketName);

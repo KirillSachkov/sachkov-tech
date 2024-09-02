@@ -52,11 +52,11 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.OwnsOne(i => i.FilesList, fb =>
+        builder.OwnsOne(i => i.Files, fb =>
         {
             fb.ToJson("files");
 
-            fb.OwnsMany(d => d.Files, fileBuilder =>
+            fb.OwnsMany(d => d.Values, fileBuilder =>
             {
                 fileBuilder.Property(f => f.PathToStorage)
                     .HasConversion(

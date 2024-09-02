@@ -1,14 +1,14 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using SachkovTech.API.Contracts;
+using SachkovTech.API.Controllers;
 using SachkovTech.API.Extensions;
-using SachkovTech.Application.FileProvider;
+using SachkovTech.API.Processors;
 using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Application.Modules.Create;
 using SachkovTech.Application.Modules.Delete;
 using SachkovTech.Application.Modules.UpdateMainInfo;
 
-namespace SachkovTech.API.Controllers;
+namespace SachkovTech.API.Modules;
 
 public class ModulesController : ApplicationController
 {
@@ -80,35 +80,20 @@ public class ModulesController : ApplicationController
         [FromServices] AddIssueHandler handler,
         CancellationToken cancellationToken)
     {
-        List<FileDto> filesDto = [];
-        try
-        {
-            foreach (var file in request.Files)
-            {
-                var stream = file.OpenReadStream();
-                filesDto.Add(new FileDto(
-                    stream, file.FileName, file.ContentType));
-            }
+        await using var fileProcessor = new FormFileProcessor();
+        var fileDtos = fileProcessor.Process(request.Files);
 
-            var command = new AddIssueCommand(
-                id,
-                request.Title,
-                request.Description,
-                filesDto);
+        var command = new AddIssueCommand(
+            id,
+            request.Title,
+            request.Description,
+            fileDtos);
 
-            var result = await handler.Handle(command, cancellationToken);
+        var result = await handler.Handle(command, cancellationToken);
 
-            if (result.IsFailure)
-                return result.Error.ToResponse();
+        if (result.IsFailure)
+            return result.Error.ToResponse();
 
-            return Ok(result.Value);
-        }
-        finally
-        {
-            foreach (var fileDto in filesDto)
-            {
-                await fileDto.Content.DisposeAsync();
-            }
-        }
+        return Ok(result.Value);
     }
 }
