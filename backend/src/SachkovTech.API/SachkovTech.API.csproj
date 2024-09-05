@@ -20,7 +20,6 @@
         <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.Trace" Version="4.0.0" />
-        <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 

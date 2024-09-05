@@ -1,5 +1,4 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Application.Modules.Create;

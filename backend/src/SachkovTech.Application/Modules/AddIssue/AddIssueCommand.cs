@@ -4,6 +4,6 @@ public record AddIssueCommand(
     Guid ModuleId,
     string Title,
     string Description,
-    IEnumerable<CreateFileDto> Files);
+    IEnumerable<CreateFileCommand> FileCommands);
 
-public record CreateFileDto(Stream Content, string FileName);
+public record CreateFileCommand(Stream Content, string FileName);

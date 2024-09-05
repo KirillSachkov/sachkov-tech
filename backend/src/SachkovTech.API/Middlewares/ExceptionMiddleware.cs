@@ -1,4 +1,5 @@
 using SachkovTech.API.Response;
+using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.API.Middlewares;
 
@@ -23,8 +24,8 @@ public class ExceptionMiddleware
         {
             _logger.LogError(ex, ex.Message);
             
-            var responseError = new ResponseError("server.internal", ex.Message, null);
-            var envelope = Envelope.Error([responseError]);
+            var error = Error.Failure("server.internal", ex.Message);
+            var envelope = Envelope.Error(error);
             
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Domain.IssueManagement;
-using SachkovTech.Infrastructure.Interceptors;
 
 namespace SachkovTech.Infrastructure;
 

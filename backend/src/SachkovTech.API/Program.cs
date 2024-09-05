@@ -1,11 +1,9 @@
 using SachkovTech.API.Extensions;
 using SachkovTech.API.Middlewares;
-using SachkovTech.API.Validation;
 using SachkovTech.Application;
 using SachkovTech.Infrastructure;
 using Serilog;
 using Serilog.Events;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +27,10 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
-builder.Services.AddFluentValidationAutoValidation(configuration =>
-{
-    configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
-});
+// builder.Services.AddFluentValidationAutoValidation(configuration =>
+// {
+//     configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
+// });
 
 var app = builder.Build();
 

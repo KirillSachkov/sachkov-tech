@@ -1,6 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using SachkovTech.API.Controllers;
+using SachkovTech.API.Controllers.Modules.Requests;
 using SachkovTech.API.Extensions;
 using SachkovTech.API.Processors;
 using SachkovTech.Application.Modules.AddIssue;
@@ -8,7 +8,7 @@ using SachkovTech.Application.Modules.Create;
 using SachkovTech.Application.Modules.Delete;
 using SachkovTech.Application.Modules.UpdateMainInfo;
 
-namespace SachkovTech.API.Modules;
+namespace SachkovTech.API.Controllers.Modules;
 
 public class ModulesController : ApplicationController
 {
@@ -18,7 +18,7 @@ public class ModulesController : ApplicationController
         [FromBody] CreateModuleRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(request, cancellationToken);
+        var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
@@ -29,20 +29,12 @@ public class ModulesController : ApplicationController
     [HttpPut("{id:guid}/main-info")]
     public async Task<ActionResult> UpdateMainInfo(
         [FromRoute] Guid id,
-        [FromBody] UpdateMainInfoDto dto,
+        [FromBody] UpdateMainInfoRequest request,
         [FromServices] UpdateMainInfoHandler handler,
-        [FromServices] IValidator<UpdateMainInfoRequest> validator,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateMainInfoRequest(id, dto);
-
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (validationResult.IsValid == false)
-        {
-            return validationResult.ToValidationErrorResponse();
-        }
-
-        var result = await handler.Handle(request, cancellationToken);
+        var command = request.ToCommand(id);
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
@@ -54,18 +46,10 @@ public class ModulesController : ApplicationController
     public async Task<ActionResult> Delete(
         [FromRoute] Guid id,
         [FromServices] DeleteModuleHandler handler,
-        [FromServices] IValidator<DeleteModuleRequest> validator,
         CancellationToken cancellationToken)
     {
-        var request = new DeleteModuleRequest(id);
-
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (validationResult.IsValid == false)
-        {
-            return validationResult.ToValidationErrorResponse();
-        }
-
-        var result = await handler.Handle(request, cancellationToken);
+        var command = new DeleteModuleCommand(id);
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
@@ -81,13 +65,9 @@ public class ModulesController : ApplicationController
         CancellationToken cancellationToken)
     {
         await using var fileProcessor = new FormFileProcessor();
-        var fileDtos = fileProcessor.Process(request.Files);
+        var fileCommands = fileProcessor.Process(request.Files);
 
-        var command = new AddIssueCommand(
-            id,
-            request.Title,
-            request.Description,
-            fileDtos);
+        var command = request.ToCommand(id, fileCommands);
 
         var result = await handler.Handle(command, cancellationToken);
 

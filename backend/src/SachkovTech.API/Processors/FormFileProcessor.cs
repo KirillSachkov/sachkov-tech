@@ -4,23 +4,23 @@ namespace SachkovTech.API.Processors;
 
 public class FormFileProcessor : IAsyncDisposable
 {
-    private readonly List<CreateFileDto> _fileDtos = [];
+    private readonly List<CreateFileCommand> _fileCommands = [];
 
-    public List<CreateFileDto> Process(IFormFileCollection files)
+    public List<CreateFileCommand> Process(IFormFileCollection files)
     {
         foreach (var file in files)
         {
             var stream = file.OpenReadStream();
-            var fileDto = new CreateFileDto(stream, file.FileName);
-            _fileDtos.Add(fileDto);
+            var fileDto = new CreateFileCommand(stream, file.FileName);
+            _fileCommands.Add(fileDto);
         }
 
-        return _fileDtos;
+        return _fileCommands;
     }
 
     public async ValueTask DisposeAsync()
     {
-        foreach (var file in _fileDtos)
+        foreach (var file in _fileCommands)
         {
             await file.Content.DisposeAsync();
         }

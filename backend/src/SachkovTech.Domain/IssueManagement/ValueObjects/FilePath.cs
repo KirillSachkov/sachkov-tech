@@ -20,9 +20,12 @@ public record FilePath
 
         return new FilePath(fullPath);
     }
-    
+
     public static Result<FilePath, Error> Create(string fullPath)
     {
+        if (string.IsNullOrWhiteSpace(fullPath))
+            return Errors.General.ValueIsInvalid("file path");
+
         return new FilePath(fullPath);
     }
 }

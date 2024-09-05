@@ -1,6 +1,8 @@
 using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Database;
+using SachkovTech.Application.Extensions;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 
@@ -10,28 +12,37 @@ public class UpdateMainInfoHandler
 {
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateMainInfoCommand> _validator;
     private readonly ILogger<UpdateMainInfoHandler> _logger;
 
     public UpdateMainInfoHandler(
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
+        IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {
         _modulesRepository = modulesRepository;
-        _logger = logger;
         _unitOfWork = unitOfWork;
+        _validator = validator;
+        _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        UpdateMainInfoRequest request,
+    public async Task<Result<Guid, ErrorList>> Handle(
+        UpdateMainInfoCommand command,
         CancellationToken cancellationToken = default)
     {
-        var moduleResult = await _modulesRepository.GetById(request.ModuleId, cancellationToken);
-        if (moduleResult.IsFailure)
-            return moduleResult.Error;
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToList();
+        }
 
-        var title = Title.Create(request.Dto.Title).Value;
-        var description = Description.Create(request.Dto.Description).Value;
+        var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
+        if (moduleResult.IsFailure)
+            return moduleResult.Error.ToErrorList();
+
+        var title = Title.Create(command.Title).Value;
+        var description = Description.Create(command.Description).Value;
 
         moduleResult.Value.UpdateMainInfo(title, description);
 
@@ -41,7 +52,7 @@ public class UpdateMainInfoHandler
             "Updated module {title}, {description} with id {moduleId}",
             title,
             description,
-            request.ModuleId);
+            command.ModuleId);
 
         return moduleResult.Value.Id.Value;
     }

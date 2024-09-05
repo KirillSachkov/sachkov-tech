@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using SachkovTech.Application.Database;
 using SachkovTech.Application.Modules;
 using SachkovTech.Application.Providers;
 using SachkovTech.Infrastructure.Options;
@@ -14,8 +15,9 @@ public static class Inject
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<ApplicationDbContext>();
         services.AddScoped<IModulesRepository, ModulesRepository>();
+        services.AddScoped<ApplicationDbContext>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddMinio(configuration);
 
