@@ -28,6 +28,14 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                     .IsRequired(false)
                     .HasColumnName("lesson_id");
             });
+        
+        builder.ComplexProperty(i => i.Position,
+            lb =>
+            {
+                lb.Property(l => l.Value)
+                    .IsRequired()
+                    .HasColumnName("position");
+            });
 
         builder.ComplexProperty(m => m.Title, tb =>
         {

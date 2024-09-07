@@ -16,11 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.UnitTests", "tests\SachkovTech.UnitTests\SachkovTech.UnitTests.csproj", "{EC9BCD7E-EF6A-4409-9987-7042788E4328}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Domain.UnitTests", "tests\SachkovTech.Domain.UnitTests\SachkovTech.Domain.UnitTests.csproj", "{EC9BCD7E-EF6A-4409-9987-7042788E4328}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{696505DF-F3E6-478B-AA1E-A35BECBB3AF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC60138D-E08D-4EAB-8309-3D381D52962C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Application.UnitTests", "tests\SachkovTech.Application.UnitTests\SachkovTech.Application.UnitTests.csproj", "{C398512E-9F0A-4DDF-A0B1-7C76918373D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
@@ -58,5 +64,6 @@ Global
 		{06FC7B34-90D3-4032-92F6-EF8D833C616E} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{1D91BD53-6F71-4812-A75D-28DD83DADF9B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
+		{C398512E-9F0A-4DDF-A0B1-7C76918373D7} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
 	EndGlobalSection
 EndGlobal

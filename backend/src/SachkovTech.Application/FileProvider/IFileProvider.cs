@@ -1,9 +1,8 @@
 using CSharpFunctionalExtensions;
-using SachkovTech.Application.FileProvider;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 
-namespace SachkovTech.Application.Providers;
+namespace SachkovTech.Application.FileProvider;
 
 public interface IFileProvider
 {

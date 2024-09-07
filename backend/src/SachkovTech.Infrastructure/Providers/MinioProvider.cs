@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using SachkovTech.Application.FileProvider;
-using SachkovTech.Application.Providers;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 
@@ -42,6 +41,8 @@ public class MinioProvider : IFileProvider
                 return pathsResult.First().Error;
 
             var results = pathsResult.Select(p => p.Value).ToList();
+            
+            _logger.LogInformation("Uploaded files: {files}", results.Select(f => f.Path));
 
             return results;
         }

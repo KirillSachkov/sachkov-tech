@@ -1,26 +1,28 @@
+using SachkovTech.Application.Dtos;
 using SachkovTech.Application.Modules.AddIssue;
+using SachkovTech.Application.Modules.UploadFilesToIssue;
 
 namespace SachkovTech.API.Processors;
 
 public class FormFileProcessor : IAsyncDisposable
 {
-    private readonly List<CreateFileCommand> _fileCommands = [];
+    private readonly List<UploadFileDto> _fileDtos = [];
 
-    public List<CreateFileCommand> Process(IFormFileCollection files)
+    public List<UploadFileDto> Process(IFormFileCollection files)
     {
         foreach (var file in files)
         {
             var stream = file.OpenReadStream();
-            var fileDto = new CreateFileCommand(stream, file.FileName);
-            _fileCommands.Add(fileDto);
+            var fileDto = new UploadFileDto(stream, file.FileName);
+            _fileDtos.Add(fileDto);
         }
 
-        return _fileCommands;
+        return _fileDtos;
     }
 
     public async ValueTask DisposeAsync()
     {
-        foreach (var file in _fileCommands)
+        foreach (var file in _fileDtos)
         {
             await file.Content.DisposeAsync();
         }

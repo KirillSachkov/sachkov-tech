@@ -7,6 +7,7 @@ using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Application.Modules.Create;
 using SachkovTech.Application.Modules.Delete;
 using SachkovTech.Application.Modules.UpdateMainInfo;
+using SachkovTech.Application.Modules.UploadFilesToIssue;
 
 namespace SachkovTech.API.Controllers.Modules;
 
@@ -60,17 +61,34 @@ public class ModulesController : ApplicationController
     [HttpPost("{id:guid}/issue")]
     public async Task<ActionResult> AddIssue(
         [FromRoute] Guid id,
-        [FromForm] AddIssueRequest request,
+        [FromBody] AddIssueRequest request,
         [FromServices] AddIssueHandler handler,
         CancellationToken cancellationToken)
     {
-        await using var fileProcessor = new FormFileProcessor();
-        var fileCommands = fileProcessor.Process(request.Files);
-
-        var command = request.ToCommand(id, fileCommands);
+        var command = request.ToCommand(id);
 
         var result = await handler.Handle(command, cancellationToken);
 
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpPost("{id:guid}/issue/{issueId:guid}/files")]
+    public async Task<ActionResult> UploadFilesToIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromForm] IFormFileCollection files,
+        [FromServices] UploadFilesToIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        await using var fileProcessor = new FormFileProcessor();
+        var fileDtos = fileProcessor.Process(files);
+
+        var command = new UploadFilesToIssueCommand(id, issueId, fileDtos);
+
+        var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 

@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
@@ -22,17 +23,19 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
         Description description,
         LessonId lessonId,
         Issue? parentIssue,
-        ValueObjectList<IssueFile> files) : base(id)
+        ValueObjectList<IssueFile>? files) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
         ParentIssue = parentIssue;
-        Files = files;
+        Files = files ?? new ValueObjectList<IssueFile>([]);
     }
 
     public Title Title { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
+
+    public Position Position { get; private set; }
 
     public LessonId LessonId { get; private set; }
 
@@ -41,14 +44,11 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
 
     public ValueObjectList<IssueFile> Files { get; private set; }
 
-    public void UpdateFilesList(ValueObjectList<IssueFile> files) =>
+    public void UpdateFiles(ValueObjectList<IssueFile> files) =>
         Files = files;
 
-    public void AddSubIssue(Issue issue)
-    {
-        // logic and validation
-        _subIssues.Add(issue);
-    }
+    public void SetPosition(Position position) =>
+        Position = position;
 
     public void Delete()
     {

@@ -16,7 +16,7 @@ public record FilePath
     {
         // валидация на доступные расширения файлов
 
-        var fullPath = path + "." + extension;
+        var fullPath = path + extension;
 
         return new FilePath(fullPath);
     }

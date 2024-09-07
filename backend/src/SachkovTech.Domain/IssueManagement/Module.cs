@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using SachkovTech.Domain.IssueManagement.Entities;
+using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
@@ -32,6 +33,15 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
     public int GetNumberOfIssues() => _issues.Count;
 
+    public Result<Issue, Error> GetIssueById(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Errors.General.NotFound(issueId.Value);
+
+        return issue;
+    }
+    
     public void UpdateMainInfo(Title title, Description description)
     {
         Title = title;
@@ -58,8 +68,15 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
     public UnitResult<Error> AddIssue(Issue issue)
     {
-        // валидация + логика
+        var serialNumberResult = Position.Create(_issues.Count + 1);
+        if(serialNumberResult.IsFailure)
+            return serialNumberResult.Error;
+    
+        issue.SetPosition(serialNumberResult.Value);
+        
         _issues.Add(issue);
         return Result.Success<Error>();
     }
+    
+   
 }
