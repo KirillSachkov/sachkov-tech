@@ -1,6 +1,6 @@
 namespace SachkovTech.Application.UnitTests;
 
-public class UnitTest1
+public class UploadFilesToIssueTests
 {
     [Fact]
     public void Test1()

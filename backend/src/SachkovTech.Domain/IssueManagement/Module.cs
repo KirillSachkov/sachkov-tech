@@ -41,7 +41,16 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
         return issue;
     }
-    
+
+    public Result<Issue, Error> GetIssueByPosition(Position position)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Position == position);
+        if (issue is null)
+            return Errors.General.NotFound();
+
+        return issue;
+    }
+
     public void UpdateMainInfo(Title title, Description description)
     {
         Title = title;
@@ -69,14 +78,82 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
     public UnitResult<Error> AddIssue(Issue issue)
     {
         var serialNumberResult = Position.Create(_issues.Count + 1);
-        if(serialNumberResult.IsFailure)
+        if (serialNumberResult.IsFailure)
             return serialNumberResult.Error;
-    
+
         issue.SetPosition(serialNumberResult.Value);
-        
+
         _issues.Add(issue);
         return Result.Success<Error>();
     }
+
+    public UnitResult<Error> MoveIssue(IssueId issueId, Position newPosition)
+    {
+        var issueResult = GetIssueById(issueId);
+        if (issueResult.IsFailure)
+            return issueResult.Error;
+
+        var issue = issueResult.Value;
+        var currentPosition = issue.Position;
+
+        if (currentPosition.Value == newPosition.Value)
+            return Result.Success<Error>();
+
+        var adjustedPositionResult = AdjustNewPositionIfOutOfBounds(newPosition);
+        if (adjustedPositionResult.IsFailure)
+            return adjustedPositionResult.Error;
+
+        newPosition = adjustedPositionResult.Value;
+        
+        var moveResult = MoveIssuesBetweenPositions(currentPosition, newPosition);
+        if (moveResult.IsFailure)
+            return moveResult.Error;
+
+        issue.SetPosition(newPosition);
+
+        return Result.Success<Error>();
+    }
     
-   
+    private Result<Position, Error> AdjustNewPositionIfOutOfBounds(Position newPosition)
+    {
+        if (newPosition.Value <= _issues.Count)
+            return newPosition;
+        
+        var lastPosition = Position.Create(_issues.Count - 1);
+        if (lastPosition.IsFailure)
+            return lastPosition.Error;
+
+        return lastPosition.Value;
+
+    }
+    
+    private UnitResult<Error> MoveIssuesBetweenPositions(Position currentPosition, Position newPosition)
+    {
+        if (newPosition.Value < currentPosition.Value)
+        {
+            var issuesToMove = _issues.Where(i => i.Position.Value >= newPosition.Value
+                                                  && i.Position.Value < currentPosition.Value);
+
+            foreach (var issueToMove in issuesToMove)
+            {
+                var result = issueToMove.MoveForward();
+                if (result.IsFailure)
+                    return result.Error;
+            }
+        }
+        else if (newPosition.Value > currentPosition.Value)
+        {
+            var issuesToMove = _issues.Where(i => i.Position.Value > currentPosition.Value
+                                                  && i.Position.Value <= newPosition.Value);
+
+            foreach (var issueToMove in issuesToMove)
+            {
+                var result = issueToMove.MoveBack();
+                if (result.IsFailure)
+                    return result.Error;
+            }
+        }
+
+        return Result.Success<Error>();
+    }
 }
