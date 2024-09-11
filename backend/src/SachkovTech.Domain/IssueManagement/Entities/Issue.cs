@@ -61,4 +61,29 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
         if (_isDeleted)
             _isDeleted = false;
     }
+
+    public UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+        
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Back();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+        
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    public void Move(Position newPosition) =>
+        Position = newPosition;
 }

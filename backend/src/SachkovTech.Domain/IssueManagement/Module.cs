@@ -41,7 +41,7 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
 
         return issue;
     }
-    
+
     public void UpdateMainInfo(Title title, Description description)
     {
         Title = title;
@@ -69,14 +69,80 @@ public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
     public UnitResult<Error> AddIssue(Issue issue)
     {
         var serialNumberResult = Position.Create(_issues.Count + 1);
-        if(serialNumberResult.IsFailure)
+        if (serialNumberResult.IsFailure)
             return serialNumberResult.Error;
-    
+
         issue.SetPosition(serialNumberResult.Value);
-        
+
         _issues.Add(issue);
         return Result.Success<Error>();
     }
-    
-   
+
+    public UnitResult<Error> MoveIssue(Issue issue, Position newPosition)
+    {
+        var currentPosition = issue.Position;
+
+        if (currentPosition == newPosition || _issues.Count == 1)
+            return Result.Success<Error>();
+
+        var adjustedPosition = AdjustNewPositionIfOutOfRange(newPosition);
+        if (adjustedPosition.IsFailure)
+            return adjustedPosition.Error;
+
+        newPosition = adjustedPosition.Value;
+
+        var moveResult = MoveIssuesBetweenPositions(newPosition, currentPosition);
+        if (moveResult.IsFailure)
+            return moveResult.Error;
+
+        issue.Move(newPosition);
+
+        return Result.Success<Error>();
+    }
+
+    private UnitResult<Error> MoveIssuesBetweenPositions(Position newPosition, Position currentPosition)
+    {
+        if (newPosition < currentPosition)
+        {
+            var issuesToMove = _issues.Where(i => i.Position >= newPosition
+                                                  && i.Position < currentPosition);
+
+            foreach (var issueToMove in issuesToMove)
+            {
+                var result = issueToMove.MoveForward();
+                if (result.IsFailure)
+                {
+                    return result.Error;
+                }
+            }
+        }
+        else if (newPosition > currentPosition)
+        {
+            var issuesToMove = _issues.Where(i => i.Position > currentPosition
+                                                  && i.Position <= newPosition);
+
+            foreach (var issueToMove in issuesToMove)
+            {
+                var result = issueToMove.MoveBack();
+                if (result.IsFailure)
+                {
+                    return result.Error;
+                }
+            }
+        }
+        
+        return Result.Success<Error>();
+    }
+
+    private Result<Position, Error> AdjustNewPositionIfOutOfRange(Position newPosition)
+    {
+        if (newPosition.Value <= _issues.Count)
+            return newPosition;
+
+        var lastPosition = Position.Create(_issues.Count - 1);
+        if (lastPosition.IsFailure)
+            return lastPosition.Error;
+
+        return lastPosition.Value;
+    }
 }

@@ -3,7 +3,7 @@ using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
-public record Position
+public class Position : ValueObject
 {
     public static readonly Position First = new(1);
     
@@ -13,12 +13,26 @@ public record Position
     }
     
     public int Value { get; }
+
+    public Result<Position, Error> Forward()
+        => Create(Value + 1);
+    
+    public Result<Position, Error> Back()
+        => Create(Value - 1);
     
     public static Result<Position, Error> Create(int number)
     {
-        if (number <= 0)
+        if (number < 1)
             return Errors.General.ValueIsInvalid("serial number");
 
         return new Position(number);
     }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+    
+    public static implicit operator int(Position position) =>
+        position.Value;
 }
