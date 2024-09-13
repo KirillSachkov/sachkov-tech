@@ -3,7 +3,7 @@ using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
-public record FilePath
+public class FilePath : ValueObject
 {
     private FilePath(string path)
     {
@@ -27,5 +27,10 @@ public record FilePath
             return Errors.General.ValueIsInvalid("file path");
 
         return new FilePath(fullPath);
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Path;
     }
 }

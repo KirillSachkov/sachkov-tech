@@ -1,6 +1,8 @@
+using CSharpFunctionalExtensions;
+
 namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-public record ModuleId
+public class ModuleId : ValueObject
 {
     private ModuleId(Guid value)
     {
@@ -21,5 +23,10 @@ public record ModuleId
     {
         ArgumentNullException.ThrowIfNull(moduleId);
         return moduleId.Value;
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

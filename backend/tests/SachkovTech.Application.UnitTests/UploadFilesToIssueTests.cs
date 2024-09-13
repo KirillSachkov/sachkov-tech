@@ -1,4 +1,3 @@
-using System.Reflection;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using FluentValidation;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Dtos;
-using SachkovTech.Application.FileProvider;
+using SachkovTech.Application.Files;
 using SachkovTech.Application.Modules;
 using SachkovTech.Application.Modules.UploadFilesToIssue;
 using SachkovTech.Domain.IssueManagement.Entities;
@@ -21,8 +20,70 @@ namespace SachkovTech.Application.UnitTests;
 
 public class UploadFilesToIssueTests
 {
+    private readonly Mock<IFileProvider> _fileProviderMock = new();
+    private readonly Mock<IModulesRepository> _modulesRepositoryMock = new();
+    private readonly Mock<ILogger<UploadFilesToIssueHandler>> _loggerMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<IValidator<UploadFilesToIssueCommand>> _validatorMock = new();
+
     [Fact]
     public async Task Handle_Should_Upload_Files_To_Issue()
+    {
+        // arrange
+        var ct = new CancellationTokenSource().Token;
+
+        var title = Title.Create("Test").Value;
+        var description = Description.Create("Description").Value;
+        var module = new Module(ModuleId.NewModuleId(), title, description);
+        var issue = new Issue(IssueId.NewIssueId(), title, description, LessonId.Empty(), null, null);
+
+        module.AddIssue(issue);
+
+        var stream = new MemoryStream();
+        var fileName = "test.jpg";
+
+        var uploadFileDto = new UploadFileDto(stream, fileName);
+
+        List<UploadFileDto> files = [uploadFileDto, uploadFileDto];
+
+        var command = new UploadFilesToIssueCommand(module.Id.Value, issue.Id.Value, files);
+
+        List<FilePath> filePaths =
+        [
+            FilePath.Create(fileName).Value,
+            FilePath.Create(fileName).Value,
+        ];
+
+        _fileProviderMock
+            .Setup(v => v.UploadFiles(It.IsAny<List<FileData>>(), ct))
+            .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
+
+        _modulesRepositoryMock.Setup(m => m.GetById(module.Id, ct))
+            .ReturnsAsync(Result.Success<Module, Error>(module));
+
+        _unitOfWorkMock.Setup(u => u.SaveChanges(ct))
+            .Returns(Task.CompletedTask);
+
+        _validatorMock.Setup(v => v.ValidateAsync(command, ct))
+            .ReturnsAsync(new ValidationResult());
+        
+        var handler = new UploadFilesToIssueHandler(
+            _fileProviderMock.Object,
+            _modulesRepositoryMock.Object,
+            _unitOfWorkMock.Object,
+            _validatorMock.Object,
+            _loggerMock.Object);
+
+        // act
+        var result = await handler.Handle(command, ct);
+
+        // assert
+        module.Issues.First(i => i.Id == issue.Id).Files.Should().HaveCount(2);
+        result.IsSuccess.Should().BeTrue();
+    }
+    
+    [Fact]
+    public async Task Handle_Should_Return_Error_When_Module_Does_Not_Exist()
     {
         // arrange
         var ct = new CancellationTokenSource().Token;
@@ -71,7 +132,7 @@ public class UploadFilesToIssueTests
             .ReturnsAsync(new ValidationResult());
         
         var loggerMock = new Mock<ILogger<UploadFilesToIssueHandler>>();
-
+        
         var handler = new UploadFilesToIssueHandler(
             fileProviderMock.Object,
             modulesRepositoryMock.Object,
@@ -86,36 +147,4 @@ public class UploadFilesToIssueTests
         module.Issues.First(i => i.Id == issue.Id).Files.Should().HaveCount(2);
         result.IsSuccess.Should().BeTrue();
     }
-
-    // public class ModulesRepositoryTest : IModulesRepository
-    // {
-    //     public Task<Guid> Add(Module module, CancellationToken cancellationToken = default)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
-    //
-    //     public Guid Save(Module module, CancellationToken cancellationToken = default)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
-    //
-    //     public Guid Delete(Module module, CancellationToken cancellationToken = default)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
-    //
-    //     public async Task<Result<Module, Error>> GetById(ModuleId moduleId, CancellationToken cancellationToken = default)
-    //     {
-    //         var title = Title.Create("Test").Value;
-    //         var description = Description.Create("Description").Value;
-    //         var module = new Module(ModuleId.NewModuleId(), title, description);
-    //         
-    //         return await Task.FromResult(module);
-    //     }
-    //
-    //     public Task<Result<Module, Error>> GetByTitle(Title title, CancellationToken cancellationToken = default)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
-    // }
 }

@@ -3,7 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
-using SachkovTech.Application.FileProvider;
+using SachkovTech.Application.Files;
 using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;

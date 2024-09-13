@@ -3,13 +3,15 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
-using SachkovTech.Application.FileProvider;
+using SachkovTech.Application.Files;
+using SachkovTech.Application.Messaging;
 using SachkovTech.Application.Modules.AddIssue;
 using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
+using FileInfo = SachkovTech.Application.Files.FileInfo;
 
 namespace SachkovTech.Application.Modules.UploadFilesToIssue;
 
@@ -21,6 +23,7 @@ public class UploadFilesToIssueHandler
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToIssueCommand> _validator;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly ILogger<UploadFilesToIssueHandler> _logger;
 
     public UploadFilesToIssueHandler(
@@ -28,12 +31,14 @@ public class UploadFilesToIssueHandler
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
         IValidator<UploadFilesToIssueCommand> validator,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue,
         ILogger<UploadFilesToIssueHandler> logger)
     {
         _fileProvider = fileProvider;
         _modulesRepository = modulesRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
+        _messageQueue = messageQueue;
         _logger = logger;
     }
 
@@ -56,7 +61,7 @@ public class UploadFilesToIssueHandler
         var issueId = IssueId.Create(command.IssueId);
 
         var issueResult = moduleResult.Value.GetIssueById(issueId);
-        if(issueResult.IsFailure)
+        if (issueResult.IsFailure)
             return issueResult.Error.ToErrorList();
 
         List<FileData> filesData = [];
@@ -68,23 +73,29 @@ public class UploadFilesToIssueHandler
             if (filePath.IsFailure)
                 return filePath.Error.ToErrorList();
 
-            var fileData = new FileData(file.Content, filePath.Value, BUCKET_NAME);
+            var fileData = new FileData(file.Content, new FileInfo(filePath.Value, BUCKET_NAME));
 
             filesData.Add(fileData);
         }
-        
+
         var filePathsResult = await _fileProvider.UploadFiles(filesData, cancellationToken);
         if (filePathsResult.IsFailure)
+        {
+            await _messageQueue.WriteAsync(filesData.Select(f => f.Info), cancellationToken);
+
             return filePathsResult.Error.ToErrorList();
+        }
 
         var issueFiles = filePathsResult.Value
             .Select(f => new IssueFile(f))
             .ToList();
 
+        // уставовить всё в тру
+
         issueResult.Value.UpdateFiles(issueFiles);
 
         await _unitOfWork.SaveChanges(cancellationToken);
-        
+
         _logger.LogInformation("Success uploaded files to issue - {id}", issueResult.Value.Id.Value);
 
         return issueResult.Value.Id.Value;

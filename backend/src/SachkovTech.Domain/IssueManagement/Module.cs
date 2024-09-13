@@ -7,7 +7,7 @@ using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueManagement;
 
-public sealed class Module : Shared.Entity<ModuleId>, ISoftDeletable
+public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
