@@ -11,6 +11,7 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
     private bool _isDeleted = false;
 
     private readonly List<Issue> _subIssues = [];
+    private List<IssueFile> _files = [];
 
     //ef core
     private Issue(IssueId id) : base(id)
@@ -29,7 +30,7 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
         Description = description;
         LessonId = lessonId;
         ParentIssue = parentIssue;
-        Files = files ?? new ValueObjectList<IssueFile>([]);
+        _files = files ?? new ValueObjectList<IssueFile>([]);
     }
 
     public Title Title { get; private set; } = default!;
@@ -42,10 +43,12 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
     public Issue? ParentIssue { get; private set; }
     public IReadOnlyList<Issue> SubIssues => _subIssues;
 
-    public ValueObjectList<IssueFile> Files { get; private set; }
+    public IReadOnlyList<IssueFile> Files => _files;
 
-    public void UpdateFiles(ValueObjectList<IssueFile> files) =>
-        Files = files;
+    public void UpdateFiles(List<IssueFile> files)
+    {
+        _files = files;
+    }
 
     public void SetPosition(Position position) =>
         Position = position;

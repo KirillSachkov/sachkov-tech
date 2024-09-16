@@ -8,8 +8,8 @@ namespace SachkovTech.Infrastructure.DbContexts;
 
 public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
-    public DbSet<ModuleDto> Modules => Set<ModuleDto>();
-    public DbSet<IssueDto> Issues => Set<IssueDto>();
+    public IQueryable<ModuleDto> Modules => Set<ModuleDto>();
+    public IQueryable<IssueDto> Issues => Set<IssueDto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

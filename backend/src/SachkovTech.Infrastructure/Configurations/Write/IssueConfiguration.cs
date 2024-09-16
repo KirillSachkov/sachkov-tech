@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SachkovTech.Application.Dtos;
 using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects;
@@ -27,7 +30,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                     .IsRequired(false)
                     .HasColumnName("lesson_id");
             });
-        
+
         builder.ComplexProperty(i => i.Position,
             lb =>
             {
@@ -58,20 +61,25 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.OwnsOne(i => i.Files, fb =>
-        {
-            fb.ToJson("files");
-
-            fb.OwnsMany(d => d.Values, fileBuilder =>
-            {
-                fileBuilder.Property(f => f.PathToStorage)
-                    .HasConversion(
-                        p => p.Path,
-                        value => FilePath.Create(value).Value)
-                    .IsRequired()
-                    .HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
-            });
-        });
+        builder.Property(i => i.Files)
+            .HasConversion(
+                files => JsonSerializer.Serialize(
+                    files.Select(f => new IssueFileDto
+                    {
+                        PathToStorage = f.PathToStorage.Path
+                    }),
+                    JsonSerializerOptions.Default),
+                
+                json => JsonSerializer.Deserialize<List<IssueFileDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => new IssueFile(FilePath.Create(dto.PathToStorage).Value))
+                    .ToList(),
+                
+                new ValueComparer<IReadOnlyList<IssueFile>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => (IReadOnlyList<IssueFile>)c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("files");
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Application.Models;
 
@@ -25,5 +26,13 @@ public static class QueriesExtensions
             Page = page,
             TotalCount = totalCount
         };
+    }
+    
+    public static IQueryable<T> WhereIf<T>(
+        this IQueryable<T> source,
+        bool condition,
+        Expression<Func<T, bool>> predicate)
+    {
+        return condition ? source.Where(predicate) : source;
     }
 }

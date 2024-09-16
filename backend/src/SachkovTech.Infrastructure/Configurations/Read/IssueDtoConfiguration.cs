@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Application.Dtos;
@@ -16,5 +17,10 @@ public class IssueDtoConfiguration : IEntityTypeConfiguration<IssueDto>
             .WithMany()
             .HasForeignKey(i => i.ParentId)
             .IsRequired(false);
+
+        builder.Property(i => i.Files)
+            .HasConversion(
+                files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<IssueFileDto[]>(json, JsonSerializerOptions.Default)!);
     }
 }

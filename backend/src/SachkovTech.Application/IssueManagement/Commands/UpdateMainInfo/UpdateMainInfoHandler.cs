@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Domain.Shared;
@@ -8,7 +9,7 @@ using SachkovTech.Domain.Shared.ValueObjects;
 
 namespace SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
 
-public class UpdateMainInfoHandler
+public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand>
 {
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;

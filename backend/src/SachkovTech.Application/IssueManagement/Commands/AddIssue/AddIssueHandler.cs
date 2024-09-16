@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Application.Files;
@@ -11,24 +12,21 @@ using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Application.IssueManagement.Commands.AddIssue;
 
-public class AddIssueHandler
+public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
 {
     private const string BUCKET_NAME = "files";
 
-    private readonly IFileProvider _fileProvider;
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<AddIssueCommand> _validator;
     private readonly ILogger<AddIssueHandler> _logger;
 
     public AddIssueHandler(
-        IFileProvider fileProvider,
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
         IValidator<AddIssueCommand> validator,
         ILogger<AddIssueHandler> logger)
     {
-        _fileProvider = fileProvider;
         _modulesRepository = modulesRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
@@ -65,7 +63,7 @@ public class AddIssueHandler
         var title = Title.Create(command.Title).Value;
         var description = Description.Create(command.Description).Value;
         var lessonId = LessonId.Empty();
-        
+
         return new Issue(
             issueId,
             title,

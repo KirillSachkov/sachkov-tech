@@ -43,5 +43,7 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
+
+        // builder.HasQueryFilter(m => m.)
     }
 }

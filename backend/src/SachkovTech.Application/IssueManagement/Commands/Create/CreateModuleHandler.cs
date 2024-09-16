@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Domain.IssueManagement;
@@ -10,7 +11,7 @@ using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Application.IssueManagement.Commands.Create;
 
-public class CreateModuleHandler
+public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
 {
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;

@@ -1,9 +1,11 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Application.Files;
+using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
 using SachkovTech.Application.Messaging;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared;
@@ -12,7 +14,7 @@ using FileInfo = SachkovTech.Application.Files.FileInfo;
 
 namespace SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
 
-public class UploadFilesToIssueHandler
+public class UploadFilesToIssueHandler : ICommandHandler<Guid, UploadFilesToIssueCommand>
 {
     private const string BUCKET_NAME = "files";
 

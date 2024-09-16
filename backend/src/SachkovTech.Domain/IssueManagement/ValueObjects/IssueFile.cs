@@ -8,6 +8,4 @@ public record IssueFile
     }
 
     public FilePath PathToStorage { get; }
-
-    public bool IsUploaded { get; } = false;
 }

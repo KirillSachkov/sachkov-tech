@@ -1,4 +1,3 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.API.Controllers.Modules.Requests;
 using SachkovTech.API.Extensions;
@@ -8,7 +7,6 @@ using SachkovTech.Application.IssueManagement.Commands.Create;
 using SachkovTech.Application.IssueManagement.Commands.Delete;
 using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
 using SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
-using SachkovTech.Application.IssueManagement.Queries.GetModulesWithPagination;
 
 namespace SachkovTech.API.Controllers.Modules;
 
@@ -75,7 +73,7 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpPost("{id:guid}/issue/{issueId:guid}/files")]
     public async Task<ActionResult> UploadFilesToIssue(
         [FromRoute] Guid id,

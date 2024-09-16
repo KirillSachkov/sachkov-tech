@@ -1,13 +1,15 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Extensions;
+using SachkovTech.Application.IssueManagement.Commands.Create;
 using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Application.IssueManagement.Commands.Delete;
 
-public class DeleteModuleHandler
+public class DeleteModuleHandler : ICommandHandler<Guid, DeleteModuleCommand>
 {
     private readonly IModulesRepository _modulesRepository;
     private readonly ILogger<DeleteModuleHandler> _logger;
