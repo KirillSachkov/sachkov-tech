@@ -1,4 +1,4 @@
-using SachkovTech.Application.Modules.Create;
+using SachkovTech.Application.IssueManagement.Commands.Create;
 
 namespace SachkovTech.API.Controllers.Modules.Requests;
 

@@ -11,7 +11,6 @@ public class FilesCleanerService : IFilesCleanerService
     private readonly ILogger<FilesCleanerService> _logger;
     private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
 
-
     public FilesCleanerService(
         IFileProvider fileProvider,
         ILogger<FilesCleanerService> logger,

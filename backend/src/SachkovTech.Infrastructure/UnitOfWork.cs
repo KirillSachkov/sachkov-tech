@@ -1,14 +1,15 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Application.Database;
+using SachkovTech.Infrastructure.DbContexts;
 
 namespace SachkovTech.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly WriteDbContext _dbContext;
 
-    public UnitOfWork(ApplicationDbContext dbContext)
+    public UnitOfWork(WriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

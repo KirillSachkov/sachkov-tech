@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using SachkovTech.API.Controllers.Modules.Requests;
 using SachkovTech.API.Extensions;
 using SachkovTech.API.Processors;
-using SachkovTech.Application.Modules.AddIssue;
-using SachkovTech.Application.Modules.Create;
-using SachkovTech.Application.Modules.Delete;
-using SachkovTech.Application.Modules.UpdateMainInfo;
-using SachkovTech.Application.Modules.UploadFilesToIssue;
+using SachkovTech.Application.IssueManagement.Commands.AddIssue;
+using SachkovTech.Application.IssueManagement.Commands.Create;
+using SachkovTech.Application.IssueManagement.Commands.Delete;
+using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
+using SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
+using SachkovTech.Application.IssueManagement.Queries.GetModulesWithPagination;
 
 namespace SachkovTech.API.Controllers.Modules;
 

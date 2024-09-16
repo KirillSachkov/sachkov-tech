@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Files;
+using SachkovTech.Application.IssueManagement;
 using SachkovTech.Application.Messaging;
-using SachkovTech.Application.Modules;
 using SachkovTech.Infrastructure.BackgroundServices;
+using SachkovTech.Infrastructure.DbContexts;
+using SachkovTech.Infrastructure.Files;
 using SachkovTech.Infrastructure.MessageQueues;
 using SachkovTech.Infrastructure.Options;
 using SachkovTech.Infrastructure.Providers;
@@ -19,15 +21,57 @@ public static class Inject
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IModulesRepository, ModulesRepository>();
-        services.AddScoped<ApplicationDbContext>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services
+            .AddDbContexts()
+            .AddMinio(configuration)
+            .AddRepositories()
+            .AddDatabase()
+            .AddHostedServices()
+            .AddMessageQueues()
+            .AddServices();
 
-        services.AddMinio(configuration);
+        return services;
+    }
+    
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFilesCleanerService, FilesCleanerService>();
 
+        return services;
+    }
+    
+    private static IServiceCollection AddMessageQueues(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+        return services;
+    }
+    
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
         services.AddHostedService<FilesCleanerBackgroundService>();
 
-        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+        return services;
+    }
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IModulesRepository, ModulesRepository>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDbContexts(this IServiceCollection services)
+    {
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<IReadDbContext, ReadDbContext>();
 
         return services;
     }

@@ -1,5 +1,4 @@
-using SachkovTech.Application.Modules.AddIssue;
-using SachkovTech.Application.Modules.UploadFilesToIssue;
+using SachkovTech.Application.IssueManagement.Commands.AddIssue;
 
 namespace SachkovTech.API.Controllers.Modules.Requests;
 

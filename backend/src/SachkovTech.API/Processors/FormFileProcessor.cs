@@ -1,6 +1,4 @@
 using SachkovTech.Application.Dtos;
-using SachkovTech.Application.Modules.AddIssue;
-using SachkovTech.Application.Modules.UploadFilesToIssue;
 
 namespace SachkovTech.API.Processors;
 

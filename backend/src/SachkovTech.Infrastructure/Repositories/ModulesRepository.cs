@@ -1,18 +1,19 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using SachkovTech.Application.Modules;
+using SachkovTech.Application.IssueManagement;
 using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
+using SachkovTech.Infrastructure.DbContexts;
 
 namespace SachkovTech.Infrastructure.Repositories;
 
 public class ModulesRepository : IModulesRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly WriteDbContext _dbContext;
 
-    public ModulesRepository(ApplicationDbContext dbContext)
+    public ModulesRepository(WriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

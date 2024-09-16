@@ -1,4 +1,4 @@
-using SachkovTech.Application.Modules.UpdateMainInfo;
+using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
 
 namespace SachkovTech.API.Controllers.Modules.Requests;
 

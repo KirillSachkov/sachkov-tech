@@ -21,4 +21,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="IssueManagement\Commands\" />
+    </ItemGroup>
+
 </Project>

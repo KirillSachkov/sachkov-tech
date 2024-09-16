@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SachkovTech.API.Response;
 
 namespace SachkovTech.API.Controllers;
 
@@ -6,4 +7,10 @@ namespace SachkovTech.API.Controllers;
 [Route("[controller]")]
 public abstract class ApplicationController : ControllerBase
 {
+    public override OkObjectResult Ok(object? value)
+    {
+        var envelope = Envelope.Ok(value);
+        
+        return base.Ok(envelope);
+    }
 }
