@@ -22,5 +22,4 @@ public class IssueDto
 public class IssueFileDto
 {
     public string PathToStorage { get; set; } = string.Empty;
-    public int Size { get; set; }
 }

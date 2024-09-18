@@ -1,10 +1,15 @@
+using System.Data;
+using System.Linq.Expressions;
+using System.Text;
 using System.Text.Json;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Database;
 using SachkovTech.Application.Dtos;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Application.Models;
+using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Infrastructure;
 
 namespace SachkovTech.Application.IssueManagement.Queries.GetModulesWithPagination;
@@ -25,6 +30,17 @@ public class GetIssuesWithPaginationHandler
     {
         var issuesQuery = _readDbContext.Issues;
 
+        Expression<Func<IssueDto, object>> keySelector = query.SortBy?.ToLower() switch
+        {
+            "title" => (issue) => issue.Title,
+            "position" => (issue) => issue.Position,
+            _ => (issue) => issue.Id
+        };
+
+        issuesQuery = query.SortDirection?.ToLower() == "desc"
+            ? issuesQuery.OrderByDescending(keySelector)
+            : issuesQuery.OrderBy(keySelector);
+
         issuesQuery = issuesQuery.WhereIf(
             !string.IsNullOrWhiteSpace(query.Title),
             i => i.Title.Contains(query.Title!));
@@ -38,7 +54,6 @@ public class GetIssuesWithPaginationHandler
             i => i.Position >= query.PositionFrom!.Value);
 
         return await issuesQuery
-            .OrderBy(i => i.Position)
             .ToPagedList(query.Page, query.PageSize, cancellationToken);
     }
 }
@@ -47,10 +62,12 @@ public class GetIssuesWithPaginationHandlerDapper
     : IQueryHandler<PagedList<IssueDto>, GetFilteredIssuesWithPaginationQuery>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
+    private readonly ILogger<GetIssuesWithPaginationHandlerDapper> _logger;
 
-    public GetIssuesWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory)
+    public GetIssuesWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory, ILogger<GetIssuesWithPaginationHandlerDapper> logger)
     {
         _sqlConnectionFactory = sqlConnectionFactory;
+        _logger = logger;
     }
 
     public async Task<PagedList<IssueDto>> Handle(
@@ -63,20 +80,26 @@ public class GetIssuesWithPaginationHandlerDapper
 
         var totalCount = await connection.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM issues");
 
-        var sql = """
-                  SELECT id, title, position, files FROM issues
-                  ORDER BY position LIMIT @PageSize OFFSET @Offset
-                  """;
-        
-        parameters.Add("@PageSize", query.PageSize);
-        parameters.Add("@Offset", (query.Page - 1) * query.PageSize);
+        var sql = new StringBuilder(
+            """
+              SELECT id, title, position, files FROM issues
+            """);
+
+        if (!string.IsNullOrWhiteSpace(query.Title))
+        {
+            sql.Append(" WHERE title = @Title");
+            parameters.Add("@Title", query.Title);
+        }
+
+        sql.ApplySorting(parameters, query.SortBy, query.SortDirection);
+        sql.ApplyPagination(parameters, query.Page, query.PageSize);
 
         var issues = await connection.QueryAsync<IssueDto, string, IssueDto>(
-            sql,
+            sql.ToString(),
             (issue, jsonFiles) =>
             {
                 var files = JsonSerializer.Deserialize<IssueFileDto[]>(jsonFiles) ?? [];
-                
+
                 issue.Files = files;
 
                 return issue;
@@ -91,5 +114,32 @@ public class GetIssuesWithPaginationHandlerDapper
             PageSize = query.PageSize,
             Page = query.Page,
         };
+    }
+}
+
+public static class SqlExtensions
+{
+    public static void ApplySorting(
+        this StringBuilder sqlBuilder,
+        DynamicParameters parameters,
+        string? sortBy,
+        string? sortDirection)
+    {
+        parameters.Add("@SortBy", sortBy, DbType.String);
+        parameters.Add("@SortDirection", sortDirection, DbType.String);
+
+        sqlBuilder.Append(" ORDER BY @SortBy @SortDirection");
+    }
+
+    public static void ApplyPagination(
+        this StringBuilder sqlBuilder,
+        DynamicParameters parameters,
+        int page,
+        int pageSize)
+    {
+        parameters.Add("@PageSize", pageSize, DbType.Int32);
+        parameters.Add("@Offset", (page - 1) * pageSize, DbType.Int32);
+
+        sqlBuilder.Append(" LIMIT @PageSize OFFSET @Offset");
     }
 }

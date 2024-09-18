@@ -7,6 +7,7 @@ using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
+using SachkovTech.Infrastructure.Extensions;
 
 namespace SachkovTech.Infrastructure.Configurations.Write;
 
@@ -62,23 +63,9 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Property(i => i.Files)
-            .HasConversion(
-                files => JsonSerializer.Serialize(
-                    files.Select(f => new IssueFileDto
-                    {
-                        PathToStorage = f.PathToStorage.Path
-                    }),
-                    JsonSerializerOptions.Default),
-                
-                json => JsonSerializer.Deserialize<List<IssueFileDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => new IssueFile(FilePath.Create(dto.PathToStorage).Value))
-                    .ToList(),
-                
-                new ValueComparer<IReadOnlyList<IssueFile>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => (IReadOnlyList<IssueFile>)c.ToList()))
-            .HasColumnType("jsonb")
+            .ValueObjectsCollectionJsonConversion(
+                file => new IssueFileDto { PathToStorage = file.PathToStorage.Path },
+                dto => new IssueFile(FilePath.Create(dto.PathToStorage).Value))
             .HasColumnName("files");
 
         builder.Property<bool>("_isDeleted")

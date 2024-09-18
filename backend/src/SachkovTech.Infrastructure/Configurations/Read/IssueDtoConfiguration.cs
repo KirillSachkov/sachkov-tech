@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Application.Dtos;
+using SachkovTech.Domain.IssueManagement.ValueObjects;
 
 namespace SachkovTech.Infrastructure.Configurations.Read;
 
