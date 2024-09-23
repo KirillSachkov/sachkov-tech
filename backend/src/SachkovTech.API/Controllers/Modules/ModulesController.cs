@@ -1,4 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SachkovTech.API.Controllers.Modules.Requests;
 using SachkovTech.API.Extensions;
 using SachkovTech.API.Processors;
@@ -12,12 +17,41 @@ namespace SachkovTech.API.Controllers.Modules;
 
 public class ModulesController : ApplicationController
 {
+    [HttpPost("jwt")]
+    public ActionResult Login(CancellationToken cancellationToken)
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, "userId"),
+            new Claim("Kirill", "Sachkov"),
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("fdasfasdfsfadsfasddfsafasdffdasfdsfasfasdfsd"));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "test",
+            audience: "test",
+            claims: claims,
+            signingCredentials: creds
+        );
+
+        var user = HttpContext.User;
+
+        var stringToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(stringToken);
+    }
+
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create(
         [FromServices] CreateModuleHandler handler,
         [FromBody] CreateModuleRequest request,
         CancellationToken cancellationToken)
     {
+        var user = HttpContext.User;
+        
         var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
         if (result.IsFailure)

@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC60138D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Application.UnitTests", "tests\SachkovTech.Application.UnitTests\SachkovTech.Application.UnitTests.csproj", "{C398512E-9F0A-4DDF-A0B1-7C76918373D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Infrastructure.Authentication", "src\SachkovTech.Infrastructure.Authentication\SachkovTech.Infrastructure.Authentication.csproj", "{6E45AE33-77B0-4365-BBE7-2DD48C347576}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E45AE33-77B0-4365-BBE7-2DD48C347576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E45AE33-77B0-4365-BBE7-2DD48C347576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E45AE33-77B0-4365-BBE7-2DD48C347576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E45AE33-77B0-4365-BBE7-2DD48C347576}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
@@ -65,5 +71,6 @@ Global
 		{1D91BD53-6F71-4812-A75D-28DD83DADF9B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
+		{6E45AE33-77B0-4365-BBE7-2DD48C347576} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 	EndGlobalSection
 EndGlobal
