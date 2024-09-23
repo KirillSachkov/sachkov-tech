@@ -64,7 +64,8 @@ public class GetIssuesWithPaginationHandlerDapper
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
     private readonly ILogger<GetIssuesWithPaginationHandlerDapper> _logger;
 
-    public GetIssuesWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory, ILogger<GetIssuesWithPaginationHandlerDapper> logger)
+    public GetIssuesWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory,
+        ILogger<GetIssuesWithPaginationHandlerDapper> logger)
     {
         _sqlConnectionFactory = sqlConnectionFactory;
         _logger = logger;
@@ -91,7 +92,7 @@ public class GetIssuesWithPaginationHandlerDapper
             parameters.Add("@Title", query.Title);
         }
 
-        sql.ApplySorting(parameters, query.SortBy, query.SortDirection);
+        sql.ApplySorting(query.SortBy, query.SortDirection);
         sql.ApplyPagination(parameters, query.Page, query.PageSize);
 
         var issues = await connection.QueryAsync<IssueDto, string, IssueDto>(
@@ -107,7 +108,7 @@ public class GetIssuesWithPaginationHandlerDapper
             splitOn: "files",
             param: parameters);
 
-        return new PagedList<IssueDto>()
+        return new PagedList<IssueDto>
         {
             Items = issues.ToList(),
             TotalCount = totalCount,
@@ -121,14 +122,21 @@ public static class SqlExtensions
 {
     public static void ApplySorting(
         this StringBuilder sqlBuilder,
-        DynamicParameters parameters,
         string? sortBy,
         string? sortDirection)
     {
-        parameters.Add("@SortBy", sortBy, DbType.String);
-        parameters.Add("@SortDirection", sortDirection, DbType.String);
+        if (string.IsNullOrWhiteSpace(sortBy) || string.IsNullOrWhiteSpace(sortDirection)) return;
 
-        sqlBuilder.Append(" ORDER BY @SortBy @SortDirection");
+        var validSortDirections = new[] { "asc", "desc" };
+
+        if (validSortDirections.Contains(sortDirection.ToLower()))
+        {
+            sqlBuilder.Append($"\norder by {sortBy} {sortDirection}");
+        }
+        else
+        {
+            throw new ArgumentException("Invalid sort parameters");
+        }
     }
 
     public static void ApplyPagination(
