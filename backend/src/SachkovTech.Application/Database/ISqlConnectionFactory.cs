@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace SachkovTech.Infrastructure;
+namespace SachkovTech.Application.Database;
 
 public interface ISqlConnectionFactory
 {

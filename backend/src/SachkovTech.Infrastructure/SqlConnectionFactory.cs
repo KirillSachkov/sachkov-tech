@@ -1,6 +1,7 @@
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using SachkovTech.Application.Database;
 
 namespace SachkovTech.Infrastructure;
 

@@ -10,7 +10,6 @@ using SachkovTech.Application.Dtos;
 using SachkovTech.Application.Extensions;
 using SachkovTech.Application.Models;
 using SachkovTech.Domain.IssueManagement.Entities;
-using SachkovTech.Infrastructure;
 
 namespace SachkovTech.Application.IssueManagement.Queries.GetModulesWithPagination;
 

@@ -6,6 +6,7 @@ using SachkovTech.API.Extensions;
 using SachkovTech.API.Middlewares;
 using SachkovTech.Application;
 using SachkovTech.Infrastructure;
+using SachkovTech.Infrastructure.Authentication;
 using Serilog;
 using Serilog.Events;
 
@@ -58,26 +59,8 @@ builder.Services.AddSerilog();
 
 builder.Services
     .AddInfrastructure(builder.Configuration)
-    .AddApplication();
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = "test",
-            ValidAudience = "test",
-            IssuerSigningKey = new SymmetricSecurityKey
-                (Encoding.UTF8.GetBytes("fdasfasdfsfadsfasddfsafasdffdasfdsfasfasdfsd")),
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = false,
-            ValidateIssuerSigningKey = true
-        };
-    });
-
-builder.Services.AddAuthorization();
+    .AddApplication()
+    .AddAuthorizationInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -92,8 +75,6 @@ if (app.Environment.IsDevelopment())
 
     await app.ApplyMigration();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

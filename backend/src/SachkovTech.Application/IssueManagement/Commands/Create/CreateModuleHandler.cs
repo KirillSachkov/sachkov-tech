@@ -45,7 +45,7 @@ public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
         var module = await _modulesRepository.GetByTitle(title, cancellationToken);
 
         if (module.IsSuccess)
-            return Errors.Module.AlreadyExist().ToErrorList();
+            return Errors.General.AlreadyExist().ToErrorList();
 
         var moduleId = ModuleId.NewModuleId();
 

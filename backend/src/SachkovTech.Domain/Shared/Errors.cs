@@ -21,13 +21,18 @@ public static class Errors
             var label = name == null ? "" : " " + name + " ";
             return Error.Validation("length.is.invalid", $"invalid{label}length)");
         }
-    }
-
-    public static class Module
-    {
+        
         public static Error AlreadyExist()
         {
-            return Error.Validation("record.already.exist", "Module already exist");
+            return Error.Validation("record.already.exist", "Record already exist");
+        }
+    }
+    
+    public static class User
+    {
+        public static Error InvalidCredentials()
+        {
+            return Error.Validation("credentials.is.invalid", "Your credentials is invalid");
         }
     }
 }
