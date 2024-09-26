@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -6,7 +7,7 @@ using SachkovTech.API.Extensions;
 using SachkovTech.API.Middlewares;
 using SachkovTech.Application;
 using SachkovTech.Infrastructure;
-using SachkovTech.Infrastructure.Authentication;
+using SachkovTech.Infrastructure.Authorization;
 using Serilog;
 using Serilog.Events;
 

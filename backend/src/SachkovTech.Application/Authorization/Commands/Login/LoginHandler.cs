@@ -2,7 +2,6 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Abstraction;
-using SachkovTech.Application.AccountManagement.Commands.Login;
 using SachkovTech.Application.Authorization.DataModels;
 using SachkovTech.Domain.Shared;
 

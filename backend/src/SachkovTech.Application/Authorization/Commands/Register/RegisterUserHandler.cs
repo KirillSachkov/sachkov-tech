@@ -5,7 +5,7 @@ using SachkovTech.Application.Abstraction;
 using SachkovTech.Application.Authorization.DataModels;
 using SachkovTech.Domain.Shared;
 
-namespace SachkovTech.Application.AccountManagement.Commands.Register;
+namespace SachkovTech.Application.Authorization.Commands.Register;
 
 public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 {

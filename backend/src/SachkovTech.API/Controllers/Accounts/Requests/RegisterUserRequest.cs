@@ -1,5 +1,4 @@
-using SachkovTech.Application.AccountManagement.Commands;
-using SachkovTech.Application.AccountManagement.Commands.Register;
+using SachkovTech.Application.Authorization.Commands.Register;
 
 namespace SachkovTech.API.Controllers.Accounts.Requests;
 
