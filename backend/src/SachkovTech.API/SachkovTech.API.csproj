@@ -36,4 +36,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="etc\permissions.json" />
+    </ItemGroup>
+
 </Project>

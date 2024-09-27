@@ -1,0 +1,45 @@
+{
+  "Permissions": {
+    "IssuesManagement": [
+      "issues.Read",
+      "issues.Create",
+      "issues.Update",
+      "issues.Delete",
+      "modules.Read",
+      "modules.Create",
+      "modules.Update",
+      "modules.Delete"
+    ],
+    "IssuesReview": [
+      "issues.review.SendOnReview",
+      "issues.review.Review",
+      "issues.review.Update"
+    ]
+  },
+  "Roles": {
+    "Admin": [
+      "issues.Read",
+      "issues.Create",
+      "issues.Update",
+      "issues.Delete",
+      "modules.Read",
+      "modules.Create",
+      "modules.Update",
+      "modules.Delete",
+      "issues.review.SendOnReview",
+      "issues.review.Review",
+      "issues.review.Update"
+    ],
+    "Student": [
+      "issues.Read",
+      "modules.Read",
+      "issuer.review.SendOnReview",
+      "issuer.review.Update"
+    ],
+    "Support": [
+      "issues.Read",
+      "modules.Read",
+      "issues.review.Review"
+    ]
+  }
+}

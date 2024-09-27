@@ -63,6 +63,8 @@ builder.Services
     .AddApplication()
     .AddAuthorizationInfrastructure(builder.Configuration);
 
+builder.Services.AddSingleton<AuthorizationSeeder>();
+
 var app = builder.Build();
 
 app.UseExceptionMiddleware();
@@ -81,5 +83,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var authorizationSeeder = app.Services.GetRequiredService<AuthorizationSeeder>();
+
+await authorizationSeeder.SeedAsync();
 
 app.Run();

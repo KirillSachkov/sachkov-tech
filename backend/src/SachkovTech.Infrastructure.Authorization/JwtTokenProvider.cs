@@ -25,13 +25,14 @@ public class JwtTokenProvider : ITokenProvider
         Claim[] claims =
         [
             new Claim(CustomClaims.Sub, user.Id.ToString()),
-            new Claim(CustomClaims.Email, user.Email ?? "")
+            new Claim(CustomClaims.Email, user.Email ?? ""),
+            new Claim("Permission", "issues.create")
         ];
 
         var jwtToken = new JwtSecurityToken(
             issuer: _jwtOptions.Issuer,
             audience: _jwtOptions.Audience,
-            expires: DateTime.UtcNow.AddMinutes(int.Parse(_jwtOptions.ExpiredMinutesTime)),
+            expires: DateTime.UtcNow.AddSeconds(_jwtOptions.ExpiredMinutesTime),
             signingCredentials: signingCredentials,
             claims: claims);
 
