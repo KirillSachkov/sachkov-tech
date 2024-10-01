@@ -10,7 +10,7 @@ public class UploadFileDtoValidator : AbstractValidator<UploadFileDto>
     {
         RuleFor(u => u.FileName)
             .NotEmpty()
-            .WithError(Errors.Files.InvalidExtension());
+            .WithError(Errors.General.ValueIsInvalid());
         
         RuleFor(u => u.FileName)
             .Must(fn =>
