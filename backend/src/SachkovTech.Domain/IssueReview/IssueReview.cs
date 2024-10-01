@@ -95,7 +95,6 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
     
     public UnitResult<Error> CreateComment(Comment comment)
     {
-        //TODO: упростить
         if (ReviewerId is null)
         {
             if (comment.CommentatorId.Value != UserId.Value)
