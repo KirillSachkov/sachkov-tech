@@ -14,7 +14,13 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(Guid path, string extension)
     {
-        // валидация на доступные расширения файлов
+        if ((Constants.Files.ALLOWED_TEXT_EXTENSIONS
+                 .FirstOrDefault(ext => ext == extension) is not null ||
+             Constants.Files.ALLOWED_PHOTO_EXTENSIONS
+                 .FirstOrDefault(ext => ext == extension) is not null) == false)
+        {
+            return Errors.Files.InvalidExtension();
+        }
 
         var fullPath = path + extension;
 
@@ -23,6 +29,14 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(string fullPath)
     {
+        if ((Constants.Files.ALLOWED_TEXT_EXTENSIONS
+                 .FirstOrDefault(ext => ext == System.IO.Path.GetExtension(fullPath)) is not null ||
+             Constants.Files.ALLOWED_PHOTO_EXTENSIONS
+                 .FirstOrDefault(ext => ext == System.IO.Path.GetExtension(fullPath)) is not null) == false)
+        {
+            return Errors.Files.InvalidExtension();
+        }
+        
         if (string.IsNullOrWhiteSpace(fullPath))
             return Errors.General.ValueIsInvalid("file path");
 

@@ -202,6 +202,71 @@ public class ModuleTests
         fourthIssue.Position.Should().Be(Position.Create(3).Value);
         fifthIssue.Position.Should().Be(Position.Create(4).Value);
     }
+    
+    [Fact]
+    public void Check_FilePath_ToBeValid_WhenItsFullPath()
+    {
+        // arrange
+        string fullPath1 = "bobmaster.jpg";
+        string fullPath2 = "dasdadad.mp4";
+        string fullPath3 = Guid.NewGuid().ToString() + ".txt";
+        string fullPath4 = Guid.NewGuid().ToString() + ".jfif";
+        string fullPath5 = Guid.NewGuid().ToString() + ".gif";
+
+        var guidPath = Guid.Parse("e3147aa9-97be-4fee-b50d-2e73965a16e9");
+        string fullPath6 = guidPath + ".raw";
+        
+        // act
+        var filePath1Res = FilePath.Create(fullPath1);
+        var filePath2Res = FilePath.Create(fullPath2);
+        var filePath3Res = FilePath.Create(fullPath3);
+        var filePath4Res = FilePath.Create(fullPath4);
+        var filePath5Res = FilePath.Create(fullPath5);
+        var filePath6Res = FilePath.Create(fullPath6);
+
+        // assert
+        filePath1Res.IsSuccess.Should().BeTrue();
+        filePath2Res.IsSuccess.Should().BeFalse();
+        filePath3Res.IsSuccess.Should().BeTrue();
+        filePath4Res.IsSuccess.Should().BeTrue();
+        filePath5Res.IsSuccess.Should().BeFalse();
+        filePath6Res.IsSuccess.Should().BeTrue();
+        
+        filePath6Res.Value.Path.Should().Be("e3147aa9-97be-4fee-b50d-2e73965a16e9.raw");
+    }
+    
+    [Fact]
+    public void Check_FilePath_ToBeValid_WhenItsPathAndExtension()
+    {
+        // arrange
+        Guid path = Guid.NewGuid();
+        string extension1 = ".tiff";
+        string extension2 = ".rtf";
+        string extension3 = ".bmp";
+        string extension4 = ".docx";
+        string extension5 = ".exe";
+
+        Guid path6 = Guid.Parse("e3147aa9-97be-4fee-b50d-2e73965a16e9");
+        string extension6 = ".txt";
+        
+        // act
+        var path1Res = FilePath.Create(path, extension1);
+        var path2Res = FilePath.Create(path, extension2);
+        var path3Res = FilePath.Create(path, extension3);
+        var path4Res = FilePath.Create(path, extension4);
+        var path5Res = FilePath.Create(path, extension5);
+        var path6Res = FilePath.Create(path6, extension6);
+
+        // assert
+        path1Res.IsSuccess.Should().BeTrue();
+        path2Res.IsSuccess.Should().BeTrue();
+        path3Res.IsSuccess.Should().BeTrue();
+        path4Res.IsSuccess.Should().BeFalse();
+        path5Res.IsSuccess.Should().BeFalse();
+        path6Res.IsSuccess.Should().BeTrue();
+        
+        path6Res.Value.Path.Should().Be("e3147aa9-97be-4fee-b50d-2e73965a16e9.txt");
+    }
 
     private Module CreateModuleWithIssues(int issuesCount)
     {

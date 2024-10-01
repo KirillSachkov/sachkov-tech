@@ -35,4 +35,17 @@ public static class Errors
             return Error.Validation("credentials.is.invalid", "Your credentials is invalid");
         }
     }
+    
+    public static class Files
+    {
+        public static Error InvalidExtension()
+        {
+            return Error.Validation("extension.is.invalid", "File extension is invalid");
+        }
+        
+        public static Error InvalidSize()
+        {
+            return Error.Validation("size.is.invalid", "File size is invalid");
+        }
+    }
 }
