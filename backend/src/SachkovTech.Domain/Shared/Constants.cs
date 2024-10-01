@@ -14,10 +14,17 @@ public class Constants
         //Bytes
         public const int MAX_FILE_SIZE = 10 * 1024 * 1024; 
         
-        public static readonly string[] ALLOWED_PHOTO_EXTENSIONS = new[] 
-            { ".png", ".jpg", ".bmp", ".tiff", ".raw", ".jfif" };
+        public static readonly string[] FORBIDDEN_FILE_EXTENSIONS = new[] 
+        {
+            // Video
+            ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv",
+    
+            // Sound
+            ".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma",
+    
+            // Software
+            ".exe", ".dll", ".msi", ".bat", ".sh", ".jar"
+        };
         
-        public static readonly string[] ALLOWED_TEXT_EXTENSIONS = new[] 
-            { ".txt", ".rtf"};
     }
 }

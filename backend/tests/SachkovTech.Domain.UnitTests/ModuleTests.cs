@@ -209,9 +209,9 @@ public class ModuleTests
         // arrange
         string fullPath1 = "bobmaster.jpg";
         string fullPath2 = "dasdadad.mp4";
-        string fullPath3 = Guid.NewGuid().ToString() + ".txt";
+        string fullPath3 = Guid.NewGuid().ToString() + ".mkv";
         string fullPath4 = Guid.NewGuid().ToString() + ".jfif";
-        string fullPath5 = Guid.NewGuid().ToString() + ".gif";
+        string fullPath5 = Guid.NewGuid().ToString() + ".flac";
 
         var guidPath = Guid.Parse("e3147aa9-97be-4fee-b50d-2e73965a16e9");
         string fullPath6 = guidPath + ".raw";
@@ -227,7 +227,7 @@ public class ModuleTests
         // assert
         filePath1Res.IsSuccess.Should().BeTrue();
         filePath2Res.IsSuccess.Should().BeFalse();
-        filePath3Res.IsSuccess.Should().BeTrue();
+        filePath3Res.IsSuccess.Should().BeFalse();
         filePath4Res.IsSuccess.Should().BeTrue();
         filePath5Res.IsSuccess.Should().BeFalse();
         filePath6Res.IsSuccess.Should().BeTrue();
@@ -261,7 +261,7 @@ public class ModuleTests
         path1Res.IsSuccess.Should().BeTrue();
         path2Res.IsSuccess.Should().BeTrue();
         path3Res.IsSuccess.Should().BeTrue();
-        path4Res.IsSuccess.Should().BeFalse();
+        path4Res.IsSuccess.Should().BeTrue();
         path5Res.IsSuccess.Should().BeFalse();
         path6Res.IsSuccess.Should().BeTrue();
         

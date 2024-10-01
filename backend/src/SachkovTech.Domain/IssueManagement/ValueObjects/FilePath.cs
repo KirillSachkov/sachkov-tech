@@ -14,10 +14,8 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(Guid path, string extension)
     {
-        if ((Constants.Files.ALLOWED_TEXT_EXTENSIONS
-                 .FirstOrDefault(ext => ext == extension) is not null ||
-             Constants.Files.ALLOWED_PHOTO_EXTENSIONS
-                 .FirstOrDefault(ext => ext == extension) is not null) == false)
+        if ((Constants.Files.FORBIDDEN_FILE_EXTENSIONS
+                 .FirstOrDefault(ext => ext == extension) is not null) == true)
         {
             return Errors.Files.InvalidExtension();
         }
@@ -29,10 +27,8 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(string fullPath)
     {
-        if ((Constants.Files.ALLOWED_TEXT_EXTENSIONS
-                 .FirstOrDefault(ext => ext == System.IO.Path.GetExtension(fullPath)) is not null ||
-             Constants.Files.ALLOWED_PHOTO_EXTENSIONS
-                 .FirstOrDefault(ext => ext == System.IO.Path.GetExtension(fullPath)) is not null) == false)
+        if ((Constants.Files.FORBIDDEN_FILE_EXTENSIONS
+                 .FirstOrDefault(ext => ext == System.IO.Path.GetExtension(fullPath)) is not null) == true)
         {
             return Errors.Files.InvalidExtension();
         }

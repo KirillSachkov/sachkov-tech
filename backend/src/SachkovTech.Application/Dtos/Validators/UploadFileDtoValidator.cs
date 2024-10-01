@@ -11,18 +11,11 @@ public class UploadFileDtoValidator : AbstractValidator<UploadFileDto>
         RuleFor(u => u.FileName)
             .NotEmpty()
             .WithError(Errors.General.ValueIsInvalid());
-        
+
         RuleFor(u => u.FileName)
-            .Must(fn =>
-                Constants.Files.ALLOWED_TEXT_EXTENSIONS
-                    .FirstOrDefault(ext => ext == Path.GetExtension(fn)) is not null ||
-                Constants.Files.ALLOWED_PHOTO_EXTENSIONS
-                    .FirstOrDefault(ext => ext == Path.GetExtension(fn)) is not null
-            )
-            .WithError(Errors.Files.InvalidExtension());
+            .MustBeProperExtension();
 
         RuleFor(u => u.Content)
-            .Must(c => c.Length < Constants.Files.MAX_FILE_SIZE)
-            .WithError(Errors.Files.InvalidSize());
+            .MustBeProperSize();
     }
 }
