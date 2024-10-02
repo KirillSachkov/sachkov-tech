@@ -3,7 +3,7 @@ using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.IssueReview.ValueObjects;
 
-public record Message
+public class Message : ValueObject 
 {
     private Message(string value)
     {
@@ -25,5 +25,10 @@ public record Message
         }
         
         return new Message(value);
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

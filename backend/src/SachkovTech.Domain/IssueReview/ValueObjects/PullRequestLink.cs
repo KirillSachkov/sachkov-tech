@@ -3,7 +3,7 @@ using SachkovTech.Domain.Shared;
 
 namespace SachkovTech.Domain.IssueReview.ValueObjects;
 
-public record PullRequestLink
+public class PullRequestLink : ValueObject
 {
     private PullRequestLink(string value)
     {
@@ -25,5 +25,10 @@ public record PullRequestLink
         }
         
         return new PullRequestLink(value);
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }
