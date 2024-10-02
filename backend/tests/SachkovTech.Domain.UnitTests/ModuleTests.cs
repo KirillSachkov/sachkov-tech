@@ -2,6 +2,9 @@ using FluentAssertions;
 using SachkovTech.Domain.IssueManagement;
 using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.IssueManagement.ValueObjects;
+using SachkovTech.Domain.IssueReview.Entities;
+using SachkovTech.Domain.IssueReview.Other;
+using SachkovTech.Domain.IssueReview.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
@@ -266,6 +269,293 @@ public class ModuleTests
         path6Res.IsSuccess.Should().BeTrue();
         
         path6Res.Value.Path.Should().Be("e3147aa9-97be-4fee-b50d-2e73965a16e9.txt");
+    }
+    
+    [Fact]
+    public void Issue_StartReview_OnlyOnce()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var reviewerId = UserId.NewUserId();
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        newIssueReview.StartReview(reviewerId);
+
+        // assert
+        oldIssueReview.ReviewerId.Should().BeNull();
+        newIssueReview.ReviewerId.Should().Be(reviewerId);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.WaitingForReviewer);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        oldIssueReview.IssueTakenTime.Should().BeNull();
+        newIssueReview.IssueTakenTime.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public void Issue_StartReview_MoreThanOnce()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var reviewerId = UserId.NewUserId();
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+
+        // assert
+        oldIssueReview.ReviewerId.Should().BeNull();
+        newIssueReview.ReviewerId.Should().Be(reviewerId);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.WaitingForReviewer);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        oldIssueReview.IssueTakenTime.Should().BeNull();
+        newIssueReview.IssueTakenTime.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public void Issue_SendIssueForRevision()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var reviewerId = UserId.NewUserId();
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.SendIssueForRevision();
+
+        // assert
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.AskedForRevision);
+    }
+    
+    [Fact]
+    public void Issue_ApproveIssue()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var reviewerId = UserId.NewUserId();
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.Approve();
+
+        // assert
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.Accepted);
+    }
+    
+    [Fact]
+    public void IssueReview_ValueObjectValidation_PullRequestLink()
+    {
+        // arrange & act
+        var pullRequestLink1 = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4");
+        var pullRequestLink2 = PullRequestLink
+            .Create(@"https://github.com/BOBBOMBA/some-super-tech/pull/43");
+        var pullRequestLink3 = PullRequestLink
+            .Create(@"https://www.youtube.com/watch?v=8VOuxijh9_s&list=PLcvhF2Wqh7DNVy1OCUpG3i5lyxyBWhGZ8");
+        var pullRequestLink4 = PullRequestLink
+            .Create(@"https://www.google.com/search?q=%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4%D1%87%D0%B8%D0%BA&oq
+=&gs_lcrp=EgZjaHJvbWUqBggBEEUYOzIGCAAQRRg5MgYIARBFGDsyBggCEEUYO9IBBzgwMGowajeoAgCwAgA&sourceid=chrome&ie=UTF-8");
+        var pullRequestLink5 = PullRequestLink
+            .Create(@"https://github.com/aznoran/PetHouse/pull/32");
+        
+        // assert
+        pullRequestLink1.IsSuccess.Should().BeTrue();
+        pullRequestLink2.IsSuccess.Should().BeTrue();
+        pullRequestLink3.IsSuccess.Should().BeFalse();
+        pullRequestLink4.IsSuccess.Should().BeFalse();
+        pullRequestLink5.IsSuccess.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IssueReview_ValueObjectValidation_Message()
+    {
+        // arrange & act
+        var message1 = Message.Create("small text");
+        string bigText = "b";
+        for (int i = 0; i < 2000; ++i)
+        {
+            bigText += "i";
+        }
+        var message2 = Message.Create(bigText);
+        
+        // assert
+        message1.IsSuccess.Should().BeTrue();
+        message2.IsSuccess.Should().BeFalse();
+    }
+    
+    [Fact]
+    public void Issue_AddComment_WhenUserAdds()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var issueReviewStatus = IssueReviewStatus.OnReview;
+
+        var newMessage = Message.Create("something").Value;
+
+        var newComment = Comment.Create(
+            userId,
+            newMessage);
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+        
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        var createCommentRes = newIssueReview.AddComment(newComment.Value);
+
+        // assert
+        createCommentRes.IsSuccess.Should().BeTrue();
+        oldIssueReview.Comments.Count.Should().Be(0);
+        newIssueReview.Comments[0].Should().Be(newComment.Value);
+        newIssueReview.Comments[0].UserId.Should().Be(userId);
+    }
+    
+    [Fact]
+    public void Issue_AddComment_WhenReviewerAdds()
+    {
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var issueReviewStatus = IssueReviewStatus.OnReview;
+        var reviewerId = UserId.NewUserId();
+
+        var newMessage = Message.Create("something").Value;
+
+        var newComment = Comment.Create(
+            reviewerId,
+            newMessage);
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        var createCommentRes = newIssueReview.AddComment(newComment.Value);
+
+        // assert
+        createCommentRes.IsSuccess.Should().BeTrue();
+        oldIssueReview.Comments.Count.Should().Be(0);
+        newIssueReview.Comments[0].Should().Be(newComment.Value);
+        newIssueReview.Comments[0].UserId.Should().Be(reviewerId);
+    }
+    
+    [Fact]
+    public void Issue_AddComment_WhenCommentatorIsInvalid()
+    {
+        // arrange
+        // arrange
+        var issueId = IssueId.NewIssueId();
+        var userId = UserId.NewUserId();
+        var issueReviewStatus = IssueReviewStatus.OnReview;
+        var reviewerId = UserId.NewUserId();
+
+        var newMessage = Message.Create("something").Value;
+
+        var newComment = Comment.Create(
+            UserId.Create(Guid.NewGuid()),
+            newMessage).Value;
+
+        var pullRequestLink = PullRequestLink
+            .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
+
+        var oldIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            pullRequestLink).Value;
+        
+        // act
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        var createCommentRes = newIssueReview.AddComment(newComment);
+
+        // assert
+        createCommentRes.IsFailure.Should().BeTrue();
     }
 
     private Module CreateModuleWithIssues(int issuesCount)
