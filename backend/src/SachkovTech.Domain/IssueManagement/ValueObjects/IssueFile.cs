@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 
 namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
-public record IssueFile
+public class IssueFile: ValueObject
 {
     [JsonConstructor]
     public IssueFile(FilePath pathToStorage)
@@ -11,4 +12,8 @@ public record IssueFile
     }
 
     public FilePath PathToStorage { get; }
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return PathToStorage;
+    }
 }

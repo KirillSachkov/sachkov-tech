@@ -6,7 +6,7 @@ using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueManagement.Entities;
 
-public class Issue : Shared.Entity<IssueId>, ISoftDeletable
+public class Issue : CSharpFunctionalExtensions.Entity<IssueId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -23,16 +23,17 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
         Title title,
         Description description,
         LessonId lessonId,
-        Issue? parentIssue,
+        Experience experience,
         ValueObjectList<IssueFile>? files) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
-        ParentIssue = parentIssue;
+        Experience = experience;
         _files = files ?? new ValueObjectList<IssueFile>([]);
     }
 
+    public Experience Experience { get; private set; } = default!;
     public Title Title { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
 
@@ -40,8 +41,6 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
 
     public LessonId LessonId { get; private set; }
 
-    public Issue? ParentIssue { get; private set; }
-    public IReadOnlyList<Issue> SubIssues => _subIssues;
 
     public IReadOnlyList<IssueFile> Files => _files;
 
@@ -70,18 +69,18 @@ public class Issue : Shared.Entity<IssueId>, ISoftDeletable
         var newPosition = Position.Forward();
         if (newPosition.IsFailure)
             return newPosition.Error;
-        
+
         Position = newPosition.Value;
 
         return Result.Success<Error>();
     }
-    
+
     public UnitResult<Error> MoveBack()
     {
         var newPosition = Position.Back();
         if (newPosition.IsFailure)
             return newPosition.Error;
-        
+
         Position = newPosition.Value;
 
         return Result.Success<Error>();

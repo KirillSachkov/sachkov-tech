@@ -63,13 +63,14 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
         var title = Title.Create(command.Title).Value;
         var description = Description.Create(command.Description).Value;
         var lessonId = LessonId.Empty();
+        var experience = Experience.Create(command.Experience).Value;
 
         return new Issue(
             issueId,
             title,
             description,
             lessonId,
-            null,
+            experience,
             null);
     }
 }
