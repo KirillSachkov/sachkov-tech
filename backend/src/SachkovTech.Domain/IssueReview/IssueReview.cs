@@ -38,9 +38,9 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
     
     public IssueReviewStatus IssueReviewStatus { get; private set; }
 
-    public ReviewerId? ReviewerId { get; private set; } = null;
-    
-    private List<Comment> _comments { get; set; }
+    public UserId? ReviewerId { get; private set; } = null;
+
+    private List<Comment> _comments = [];
     public IReadOnlyList<Comment> Comments => _comments;
 
     public DateTime ReviewStartedTime { get; private set; }
@@ -52,7 +52,6 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
 
     public static Result<IssueReview, Error> Create(IssueId issueId,
         UserId userId,
-        ReviewerId? reviewerId,
         PullRequestLink pullRequestLink)
     {
         return Result.Success<IssueReview, Error>(new(
@@ -65,7 +64,7 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
             pullRequestLink));
     }
 
-    public void StartReview(ReviewerId reviewerId)
+    public void StartReview(UserId reviewerId)
     {
         ReviewerId = reviewerId;
         IssueReviewStatus = IssueReviewStatus.OnReview;
@@ -99,12 +98,22 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
         
         return UnitResult.Success<Error>();
     }
-    
+
     public UnitResult<Error> AddComment(Comment comment)
     {
-        if ((comment.UserId == UserId || comment.UserId.Value == ReviewerId!.Value) == false)
+        if (ReviewerId is null)
         {
-            return Errors.General.ValueIsInvalid("comment");
+            if (comment.UserId != UserId)
+            {
+                return Errors.General.ValueIsInvalid("comment");
+            }
+        }
+        else
+        {
+            if ((comment.UserId == UserId || comment.UserId == ReviewerId) == false)
+            {
+                return Errors.General.ValueIsInvalid("comment");
+            }
         }
         
         _comments.Add(comment);

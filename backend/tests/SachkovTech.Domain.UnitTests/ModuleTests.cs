@@ -277,7 +277,7 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
@@ -285,13 +285,11 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
@@ -312,7 +310,7 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
@@ -320,13 +318,11 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
@@ -349,7 +345,7 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
@@ -357,13 +353,11 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
@@ -382,7 +376,7 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
@@ -390,13 +384,11 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
@@ -457,7 +449,6 @@ public class ModuleTests
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
         var issueReviewStatus = IssueReviewStatus.OnReview;
-        var reviewerId = ReviewerId.NewReviewerId();
 
         var newMessage = Message.Create("something").Value;
 
@@ -472,22 +463,20 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.AddComment(newComment.Value);
+        var createCommentRes = newIssueReview.AddComment(newComment.Value);
 
         // assert
         createCommentRes.IsSuccess.Should().BeTrue();
         oldIssueReview.Comments.Count.Should().Be(0);
-        newIssueReview.Comments[0].Should().Be(newComment);
+        newIssueReview.Comments[0].Should().Be(newComment.Value);
         newIssueReview.Comments[0].UserId.Should().Be(userId);
     }
     
@@ -498,12 +487,12 @@ public class ModuleTests
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
         var issueReviewStatus = IssueReviewStatus.OnReview;
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var newMessage = Message.Create("something").Value;
 
         var newComment = Comment.Create(
-            UserId.Create(reviewerId.Value),
+            reviewerId,
             newMessage);
 
         var pullRequestLink = PullRequestLink
@@ -512,23 +501,23 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.AddComment(newComment.Value);
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        var createCommentRes = newIssueReview.AddComment(newComment.Value);
 
         // assert
         createCommentRes.IsSuccess.Should().BeTrue();
         oldIssueReview.Comments.Count.Should().Be(0);
-        newIssueReview.Comments[0].Should().Be(newComment);
-        newIssueReview.Comments[0].UserId.Value.Should().Be(reviewerId.Value);
+        newIssueReview.Comments[0].Should().Be(newComment.Value);
+        newIssueReview.Comments[0].UserId.Should().Be(reviewerId);
     }
     
     [Fact]
@@ -539,7 +528,7 @@ public class ModuleTests
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
         var issueReviewStatus = IssueReviewStatus.OnReview;
-        var reviewerId = ReviewerId.NewReviewerId();
+        var reviewerId = UserId.NewUserId();
 
         var newMessage = Message.Create("something").Value;
 
@@ -553,17 +542,17 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            null,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.AddComment(newComment);
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        var createCommentRes = newIssueReview.AddComment(newComment);
 
         // assert
         createCommentRes.IsFailure.Should().BeTrue();
