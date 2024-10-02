@@ -56,6 +56,16 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
         foreach (var issue in _issues)
             issue.Delete();
     }
+    
+    public UnitResult<Error> DeleteIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Errors.General.NotFound(issueId);
+        
+        _issues.Remove(issue);
+        return Result.Success<Error>();
+    }
 
     public void Restore()
     {

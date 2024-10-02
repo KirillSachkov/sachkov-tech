@@ -11,7 +11,11 @@ using SachkovTech.API.Processors;
 using SachkovTech.Application.IssueManagement.Commands.AddIssue;
 using SachkovTech.Application.IssueManagement.Commands.Create;
 using SachkovTech.Application.IssueManagement.Commands.Delete;
+using SachkovTech.Application.IssueManagement.Commands.DeleteIssue;
+using SachkovTech.Application.IssueManagement.Commands.DeleteIssue.ForceDeleteIssue;
+using SachkovTech.Application.IssueManagement.Commands.UpdateIssueMainInfo;
 using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
+using SachkovTech.Application.IssueManagement.Commands.UpdatePosition;
 using SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
 
 namespace SachkovTech.API.Controllers.Modules;
@@ -63,6 +67,38 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
+    
+    [HttpDelete("{id:guid}/issue/{issueId:guid}/soft")]
+    public async Task<ActionResult> SoftDeleteIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromServices] SoftDeleteIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteIssueCommand(id, issueId);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpDelete("{id:guid}/issue/{issueId:guid}/force")]
+    public async Task<ActionResult> ForceDeleteIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromServices] ForceDeleteIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteIssueCommand(id, issueId);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok(result.Value);
+    }
 
     [HttpPost("{id:guid}/issue")]
     public async Task<ActionResult> AddIssue(
@@ -95,6 +131,40 @@ public class ModulesController : ApplicationController
         var command = new UploadFilesToIssueCommand(id, issueId, fileDtos);
 
         var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPut("{id:guid}/issue/{issueId:guid}/newPosition/{newPosition:int}")]
+    public async Task<ActionResult> UpdateIssuePosition(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromRoute] int newPosition,
+        [FromServices] UpdateIssuePositionHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateIssuePositionCommand(id, issueId, newPosition);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpPut("{id:guid}/issue/{issueId:guid}/main-info")]
+    public async Task<ActionResult> UpdateIssueMainInfo(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromBody] UpdateIssueMainInfoRequest request,
+        [FromServices] UpdateIssueMainInfoHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id, issueId);;
+        var result = await handler.Handle(command, cancellationToken);
+
         if (result.IsFailure)
             return result.Error.ToResponse();
 

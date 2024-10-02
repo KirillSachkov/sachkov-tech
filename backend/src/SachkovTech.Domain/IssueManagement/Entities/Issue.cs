@@ -88,4 +88,18 @@ public class Issue : CSharpFunctionalExtensions.Entity<IssueId>, ISoftDeletable
 
     public void Move(Position newPosition) =>
         Position = newPosition;
+
+    public UnitResult<Error> UpdateMainInfo(
+        Title title,
+        Description description,
+        LessonId lessonId,
+        Experience experience)
+    {
+        Title = title;
+        Description = description;
+        LessonId = lessonId;
+        Experience = experience;
+        
+        return Result.Success<Error>();
+    }
 }

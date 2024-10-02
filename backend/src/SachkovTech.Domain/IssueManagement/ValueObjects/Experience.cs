@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.Domain.Shared;
 
-namespace SachkovTech.Domain.IssueManagement.Entities;
+namespace SachkovTech.Domain.IssueManagement.ValueObjects;
 
 public class Experience : ValueObject
 {
@@ -15,7 +15,7 @@ public class Experience : ValueObject
 
     public static Result<Experience, Error> Create(int experience)
     {
-        if (experience < 0 || experience > MAX_VALUE)
+        if (experience is < 0 or > MAX_VALUE)
             return Errors.General.ValueIsInvalid("Experience");
         return new Experience(experience);
     }

@@ -36,7 +36,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
             lb =>
             {
                 lb.Property(l => l.Value)
-                    .IsRequired(false)
+                    .IsRequired()
                     .HasColumnName("experience");
             });
 
