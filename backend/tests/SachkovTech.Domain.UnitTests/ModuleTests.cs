@@ -272,7 +272,7 @@ public class ModuleTests
     }
     
     [Fact]
-    public void Set_Issue_OnReview_OnlyOnce()
+    public void Issue_StartReview_OnlyOnce()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
@@ -307,7 +307,7 @@ public class ModuleTests
     }
     
     [Fact]
-    public void Set_Issue_OnReview_MoreThanOnce()
+    public void Issue_StartReview_MoreThanOnce()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
@@ -451,7 +451,7 @@ public class ModuleTests
     }
     
     [Fact]
-    public void Issue_CreateComment_WhenUserCreates()
+    public void Issue_AddComment_WhenUserAdds()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
@@ -492,7 +492,7 @@ public class ModuleTests
     }
     
     [Fact]
-    public void Issue_CreateComment_WhenReviewerCreates()
+    public void Issue_AddComment_WhenReviewerAdds()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
@@ -532,7 +532,7 @@ public class ModuleTests
     }
     
     [Fact]
-    public void Issue_CreateComment_WhenCommentatorIsInvalid()
+    public void Issue_AddComment_WhenCommentatorIsInvalid()
     {
         // arrange
         // arrange
