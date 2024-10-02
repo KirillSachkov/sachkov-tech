@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.Domain.IssueReview.Entities;
+using SachkovTech.Domain.IssueReview.Other;
 using SachkovTech.Domain.IssueReview.ValueObjects;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
@@ -17,21 +18,17 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
     public IssueReview(IssueReviewId issueReviewId,
         IssueId issueId,
         UserId userId,
-        IssueReviewStatusInfo issueReviewStatus,
-        ReviewerId? reviewerId,
-        IReadOnlyList<Comment> comments,
-        DateTime issueTakenTime,
-        DateTime issueCreatedTime,
+        IssueReviewStatus issueReviewStatus,
+        DateTime reviewStartedTime,
+        DateTime? issueApprovedTime,
         PullRequestLink pullRequestLink)
         : base(issueReviewId)
     {
         IssueId = issueId;
         UserId = userId;
         IssueReviewStatus = issueReviewStatus;
-        ReviewerId = reviewerId;
-        Comments = comments;
-        IssueTakenTime = issueTakenTime;
-        IssueCreatedTime = issueCreatedTime;
+        ReviewStartedTime = reviewStartedTime;
+        IssueApprovedTime = issueApprovedTime;
         PullRequestLink = pullRequestLink;
     }
 
@@ -39,88 +36,78 @@ public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewI
 
     public UserId UserId { get; private set; } 
     
-    public IssueReviewStatusInfo IssueReviewStatus { get; private set; }
+    public IssueReviewStatus IssueReviewStatus { get; private set; }
 
     public ReviewerId? ReviewerId { get; private set; } = null;
     
-    public IReadOnlyList<Comment> Comments { get; private set; }
+    private List<Comment> _comments { get; set; }
+    public IReadOnlyList<Comment> Comments => _comments;
 
-    public DateTime IssueTakenTime { get; private set; } = default;
+    public DateTime ReviewStartedTime { get; private set; }
+    public DateTime? IssueTakenTime { get; private set; }
     
-    public DateTime IssueCreatedTime { get; private set; }
+    public DateTime? IssueApprovedTime { get; private set; }
     
     public PullRequestLink PullRequestLink { get; private set; }
 
     public static Result<IssueReview, Error> Create(IssueId issueId,
         UserId userId,
-        IssueReviewStatusInfo issueReviewStatus,
         ReviewerId? reviewerId,
-        IReadOnlyList<Comment> comments,
-        DateTime issueTakenTime,
-        DateTime issueCreatedTime,
         PullRequestLink pullRequestLink)
     {
         return Result.Success<IssueReview, Error>(new(
             IssueReviewId.NewIssueReviewId(),
             issueId,
             userId,
-            issueReviewStatus,
-            reviewerId,
-            comments,
-            issueTakenTime,
-            issueCreatedTime,
+            IssueReviewStatus.WaitingForReviewer,
+            DateTime.UtcNow,
+            null,
             pullRequestLink));
     }
 
-    public void SetIssueOnReview(ReviewerId? reviewerId)
+    public void StartReview(ReviewerId reviewerId)
     {
         ReviewerId = reviewerId;
-        IssueReviewStatus = IssueReviewStatusInfo.Create(2).Value;
+        IssueReviewStatus = IssueReviewStatus.OnReview;
 
-        if (IssueTakenTime == default)
+        if (IssueTakenTime == null)
         {
             IssueTakenTime = DateTime.UtcNow;
         }
     }
     
-    public void AskForRevision()
+    public UnitResult<Error> SendIssueForRevision()
     {
-        IssueReviewStatus = IssueReviewStatusInfo.Create(4).Value;
-    }
-    
-    public void AcceptIssue()
-    {
-        IssueReviewStatus = IssueReviewStatusInfo.Create(3).Value;
-    }
-    
-    public UnitResult<Error> CreateComment(Comment comment)
-    {
-        if (ReviewerId is null)
+        if (IssueReviewStatus != IssueReviewStatus.OnReview)
         {
-            if (comment.CommentatorId.Value != UserId.Value)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
-        }
-        else
-        {
-            if (comment.CommentatorId.Value != UserId.Value &&
-                comment.CommentatorId.Value != ReviewerId.Value)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
+            return Errors.General.ValueIsInvalid("issue-review-status");
         }
 
-        var newComments = new List<Comment>(capacity: Comments.Count+1);
-
-        foreach (var commentTemp in Comments)
+        IssueReviewStatus = IssueReviewStatus.AskedForRevision;
+        
+        return UnitResult.Success<Error>();
+    }
+    
+    public UnitResult<Error> Approve()
+    {
+        if (IssueReviewStatus != IssueReviewStatus.OnReview)
         {
-            newComments.Add(commentTemp);
+            return Errors.General.ValueIsInvalid("issue-review-status");
+        }
+
+        IssueReviewStatus = IssueReviewStatus.Accepted;
+        
+        return UnitResult.Success<Error>();
+    }
+    
+    public UnitResult<Error> AddComment(Comment comment)
+    {
+        if ((comment.UserId == UserId || comment.UserId.Value == ReviewerId!.Value) == false)
+        {
+            return Errors.General.ValueIsInvalid("comment");
         }
         
-        newComments.Add(comment);
-
-        Comments = newComments;
+        _comments.Add(comment);
 
         return UnitResult.Success<Error>();
     }

@@ -277,16 +277,7 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
@@ -294,33 +285,25 @@ public class ModuleTests
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         // act
-        newIssueReview.SetIssueOnReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
 
         // assert
         oldIssueReview.ReviewerId.Should().BeNull();
         newIssueReview.ReviewerId.Should().Be(reviewerId);
-        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(1).Value);
-        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(2).Value);
-        oldIssueReview.IssueTakenTime.Should().Be(default);
-        newIssueReview.IssueTakenTime.Should().NotBe(default);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.WaitingForReviewer);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        oldIssueReview.IssueTakenTime.Should().BeNull();
+        newIssueReview.IssueTakenTime.Should().NotBeNull();
     }
     
     [Fact]
@@ -329,182 +312,101 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
-        
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            issueTakenTime,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         // act
-        newIssueReview.SetIssueOnReview(reviewerId);
-        newIssueReview.SetIssueOnReview(reviewerId);
-        newIssueReview.SetIssueOnReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
 
         // assert
         oldIssueReview.ReviewerId.Should().BeNull();
         newIssueReview.ReviewerId.Should().Be(reviewerId);
-        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(1).Value);
-        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(2).Value);
-        oldIssueReview.IssueTakenTime.Should().Be(default);
-        newIssueReview.IssueTakenTime.Should().Be(issueTakenTime);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.WaitingForReviewer);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        oldIssueReview.IssueTakenTime.Should().BeNull();
+        newIssueReview.IssueTakenTime.Should().NotBeNull();
     }
     
     [Fact]
-    public void Issue_AskForRevision()
+    public void Issue_SendIssueForRevision()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
-        
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            issueTakenTime,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         // act
-        newIssueReview.AskForRevision();
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.SendIssueForRevision();
 
         // assert
-        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(1).Value);
-        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(4).Value);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.AskedForRevision);
     }
     
     [Fact]
-    public void Issue_AcceptIssue()
+    public void Issue_ApproveIssue()
     {
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
-        
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            issueTakenTime,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         // act
-        newIssueReview.AcceptIssue();
+        oldIssueReview.StartReview(reviewerId);
+        newIssueReview.StartReview(reviewerId);
+        newIssueReview.Approve();
 
         // assert
-        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(1).Value);
-        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatusInfo.Create(3).Value);
-    }
-    
-    //TODO: проверка VO (Pullreqlink , message, statusinfo)
-    [Fact]
-    public void IssueReview_ValueObjectValidation_IssueReviewStatusInfo()
-    {
-        // arrange & act
-        var reviewStatus1 = IssueReviewStatusInfo.Create(0);
-        var reviewStatus2 = IssueReviewStatusInfo.Create(1);
-        var reviewStatus3 = IssueReviewStatusInfo.Create(2);
-        var reviewStatus4 = IssueReviewStatusInfo.Create(3);
-        var reviewStatus5 = IssueReviewStatusInfo.Create(4);
-        var reviewStatus6 = IssueReviewStatusInfo.Create(5);
-        var reviewStatus7 = IssueReviewStatusInfo.Create(555);
-        
-        // assert
-        reviewStatus1.IsSuccess.Should().BeFalse();
-        reviewStatus2.IsSuccess.Should().BeTrue();
-        reviewStatus3.IsSuccess.Should().BeTrue();
-        reviewStatus4.IsSuccess.Should().BeTrue();
-        reviewStatus5.IsSuccess.Should().BeTrue();
-        reviewStatus6.IsSuccess.Should().BeFalse();
-        reviewStatus7.IsSuccess.Should().BeFalse();
-
-        reviewStatus2.Value.Value.Should().Be(IssueReviewStatus.WaitingForReviewer);
-        reviewStatus3.Value.Value.Should().Be(IssueReviewStatus.OnReview);
-        reviewStatus4.Value.Value.Should().Be(IssueReviewStatus.Accepted);
-        reviewStatus5.Value.Value.Should().Be(IssueReviewStatus.AskedForRevision);
+        oldIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
+        newIssueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.Accepted);
     }
     
     [Fact]
@@ -554,67 +456,39 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
+        var issueReviewStatus = IssueReviewStatus.OnReview;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var newMessage = Message.Create("something").Value;
 
         var newComment = Comment.Create(
-            CommentatorId.Create(userId.Value),
-            newMessage, DateTime.UtcNow);
-        
-        var newComments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            newComment.Value
-        };
+            userId,
+            newMessage);
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
         
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            newComments,
-            issueTakenTime,
-            DateTime.UtcNow,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.CreateComment(newComment.Value);
+        var createCommentRes = oldIssueReview.AddComment(newComment.Value);
 
         // assert
         createCommentRes.IsSuccess.Should().BeTrue();
-        oldIssueReview.Comments[0].Message.Should().Be(newIssueReview.Comments[0].Message);
-        oldIssueReview.Comments[1].Message.Should().Be(newIssueReview.Comments[1].Message);
-        oldIssueReview.Comments[2].Message.Should().Be(newIssueReview.Comments[2].Message);
-        oldIssueReview.Comments[3].Message.Should().Be(newIssueReview.Comments[3].Message);
-        newIssueReview.Comments[3].CommentatorId.Value.Should().Be(userId.Value);
+        oldIssueReview.Comments.Count.Should().Be(0);
+        newIssueReview.Comments[0].Should().Be(newComment);
+        newIssueReview.Comments[0].UserId.Should().Be(userId);
     }
     
     [Fact]
@@ -623,106 +497,73 @@ public class ModuleTests
         // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
+        var issueReviewStatus = IssueReviewStatus.OnReview;
         var reviewerId = ReviewerId.NewReviewerId();
-
-        var message = Message.Create("test").Value;
-        
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
 
         var newMessage = Message.Create("something").Value;
 
         var newComment = Comment.Create(
-            CommentatorId.Create(reviewerId.Value),
-            newMessage, DateTime.UtcNow);
-        
-        var newComments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            newComment.Value
-        };
+            UserId.Create(reviewerId.Value),
+            newMessage);
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
-        
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
-            reviewerId,
-            comments,
-            default,
-            DateTime.UtcNow,
+            null,
             pullRequestLink).Value;
         
         var newIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
-            reviewerId,
-            newComments,
-            issueTakenTime,
-            DateTime.UtcNow,
+            null,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.CreateComment(newComment.Value);
+        var createCommentRes = oldIssueReview.AddComment(newComment.Value);
 
         // assert
         createCommentRes.IsSuccess.Should().BeTrue();
-        oldIssueReview.Comments[0].Message.Should().Be(newIssueReview.Comments[0].Message);
-        oldIssueReview.Comments[1].Message.Should().Be(newIssueReview.Comments[1].Message);
-        oldIssueReview.Comments[2].Message.Should().Be(newIssueReview.Comments[2].Message);
-        oldIssueReview.Comments[3].Message.Should().Be(newIssueReview.Comments[3].Message);
-        newIssueReview.Comments[3].CommentatorId.Value.Should().Be(reviewerId.Value);
+        oldIssueReview.Comments.Count.Should().Be(0);
+        newIssueReview.Comments[0].Should().Be(newComment);
+        newIssueReview.Comments[0].UserId.Value.Should().Be(reviewerId.Value);
     }
     
     [Fact]
     public void Issue_CreateComment_WhenCommentatorIsInvalid()
     {
         // arrange
+        // arrange
         var issueId = IssueId.NewIssueId();
         var userId = UserId.NewUserId();
-        var issueReviewStatus = IssueReviewStatusInfo.Create(1).Value;
+        var issueReviewStatus = IssueReviewStatus.OnReview;
         var reviewerId = ReviewerId.NewReviewerId();
 
-        var message = Message.Create("test").Value;
+        var newMessage = Message.Create("something").Value;
 
-        var comment = Comment.Create(CommentatorId.Create(Guid.NewGuid()), message, DateTime.UtcNow).Value;
-        
-        var comments = new List<Comment>()
-        {
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(reviewerId.Value), message, DateTime.UtcNow).Value,
-            Comment.Create(CommentatorId.Create(userId.Value), message, DateTime.UtcNow).Value
-        };
+        var newComment = Comment.Create(
+            UserId.Create(Guid.NewGuid()),
+            newMessage).Value;
 
         var pullRequestLink = PullRequestLink
             .Create(@"https://github.com/KirillSachkov/sachkov-tech/pull/4").Value;
-        
-        var issueTakenTime = DateTime.UtcNow;
 
         var oldIssueReview = IssueReview.IssueReview.Create(
             issueId,
             userId,
-            issueReviewStatus,
             null,
-            comments,
-            default,
-            DateTime.UtcNow,
+            pullRequestLink).Value;
+        
+        var newIssueReview = IssueReview.IssueReview.Create(
+            issueId,
+            userId,
+            null,
             pullRequestLink).Value;
         
         // act
-        var createCommentRes = oldIssueReview.CreateComment(comment);
+        var createCommentRes = oldIssueReview.AddComment(newComment);
 
         // assert
         createCommentRes.IsFailure.Should().BeTrue();

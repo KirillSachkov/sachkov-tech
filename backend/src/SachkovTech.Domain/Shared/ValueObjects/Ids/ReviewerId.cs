@@ -1,6 +1,8 @@
-﻿namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
+﻿using CSharpFunctionalExtensions;
 
-public record ReviewerId
+namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
+
+public class ReviewerId : ValueObject
 {
     private ReviewerId(Guid value)
     {
@@ -12,4 +14,9 @@ public record ReviewerId
     public static ReviewerId NewReviewerId() => new(Guid.NewGuid());
     public static ReviewerId Empty() => new(Guid.Empty);
     public static ReviewerId Create(Guid id) => new(id);
+    
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }

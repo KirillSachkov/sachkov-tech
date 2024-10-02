@@ -13,29 +13,28 @@ public class Comment : Shared.Entity<CommentId>
     }
 
     private Comment(CommentId id,
-        CommentatorId commentatorId,
+        UserId userId,
         Message message,
         DateTime createdAt) : base(id)
     {
-        CommentatorId = commentatorId;
+        UserId = userId;
         Message = message;
         CreatedAt = createdAt;
     }
 
-    public CommentatorId CommentatorId { get; private set; }
+    public UserId UserId { get; private set; }
 
     public Message Message { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
-    public static Result<Comment, Error> Create(CommentatorId commentatorId,
-        Message message,
-        DateTime createdAt)
+    public static Result<Comment, Error> Create(UserId userId,
+        Message message)
     {
         return Result.Success<Comment, Error>(new Comment(
             CommentId.NewCommentId(),
-            commentatorId,
+            userId,
             message,
-            createdAt));
+            DateTime.UtcNow));
     }
 }
