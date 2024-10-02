@@ -5,7 +5,7 @@ using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueSolvingManagement.Entities;
 
-public class UserIssue : Shared.Entity<UserIssueId>
+public class UserIssue : CSharpFunctionalExtensions.Entity<UserIssueId>
 {
     public UserIssue(
         UserIssueId id,
@@ -52,14 +52,26 @@ public class UserIssue : Shared.Entity<UserIssueId>
         return Result.Success<Error>();
     }
 
-    public void SendForRevision()
+    public UnitResult<Error> SendForRevision()
     {
-        Status = IssueStatus.AtWork;
-        Attempts = Attempts.Add();
+        if (Status == IssueStatus.NotCompleted || Status == IssueStatus.UnderReview)
+        {
+            Status = IssueStatus.AtWork;
+            Attempts = Attempts.Add();
+            
+            return Result.Success<Error>();
+        }
+        
+        return Error.Failure("issue.status.invalid", "issue status should be not completed or under review");
     }
 
-    public void CompleteTask()
+    public UnitResult<Error> CompleteTask()
     {
+        if (Status != IssueStatus.UnderReview)
+            return Error.Failure("issue.invalid.status", "issue status should be under review");
+        
         Status = IssueStatus.Completed;
+
+        return new UnitResult<Error>();
     }
 }
