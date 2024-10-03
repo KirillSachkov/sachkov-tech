@@ -10,7 +10,9 @@ public class FileType : ValueObject
     public static readonly FileType Document = new(nameof(Document).ToUpper());
     public static readonly FileType Spreadsheets = new(nameof(Spreadsheets).ToUpper());
     public static readonly FileType Archive = new(nameof(Archive).ToUpper());
-    
+
+    private static readonly FileType[] _types = [Image, Video, Document, Spreadsheets, Archive];
+
     public string Value { get; }
 
     private FileType(string value)
@@ -18,10 +20,14 @@ public class FileType : ValueObject
         Value = value;
     }
 
-    public static Result<FileType, Error> Create(string fileType)
+    public static Result<FileType, Error> Create(string input)
     {
-        if (string.IsNullOrWhiteSpace(fileType) || fileType.Length > Constants.Default.MAX_LOW_TEXT_LENGTH)
+        var fileType = input.Trim().ToUpper();
+
+        if (_types.Any(t => t.Value == fileType) == false)
+        {
             return Errors.General.ValueIsInvalid("file type");
+        }
 
         return new FileType(fileType);
     }

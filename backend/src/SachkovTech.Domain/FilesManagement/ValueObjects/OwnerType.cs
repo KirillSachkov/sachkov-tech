@@ -7,6 +7,8 @@ public class OwnerType : ValueObject
 {
     public static readonly OwnerType Issue = new(nameof(Issue).ToUpper());
 
+    private static readonly OwnerType[] _types = [Issue];
+
     public string Value { get; }
 
     private OwnerType(string value)
@@ -14,10 +16,14 @@ public class OwnerType : ValueObject
         Value = value;
     }
 
-    public static Result<OwnerType, Error> Create(string fileOwnerType)
+    public static Result<OwnerType, Error> Create(string input)
     {
-        if (string.IsNullOrWhiteSpace(fileOwnerType) || fileOwnerType.Length < Constants.Default.MAX_LOW_TEXT_LENGTH)
-            return Errors.General.ValueIsInvalid("file owner type");
+        var fileOwnerType = input.Trim().ToUpper();
+
+        if (_types.Any(t => t.Value == fileOwnerType) == false)
+        {
+            return Errors.General.ValueIsInvalid("owner type");
+        }
 
         return new OwnerType(fileOwnerType);
     }

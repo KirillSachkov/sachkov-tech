@@ -12,17 +12,15 @@ public class MimeType : ValueObject
     public static readonly MimeType Gif = new(MediaTypeNames.Image.Gif);
     public static readonly MimeType Svg = new(MediaTypeNames.Image.Svg);
     public static readonly MimeType Icon = new(MediaTypeNames.Image.Icon);
-    public static readonly MimeType Bmp = new(MediaTypeNames.Image.Bmp);
 
     public static readonly MimeType Pdf = new(MediaTypeNames.Application.Pdf);
     public static readonly MimeType Json = new(MediaTypeNames.Application.Json);
-    public static readonly MimeType Zip = new(MediaTypeNames.Application.Zip);
-    public static readonly MimeType Rtf = new(MediaTypeNames.Application.Rtf);
     public static readonly MimeType Xml = new(MediaTypeNames.Application.Xml);
 
-    public static readonly MimeType Mp4 = new("video/mp4");
-    public static readonly MimeType Mpeg = new("video/mpeg");
-    public static readonly MimeType Webm = new("video/webm");
+    private static readonly MimeType[] _types =
+    [
+        Png, Jpeg, Gif, Svg, Icon, Pdf, Json, Xml, Svg
+    ];
 
     public string Value { get; }
 
@@ -31,12 +29,19 @@ public class MimeType : ValueObject
         Value = value;
     }
 
-    public Result<MimeType, Error> Create(string type)
+    public Result<MimeType, Error> Create(string input)
     {
-        if (string.IsNullOrEmpty(type) || type.Length > Constants.Default.MAX_LOW_TEXT_LENGTH)
-            return Errors.General.ValueIsInvalid("MimeType");
+        var mimeType = input.Trim().ToUpper();
 
-        return new MimeType(type);
+        if (_types.Any(t => t.Value == mimeType) == false)
+        {
+            return Errors.General.ValueIsInvalid("mime type");
+        }
+
+        if (string.IsNullOrEmpty(mimeType) || mimeType.Length > Constants.Default.MAX_LOW_TEXT_LENGTH)
+            return Errors.General.ValueIsInvalid("mime type");
+
+        return new MimeType(mimeType);
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

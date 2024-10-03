@@ -19,7 +19,6 @@ public class FileData : CSharpFunctionalExtensions.Entity<FileId>
         FileName name,
         Guid ownerId,
         FilePath storagePath,
-        DateTime uploadDate,
         bool isUploaded,
         FileSize fileSize,
         MimeType mimeType,
@@ -30,7 +29,7 @@ public class FileData : CSharpFunctionalExtensions.Entity<FileId>
         Name = name;
         OwnerId = ownerId;
         StoragePath = storagePath;
-        UploadDate = uploadDate;
+        UploadDate = DateTime.UtcNow;
         IsUploaded = isUploaded;
         FileSize = fileSize;
         MimeType = mimeType;
