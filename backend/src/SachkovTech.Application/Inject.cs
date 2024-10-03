@@ -1,12 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using SachkovTech.Application.Abstraction;
-using SachkovTech.Application.IssueManagement.Commands.AddIssue;
-using SachkovTech.Application.IssueManagement.Commands.Create;
-using SachkovTech.Application.IssueManagement.Commands.Delete;
-using SachkovTech.Application.IssueManagement.Commands.UpdateMainInfo;
-using SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
-using SachkovTech.Application.IssueManagement.Queries.GetModulesWithPagination;
+using SachkovTech.Core.Abstraction;
 
 namespace SachkovTech.Application;
 
@@ -17,7 +11,8 @@ public static class Inject
         services
             .AddCommands()
             .AddQueries()
-            .AddValidatorsFromAssembly(typeof(Inject).Assembly);;
+            .AddValidatorsFromAssembly(typeof(Inject).Assembly);
+        ;
 
         return services;
     }

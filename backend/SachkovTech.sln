@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.API", "src\SachkovTech.API\SachkovTech.API.csproj", "{C2063B39-6BC1-451E-B961-00EFC1AB5A2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Web", "src\SachkovTech.Web\SachkovTech.Web.csproj", "{C2063B39-6BC1-451E-B961-00EFC1AB5A2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Infrastructure", "src\SachkovTech.Infrastructure\SachkovTech.Infrastructure.csproj", "{1D91BD53-6F71-4812-A75D-28DD83DADF9B}"
 EndProject
@@ -24,7 +24,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC60138D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Application.UnitTests", "tests\SachkovTech.Application.UnitTests\SachkovTech.Application.UnitTests.csproj", "{C398512E-9F0A-4DDF-A0B1-7C76918373D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Infrastructure.Authorization", "src\SachkovTech.Infrastructure.Authorization\SachkovTech.Infrastructure.Authorization.csproj", "{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Infrastructure", "src\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj", "{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Application", "src\Accounts\SachkovTech.Accounts.Application\SachkovTech.Accounts.Application.csproj", "{DC09494D-69C3-4FF7-BED4-65869B3A32C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Domain", "src\Accounts\SachkovTech.Accounts.Domain\SachkovTech.Accounts.Domain.csproj", "{94E3B672-37F1-4373-8C8B-48B64C335826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Presentation", "src\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj", "{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Core", "src\SachkovTech.Core\SachkovTech.Core.csproj", "{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Domain", "src\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj", "{890B3F8D-E258-45A1-834C-CBC73F159A52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Application", "src\SachkovTech.Issues.Application\SachkovTech.Issues.Application.csproj", "{21393E38-CE4C-4472-80A3-D0DD4D05131D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Infrastructure", "src\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj", "{780E0171-DC71-46A4-8ADE-3815ACCF014E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Controllers", "src\SachkovTech.Issues.Controllers\SachkovTech.Issues.Controllers.csproj", "{345C5ECC-C139-4C59-90BD-33C5864787A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{0F5BCE9B-E821-499E-A48C-F47F19E4A632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Contracts", "src\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj", "{0601F2F9-092D-4416-8967-959121C46B8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{339CC8AA-025D-4D5B-A585-4189E4335EF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +85,42 @@ Global
 		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E3B672-37F1-4373-8C8B-48B64C335826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E3B672-37F1-4373-8C8B-48B64C335826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E3B672-37F1-4373-8C8B-48B64C335826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E3B672-37F1-4373-8C8B-48B64C335826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{890B3F8D-E258-45A1-834C-CBC73F159A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{890B3F8D-E258-45A1-834C-CBC73F159A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{890B3F8D-E258-45A1-834C-CBC73F159A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{890B3F8D-E258-45A1-834C-CBC73F159A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{345C5ECC-C139-4C59-90BD-33C5864787A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345C5ECC-C139-4C59-90BD-33C5864787A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345C5ECC-C139-4C59-90BD-33C5864787A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345C5ECC-C139-4C59-90BD-33C5864787A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0601F2F9-092D-4416-8967-959121C46B8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0601F2F9-092D-4416-8967-959121C46B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0601F2F9-092D-4416-8967-959121C46B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0601F2F9-092D-4416-8967-959121C46B8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
@@ -71,6 +129,17 @@ Global
 		{1D91BD53-6F71-4812-A75D-28DD83DADF9B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
-		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{890B3F8D-E258-45A1-834C-CBC73F159A52} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{345C5ECC-C139-4C59-90BD-33C5864787A4} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{0F5BCE9B-E821-499E-A48C-F47F19E4A632} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{94E3B672-37F1-4373-8C8B-48B64C335826} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{0601F2F9-092D-4416-8967-959121C46B8E} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{339CC8AA-025D-4D5B-A585-4189E4335EF7} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 	EndGlobalSection
 EndGlobal

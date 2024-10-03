@@ -1,5 +1,5 @@
 using CSharpFunctionalExtensions;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
+using SachkovTech.Core.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueSolvingManagement.ValueObjects;
 

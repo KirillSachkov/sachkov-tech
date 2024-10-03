@@ -1,6 +1,0 @@
-@SachkovTech.API_HostAddress = http://localhost:5173
-
-GET {{SachkovTech.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

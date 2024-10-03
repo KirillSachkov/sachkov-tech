@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using SachkovTech.Core;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.IssueReview.ValueObjects;
-using SachkovTech.Domain.Shared;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueReview.Entities;
 
-public class Comment : Shared.Entity<CommentId>
+public class Comment : Entity<CommentId>
 {
     //Ef core
     private Comment(CommentId id) : base(id)

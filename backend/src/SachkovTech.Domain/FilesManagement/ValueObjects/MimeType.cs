@@ -1,7 +1,6 @@
-using System.Net.Http.Headers;
 using System.Net.Mime;
 using CSharpFunctionalExtensions;
-using SachkovTech.Domain.Shared;
+using SachkovTech.Core;
 
 namespace SachkovTech.Domain.FilesManagement.ValueObjects;
 

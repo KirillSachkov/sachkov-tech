@@ -1,5 +1,5 @@
 using System.Threading.Channels;
-using SachkovTech.Application.Messaging;
+using SachkovTech.Core.Messaging;
 
 namespace SachkovTech.Infrastructure.MessageQueues;
 

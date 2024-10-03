@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
+using SachkovTech.Core;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.IssueReview.Entities;
 using SachkovTech.Domain.IssueReview.Other;
 using SachkovTech.Domain.IssueReview.ValueObjects;
-using SachkovTech.Domain.Shared;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueReview;
 
-public sealed class IssueReview : CSharpFunctionalExtensions.Entity<IssueReviewId>
+public sealed class IssueReview : Entity<IssueReviewId>
 {
 
     // ef core

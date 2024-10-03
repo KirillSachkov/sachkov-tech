@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
 using SachkovTech.Application.Files;
-using SachkovTech.Application.Messaging;
-using FileInfo = SachkovTech.Application.Files.FileInfo;
+using SachkovTech.Core;
+using SachkovTech.Core.Messaging;
+using FileInfo = SachkovTech.Core.FileInfo;
 
 namespace SachkovTech.Infrastructure.Files;
 

@@ -1,7 +1,7 @@
 using FluentAssertions;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.IssueSolvingManagement.Entities;
 using SachkovTech.Domain.IssueSolvingManagement.ValueObjects;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.UnitTests;
 

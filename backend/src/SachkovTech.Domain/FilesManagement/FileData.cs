@@ -1,7 +1,6 @@
-using System.Net.Http.Headers;
-using System.Net.Mime;
+using SachkovTech.Core;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.FilesManagement.ValueObjects;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.FilesManagement;
 

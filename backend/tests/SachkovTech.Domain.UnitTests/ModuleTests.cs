@@ -1,12 +1,11 @@
+using System.Reflection;
 using FluentAssertions;
-using SachkovTech.Domain.IssueManagement;
-using SachkovTech.Domain.IssueManagement.Entities;
-using SachkovTech.Domain.IssueManagement.ValueObjects;
+using SachkovTech.Core;
+using SachkovTech.Core.ValueObjects;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.IssueReview.Entities;
 using SachkovTech.Domain.IssueReview.Other;
 using SachkovTech.Domain.IssueReview.ValueObjects;
-using SachkovTech.Domain.Shared.ValueObjects;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.UnitTests;
 

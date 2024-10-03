@@ -1,19 +1,12 @@
 using CSharpFunctionalExtensions;
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
-using SachkovTech.Application.Database;
-using SachkovTech.Application.Dtos;
-using SachkovTech.Application.Files;
-using SachkovTech.Application.IssueManagement;
-using SachkovTech.Application.IssueManagement.Commands.UploadFilesToIssue;
-using SachkovTech.Domain.IssueManagement.Entities;
-using SachkovTech.Domain.IssueManagement.ValueObjects;
-using SachkovTech.Domain.Shared;
-using SachkovTech.Domain.Shared.ValueObjects;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
+using SachkovTech.Core;
+using SachkovTech.Core.Dtos;
+using SachkovTech.Core.ValueObjects;
+using SachkovTech.Core.ValueObjects.Ids;
 using Module = SachkovTech.Domain.IssueManagement.Module;
 
 namespace SachkovTech.Application.UnitTests;

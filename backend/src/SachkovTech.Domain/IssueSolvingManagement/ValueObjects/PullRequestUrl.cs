@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using SachkovTech.Domain.Shared;
+using SachkovTech.Core;
 
 namespace SachkovTech.Domain.IssueSolvingManagement.ValueObjects;
 

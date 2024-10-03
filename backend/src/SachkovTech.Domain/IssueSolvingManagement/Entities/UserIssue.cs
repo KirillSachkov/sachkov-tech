@@ -1,11 +1,11 @@
 using CSharpFunctionalExtensions;
+using SachkovTech.Core;
+using SachkovTech.Core.ValueObjects.Ids;
 using SachkovTech.Domain.IssueSolvingManagement.ValueObjects;
-using SachkovTech.Domain.Shared;
-using SachkovTech.Domain.Shared.ValueObjects.Ids;
 
 namespace SachkovTech.Domain.IssueSolvingManagement.Entities;
 
-public class UserIssue : CSharpFunctionalExtensions.Entity<UserIssueId>
+public class UserIssue : Entity<UserIssueId>
 {
     public UserIssue(
         UserIssueId id,

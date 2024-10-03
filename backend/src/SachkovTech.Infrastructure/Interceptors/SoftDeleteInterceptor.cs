@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using SachkovTech.Domain.Shared;
+using SachkovTech.Core;
 
 namespace SachkovTech.Infrastructure.Interceptors;
 
