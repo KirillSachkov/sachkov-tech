@@ -56,14 +56,28 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
         foreach (var issue in _issues)
             issue.Delete();
     }
-    
+
     public UnitResult<Error> DeleteIssue(IssueId issueId)
     {
         var issue = _issues.FirstOrDefault(i => i.Id == issueId);
         if (issue is null)
-            return Errors.General.NotFound(issueId);
-        
+            return Result.Success<Error>();
+
+        RecalculatePositionOfOtherIssues(issue.Position);
+
         _issues.Remove(issue);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> SoftDeleteIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Result.Success<Error>();
+
+        RecalculatePositionOfOtherIssues(issue.Position);
+
+        issue.Delete();
         return Result.Success<Error>();
     }
 
@@ -85,6 +99,24 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
         issue.SetPosition(serialNumberResult.Value);
 
         _issues.Add(issue);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateIssueInfo(
+        IssueId issueId,
+        Title title,
+        Description description,
+        LessonId lessonId,
+        Experience experience)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Errors.General.NotFound(issueId);
+
+        var issueResult = issue.UpdateMainInfo(title, description, lessonId, experience);
+        if (issueResult.IsFailure)
+            return issueResult.Error;
+
         return Result.Success<Error>();
     }
 
@@ -140,7 +172,7 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
                 }
             }
         }
-        
+
         return Result.Success<Error>();
     }
 
@@ -154,5 +186,24 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
             return lastPosition.Error;
 
         return lastPosition.Value;
+    }
+
+
+    private UnitResult<Error> RecalculatePositionOfOtherIssues(Position currentPosition)
+    {
+        if (currentPosition == _issues.Count)
+            return Result.Success<Error>();
+
+        var issuesToMove = _issues.Where(i => i.Position > currentPosition);
+        foreach (var issue in issuesToMove)
+        {
+            var result = issue.MoveBack();
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+        }
+
+        return Result.Success<Error>();
     }
 }

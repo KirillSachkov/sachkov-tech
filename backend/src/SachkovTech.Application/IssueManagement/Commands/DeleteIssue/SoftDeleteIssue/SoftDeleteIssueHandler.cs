@@ -44,7 +44,9 @@ public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
         if (issueResult == null)
             return Errors.General.NotFound(command.IssueId).ToErrorList();
         
-        issueResult.Delete();
+        var deleteResult = moduleResult.Value.SoftDeleteIssue(command.IssueId);
+        if (deleteResult.IsFailure)
+            return deleteResult.Error.ToErrorList();
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

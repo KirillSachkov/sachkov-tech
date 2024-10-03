@@ -37,31 +37,6 @@ public class ModulesRepository : IModulesRepository
         return module.Id;
     }
 
-    public async Task<Result<Guid, ErrorList>> DeleteIssue(ModuleId moduleId, IssueId issueId,
-        CancellationToken cancellationToken = default)
-    {
-        var module = await _dbContext.Modules
-            .Include(m => m.Issues)
-            .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
-
-        if (module == null)
-            return Errors.General.NotFound(moduleId).ToErrorList();
-        
-        var issue = module.Issues.FirstOrDefault(m => m.Id == issueId);
-        if (issue == null)
-            return Errors.General.NotFound(issueId).ToErrorList();
-            
-        var result = module.DeleteIssue(issueId);
-        if (result.IsFailure)
-            return result.Error.ToErrorList();
-
-        _dbContext.Set<Issue>().Remove(issue);
-        
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return issueId.Value;
-    }
-
     public async Task<Result<Module, Error>> GetById(
         ModuleId moduleId, CancellationToken cancellationToken = default)
     {

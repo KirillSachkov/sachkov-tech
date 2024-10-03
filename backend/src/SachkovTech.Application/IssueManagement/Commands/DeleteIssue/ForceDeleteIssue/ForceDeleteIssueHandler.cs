@@ -45,10 +45,11 @@ public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
         if (issueResult == null)
             return Errors.General.NotFound(command.IssueId).ToErrorList();
         
-        var result = await _modulesRepository.DeleteIssue(command.ModuleId, command.IssueId, cancellationToken);
-            if (result.IsFailure)
-                return result.Error;
-            
+        var deleteResult = moduleResult.Value.DeleteIssue(issueResult.Id);
+        if (deleteResult.IsFailure)
+            return deleteResult.Error.ToErrorList();
+        
+        
         await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation(

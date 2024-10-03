@@ -53,7 +53,8 @@ public class UpdateIssueMainInfoHandler : ICommandHandler<Guid, UpdateIssueMainI
         var experience = Experience.Create(command.Experience).Value;
         var lessonId = LessonId.Empty();
 
-        var updateResult = issueResult.UpdateMainInfo(
+        var updateResult = moduleResult.Value.UpdateIssueInfo(
+            issueResult.Id.Value,
             title,
             description,
             lessonId,

@@ -36,9 +36,10 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
         });
 
         builder.HasMany(m => m.Issues)
-            .WithOne()
+            .WithOne(m => m.Module)
             .HasForeignKey("module_id")
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

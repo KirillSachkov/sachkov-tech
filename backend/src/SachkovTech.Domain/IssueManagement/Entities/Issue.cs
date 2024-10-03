@@ -11,7 +11,11 @@ public class Issue : CSharpFunctionalExtensions.Entity<IssueId>, ISoftDeletable
     private bool _isDeleted = false;
 
     private readonly List<Issue> _subIssues = [];
+
     private List<IssueFile> _files = [];
+
+    //ef core navigation
+    public Module Module { get; private set; }
 
     //ef core
     private Issue(IssueId id) : base(id)
@@ -89,7 +93,7 @@ public class Issue : CSharpFunctionalExtensions.Entity<IssueId>, ISoftDeletable
     public void Move(Position newPosition) =>
         Position = newPosition;
 
-    public UnitResult<Error> UpdateMainInfo(
+    internal UnitResult<Error> UpdateMainInfo(
         Title title,
         Description description,
         LessonId lessonId,
@@ -99,7 +103,7 @@ public class Issue : CSharpFunctionalExtensions.Entity<IssueId>, ISoftDeletable
         Description = description;
         LessonId = lessonId;
         Experience = experience;
-        
+
         return Result.Success<Error>();
     }
 }
