@@ -75,9 +75,26 @@ public sealed class Module : CSharpFunctionalExtensions.Entity<ModuleId>, ISoftD
         if (issue is null)
             return Result.Success<Error>();
 
-        RecalculatePositionOfOtherIssues(issue.Position);
-
+        var result = RecalculatePositionOfOtherIssues(issue.Position);
+        if (result.IsFailure)
+            return result.Error
+                ;
         issue.Delete();
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> RestoreIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Result.Success<Error>();
+
+        issue.Restore();
+        
+        var resultMove = MoveIssue(issue, Position.Create(_issues.Count).Value);
+        if (resultMove.IsFailure)
+            return resultMove.Error;
+        
         return Result.Success<Error>();
     }
 
