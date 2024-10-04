@@ -1,6 +1,8 @@
+using CSharpFunctionalExtensions;
+
 namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-public record IssueId
+public class IssueId : ValueObject
 {
     private IssueId(Guid value)
     {
@@ -12,4 +14,17 @@ public record IssueId
     public static IssueId NewIssueId() => new(Guid.NewGuid());
     public static IssueId Empty() => new(Guid.Empty);
     public static IssueId Create(Guid id) => new(id);
+    public static implicit operator IssueId(Guid id) => new(id);
+
+    public static implicit operator Guid(IssueId issueId)
+    {
+        ArgumentNullException.ThrowIfNull(issueId);
+        return issueId.Value;
+    }
+    
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+
 }

@@ -4,8 +4,9 @@ namespace SachkovTech.API.Controllers.Modules.Requests;
 
 public record AddIssueRequest(
     string Title,
-    string Description)
+    string Description,
+    int Experience)
 {
     public AddIssueCommand ToCommand(Guid moduleId) =>
-        new (moduleId, Title, Description);
+        new (moduleId, Title, Description, Experience);
 }

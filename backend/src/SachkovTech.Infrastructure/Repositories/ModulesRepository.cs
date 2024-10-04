@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Application.IssueManagement;
 using SachkovTech.Domain.IssueManagement;
+using SachkovTech.Domain.IssueManagement.Entities;
 using SachkovTech.Domain.Shared;
 using SachkovTech.Domain.Shared.ValueObjects;
 using SachkovTech.Domain.Shared.ValueObjects.Ids;
@@ -41,7 +42,6 @@ public class ModulesRepository : IModulesRepository
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
-            .ThenInclude(i => i.SubIssues)
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
 
         if (module is null)
@@ -55,7 +55,6 @@ public class ModulesRepository : IModulesRepository
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
-            .ThenInclude(i => i.SubIssues)
             .FirstOrDefaultAsync(m => m.Title == title, cancellationToken);
 
         if (module is null)

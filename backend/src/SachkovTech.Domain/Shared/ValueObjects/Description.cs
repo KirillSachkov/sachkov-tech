@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 
 namespace SachkovTech.Domain.Shared.ValueObjects;
 
-public record Description
+public class Description : ValueObject
 {
     public const int MAX_LENGTH = 2000;
 
@@ -19,5 +19,10 @@ public record Description
             return Errors.General.ValueIsInvalid("Description");
 
         return new Description(value);
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

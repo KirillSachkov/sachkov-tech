@@ -1,6 +1,8 @@
+using CSharpFunctionalExtensions;
+
 namespace SachkovTech.Domain.Shared.ValueObjects.Ids;
 
-public record LessonId
+public class LessonId: ValueObject
 {
     private LessonId(Guid? value)
     {
@@ -22,5 +24,10 @@ public record LessonId
         ArgumentNullException.ThrowIfNull(lessonId);
         ArgumentNullException.ThrowIfNull(lessonId.Value);
         return lessonId.Value.Value;
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }
