@@ -10,7 +10,8 @@ public class Issue : Entity<IssueId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
-    private readonly List<Issue> _subIssues = [];
+    //ef core navigation
+    public Module Module { get; private set; }
 
     //ef core
     private Issue(IssueId id) : base(id)
@@ -22,23 +23,21 @@ public class Issue : Entity<IssueId>, ISoftDeletable
         Title title,
         Description description,
         LessonId lessonId,
-        Issue? parentIssue) : base(id)
+        Experience experience) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
-        ParentIssue = parentIssue;
+        Experience = experience;
     }
 
+    public Experience Experience { get; private set; } = default!;
     public Title Title { get; private set; } = default!;
     public Description Description { get; private set; } = default!;
 
     public Position Position { get; private set; }
 
     public LessonId LessonId { get; private set; }
-
-    public Issue? ParentIssue { get; private set; }
-    public IReadOnlyList<Issue> SubIssues => _subIssues;
 
     public void SetPosition(Position position) =>
         Position = position;
@@ -79,4 +78,18 @@ public class Issue : Entity<IssueId>, ISoftDeletable
 
     public void Move(Position newPosition) =>
         Position = newPosition;
+
+    internal UnitResult<Error> UpdateMainInfo(
+        Title title,
+        Description description,
+        LessonId lessonId,
+        Experience experience)
+    {
+        Title = title;
+        Description = description;
+        LessonId = lessonId;
+        Experience = experience;
+
+        return Result.Success<Error>();
+    }
 }

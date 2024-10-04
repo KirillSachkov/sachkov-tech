@@ -55,6 +55,38 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
+    
+    [HttpDelete("{id:guid}/issue/{issueId:guid}/soft")]
+    public async Task<ActionResult> SoftDeleteIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromServices] SoftDeleteIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteIssueCommand(id, issueId);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpDelete("{id:guid}/issue/{issueId:guid}/force")]
+    public async Task<ActionResult> ForceDeleteIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromServices] ForceDeleteIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteIssueCommand(id, issueId);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok(result.Value);
+    }
 
     [HttpPost("{id:guid}/issue")]
     public async Task<ActionResult> AddIssue(
@@ -65,6 +97,40 @@ public class ModulesController : ApplicationController
     {
         var command = request.ToCommand(id);
 
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPut("{id:guid}/issue/{issueId:guid}/newPosition/{newPosition:int}")]
+    public async Task<ActionResult> UpdateIssuePosition(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromRoute] int newPosition,
+        [FromServices] UpdateIssuePositionHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateIssuePositionCommand(id, issueId, newPosition);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
+    [HttpPut("{id:guid}/issue/{issueId:guid}/main-info")]
+    public async Task<ActionResult> UpdateIssueMainInfo(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromBody] UpdateIssueMainInfoRequest request,
+        [FromServices] UpdateIssueMainInfoHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(id, issueId);;
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)

@@ -41,7 +41,6 @@ public class ModulesRepository : IModulesRepository
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
-            .ThenInclude(i => i.SubIssues)
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
 
         if (module is null)
@@ -55,7 +54,6 @@ public class ModulesRepository : IModulesRepository
     {
         var module = await _dbContext.Modules
             .Include(m => m.Issues)
-            .ThenInclude(i => i.SubIssues)
             .FirstOrDefaultAsync(m => m.Title == title, cancellationToken);
 
         if (module is null)

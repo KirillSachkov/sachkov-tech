@@ -26,6 +26,14 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                     .IsRequired(false)
                     .HasColumnName("lesson_id");
             });
+        
+        builder.ComplexProperty(i => i.Experience,
+            lb =>
+            {
+                lb.Property(l => l.Value)
+                    .IsRequired()
+                    .HasColumnName("experience");
+            });
 
         builder.ComplexProperty(i => i.Position,
             lb =>
@@ -50,12 +58,12 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                 .HasMaxLength(Description.MAX_LENGTH)
                 .HasColumnName("description");
         });
-
-        builder.HasOne(i => i.ParentIssue)
-            .WithMany(p => p.SubIssues)
-            .HasForeignKey("parent_id")
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.Property(i => i.Files)
+            .ValueObjectsCollectionJsonConversion(
+                file => new IssueFileDto { PathToStorage = file.PathToStorage.Path },
+                dto => new IssueFile(FilePath.Create(dto.PathToStorage).Value))
+            .HasColumnName("files");
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

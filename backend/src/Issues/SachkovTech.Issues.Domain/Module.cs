@@ -57,6 +57,47 @@ public class Module : Entity<ModuleId>
             issue.Delete();
     }
 
+    public UnitResult<Error> DeleteIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Result.Success<Error>();
+
+        RecalculatePositionOfOtherIssues(issue.Position);
+
+        _issues.Remove(issue);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> SoftDeleteIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Result.Success<Error>();
+
+        var result = RecalculatePositionOfOtherIssues(issue.Position);
+        if (result.IsFailure)
+            return result.Error
+                ;
+        issue.Delete();
+        return Result.Success<Error>();
+    }
+    
+    public UnitResult<Error> RestoreIssue(IssueId issueId)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Result.Success<Error>();
+
+        issue.Restore();
+        
+        var resultMove = MoveIssue(issue, Position.Create(_issues.Count).Value);
+        if (resultMove.IsFailure)
+            return resultMove.Error;
+        
+        return Result.Success<Error>();
+    }
+
     public void Restore()
     {
         if (!_isDeleted) return;
@@ -75,6 +116,24 @@ public class Module : Entity<ModuleId>
         issue.SetPosition(serialNumberResult.Value);
 
         _issues.Add(issue);
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateIssueInfo(
+        IssueId issueId,
+        Title title,
+        Description description,
+        LessonId lessonId,
+        Experience experience)
+    {
+        var issue = _issues.FirstOrDefault(i => i.Id == issueId);
+        if (issue is null)
+            return Errors.General.NotFound(issueId);
+
+        var issueResult = issue.UpdateMainInfo(title, description, lessonId, experience);
+        if (issueResult.IsFailure)
+            return issueResult.Error;
+
         return Result.Success<Error>();
     }
 
@@ -144,5 +203,24 @@ public class Module : Entity<ModuleId>
             return lastPosition.Error;
 
         return lastPosition.Value;
+    }
+
+
+    private UnitResult<Error> RecalculatePositionOfOtherIssues(Position currentPosition)
+    {
+        if (currentPosition == _issues.Count)
+            return Result.Success<Error>();
+
+        var issuesToMove = _issues.Where(i => i.Position > currentPosition);
+        foreach (var issue in issuesToMove)
+        {
+            var result = issue.MoveBack();
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+        }
+
+        return Result.Success<Error>();
     }
 }

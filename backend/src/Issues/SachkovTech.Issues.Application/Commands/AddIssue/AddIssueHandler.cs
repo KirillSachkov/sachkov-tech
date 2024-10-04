@@ -51,7 +51,12 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
         moduleResult.Value.AddIssue(issue);
 
         await _unitOfWork.SaveChanges(cancellationToken);
-
+        
+        _logger.LogInformation(
+            "Issue {issueId} was created in module {moduleId}",
+            issue.Id,
+            command.ModuleId);
+        
         return issue.Id.Value;
     }
 
@@ -61,12 +66,14 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
         var title = Title.Create(command.Title).Value;
         var description = Description.Create(command.Description).Value;
         var lessonId = LessonId.Empty();
+        var experience = Experience.Create(command.Experience).Value;
 
         return new Issue(
             issueId,
             title,
             description,
             lessonId,
+            experience,
             null);
     }
 }
