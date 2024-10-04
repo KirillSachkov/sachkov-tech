@@ -14,7 +14,8 @@ public sealed class IssueReview : Entity<IssueReviewId>
     {
     }
 
-    public IssueReview(IssueReviewId issueReviewId,
+    public IssueReview(
+        IssueReviewId issueReviewId,
         UserIssueId userIssueId,
         IssueReviewStatus issueReviewStatus,
         DateTime reviewStartedTime,
@@ -31,11 +32,9 @@ public sealed class IssueReview : Entity<IssueReviewId>
 
     public UserIssueId UserIssueId { get; private set; }
 
-    public UserId UserId { get; private set; }
+    public UserId? ReviewerId { get; private set; } = null;
 
     public IssueReviewStatus IssueReviewStatus { get; private set; }
-
-    public UserId? ReviewerId { get; private set; } = null;
 
     private List<Comment> _comments = [];
     public IReadOnlyList<Comment> Comments => _comments;
@@ -84,21 +83,6 @@ public sealed class IssueReview : Entity<IssueReviewId>
 
     public UnitResult<Error> AddComment(Comment comment)
     {
-        if (ReviewerId is null)
-        {
-            if (comment.UserId != UserId)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
-        }
-        else
-        {
-            if ((comment.UserId == UserId || comment.UserId == ReviewerId) == false)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
-        }
-
         _comments.Add(comment);
 
         return UnitResult.Success<Error>();

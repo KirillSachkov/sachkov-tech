@@ -9,25 +9,24 @@ public class UserIssue : Entity<UserIssueId>
 {
     public UserIssue(
         UserIssueId id,
-        Guid userId,
-        IssueIdentifier issueIdentifier
-        ) : base(id)
+        UserId userId,
+        IssueId issueId) : base(id)
     {
         UserId = userId;
-        IssueIdentifier = issueIdentifier;
+        IssueId = issueId;
         Status = IssueStatus.NotCompleted;
     }
-    
-    public Guid UserId { get; private set; }
-    
-    public IssueIdentifier IssueIdentifier { get; private set; }
-    
+
+    public UserId UserId { get; private set; }
+
+    public IssueId IssueId { get; private set; }
+
     public IssueStatus Status { get; private set; }
-    
+
     public DateTime StartDateOfExecution { get; private set; }
-    
+
     public DateTime EndDateOfExecution { get; private set; }
-    
+
     public Attempts Attempts { get; private set; } = null!;
 
     public PullRequestUrl PullRequestUrl { get; private set; } = null!;
@@ -45,7 +44,7 @@ public class UserIssue : Entity<UserIssueId>
 
         if (Status != IssueStatus.AtWork)
             return Error.Failure("issue.status.invalid", "issue not at work");
-        
+
         Status = IssueStatus.UnderReview;
         PullRequestUrl = pullRequestUrl;
 
@@ -58,10 +57,10 @@ public class UserIssue : Entity<UserIssueId>
         {
             Status = IssueStatus.AtWork;
             Attempts = Attempts.Add();
-            
+
             return Result.Success<Error>();
         }
-        
+
         return Error.Failure("issue.status.invalid", "issue status should be not completed or under review");
     }
 
@@ -69,7 +68,7 @@ public class UserIssue : Entity<UserIssueId>
     {
         if (Status != IssueStatus.UnderReview)
             return Error.Failure("issue.invalid.status", "issue status should be under review");
-        
+
         Status = IssueStatus.Completed;
 
         return new UnitResult<Error>();
