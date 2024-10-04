@@ -1,10 +1,18 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SachkovTech.Accounts.Application;
 using SachkovTech.Web.Middlewares;
-using SachkovTech.Application;
 using SachkovTech.Accounts.Infrastructure;
-using SachkovTech.Core.Authorization;
-using SachkovTech.Core.Extensions;
+using SachkovTech.Accounts.Presentation;
+using SachkovTech.Core.Options;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.IssuesManagement.Application;
+using SachkovTech.IssuesManagement.Infrastructure;
+using SachkovTech.IssuesManagement.Presentation.Issues;
+using SachkovTech.IssuesManagement.Presentation.Modules;
 using Serilog;
 using Serilog.Events;
 
@@ -19,9 +27,6 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
     .CreateLogger();
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -48,20 +53,55 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            []
         }
     });
 });
 
 builder.Services.AddSerilog();
 
-builder.Services
-    // .AddInfrastructure(builder.Configuration)
-    .AddApplication()
-    .AddAuthorizationInfrastructure(builder.Configuration);
-
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        var jwtOptions = builder.Configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
+                         ?? throw new ApplicationException("Missing jwt configuration");
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+builder.Services
+    .AddAccountsApplication()
+    .AddAccountsInfrastructure(builder.Configuration)
+    
+    .AddIssuesManagementApplication()
+    .AddIssuesManagementInfrastructure(builder.Configuration);
+
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(AccountsController).Assembly)
+    .AddApplicationPart(typeof(ModulesController).Assembly)
+    .AddApplicationPart(typeof(IssuesController).Assembly);
+
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
@@ -73,8 +113,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    await app.ApplyMigration();
 }
 
 app.UseAuthentication();

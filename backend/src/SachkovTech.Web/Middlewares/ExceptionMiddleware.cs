@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using SachkovTech.Core;
+using SachkovTech.Core.Models;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Web.Middlewares;
 
-[ApiController]
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;

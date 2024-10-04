@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.Accounts.Contracts.Requests;
-using SachkovTech.Core;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Contracts;
 

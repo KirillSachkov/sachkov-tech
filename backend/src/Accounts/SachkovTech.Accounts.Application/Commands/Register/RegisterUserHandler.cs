@@ -2,8 +2,8 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Accounts.Domain;
-using SachkovTech.Core;
-using SachkovTech.Core.Abstraction;
+using SachkovTech.Core.Abstractions;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.Register;
 

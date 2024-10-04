@@ -24,10 +24,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SachkovTech.Application\SachkovTech.Application.csproj" />
-      <ProjectReference Include="..\SachkovTech.Domain\SachkovTech.Domain.csproj" />
       <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj" />
-      <ProjectReference Include="..\SachkovTech.Infrastructure\SachkovTech.Infrastructure.csproj" />
+      <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj" />
+      <ProjectReference Include="..\IssuesManagement\SachkovTech.IssuesManagement.Infrastructure\SachkovTech.IssuesManagement.Infrastructure.csproj" />
+      <ProjectReference Include="..\IssuesManagement\SachkovTech.IssuesManagement.Presentation\SachkovTech.IssuesManagement.Presentation.csproj" />
+      <ProjectReference Include="..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

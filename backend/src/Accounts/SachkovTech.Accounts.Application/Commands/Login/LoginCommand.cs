@@ -1,4 +1,4 @@
-using SachkovTech.Core.Abstraction;
+using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Accounts.Application.Commands.Login;
 

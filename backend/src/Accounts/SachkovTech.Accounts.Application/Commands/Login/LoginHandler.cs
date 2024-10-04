@@ -2,8 +2,8 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Accounts.Domain;
-using SachkovTech.Core;
-using SachkovTech.Core.Abstraction;
+using SachkovTech.Core.Abstractions;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.Login;
 
@@ -40,7 +40,7 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
         }
 
         var token = _tokenProvider.GenerateAccessToken(user);
-        
+
         _logger.LogInformation("Successfully logged in.");
 
         return token;

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Domain;
+using SachkovTech.Core.Options;
 
 namespace SachkovTech.Accounts.Infrastructure;
 
