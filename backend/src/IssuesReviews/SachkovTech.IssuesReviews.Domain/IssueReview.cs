@@ -86,6 +86,11 @@ public sealed class IssueReview : Entity<IssueReviewId>
 
     public UnitResult<Error> AddComment(Comment comment)
     {
+        if (comment.UserId != UserId || (ReviewerId != null && ReviewerId != comment.UserId))
+        {
+            return Errors.General.ValueIsInvalid("userId");
+        }
+
         _comments.Add(comment);
 
         return UnitResult.Success<Error>();
