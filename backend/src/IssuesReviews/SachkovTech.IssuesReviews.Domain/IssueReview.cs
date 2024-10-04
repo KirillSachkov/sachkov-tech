@@ -17,6 +17,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
     public IssueReview(
         IssueReviewId issueReviewId,
         UserIssueId userIssueId,
+        UserId userId,
         IssueReviewStatus issueReviewStatus,
         DateTime reviewStartedTime,
         DateTime? issueApprovedTime,
@@ -24,6 +25,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
         : base(issueReviewId)
     {
         UserIssueId = userIssueId;
+        UserId = userId;
         IssueReviewStatus = issueReviewStatus;
         ReviewStartedTime = reviewStartedTime;
         IssueApprovedTime = issueApprovedTime;
@@ -31,6 +33,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
     }
 
     public UserIssueId UserIssueId { get; private set; }
+    public UserId UserId { get; private set; }
 
     public UserId? ReviewerId { get; private set; } = null;
 
