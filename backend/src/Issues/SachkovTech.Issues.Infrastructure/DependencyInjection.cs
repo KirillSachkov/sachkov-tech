@@ -1,10 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure.DbContexts;
-using SachkovTech.Issues.Infrastructure.Options;
 using SachkovTech.Issues.Infrastructure.Repositories;
 
 namespace SachkovTech.Issues.Infrastructure;
@@ -16,7 +14,6 @@ public static class DependencyInjection
     {
         services
             .AddDbContexts()
-            .AddMinio(configuration)
             .AddRepositories()
             .AddDatabase();
 
@@ -44,26 +41,6 @@ public static class DependencyInjection
     {
         services.AddScoped<WriteDbContext>();
         services.AddScoped<IReadDbContext, ReadDbContext>();
-
-        return services;
-    }
-
-    private static IServiceCollection AddMinio(
-        this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MinioOptions>(
-            configuration.GetSection(MinioOptions.MINIO));
-
-        services.AddMinio(options =>
-        {
-            var minioOptions = configuration.GetSection(MinioOptions.MINIO).Get<MinioOptions>()
-                               ?? throw new ApplicationException("Missing minio configuration");
-
-            options.WithEndpoint(minioOptions.Endpoint);
-
-            options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
-            options.WithSSL(minioOptions.WithSsl);
-        });
 
         return services;
     }

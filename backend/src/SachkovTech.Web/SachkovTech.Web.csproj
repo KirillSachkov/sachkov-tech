@@ -26,6 +26,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj" />
       <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj" />
+      <ProjectReference Include="..\Files\SachkovTech.Files.Infrastructure\SachkovTech.Files.Infrastructure.csproj" />
       <ProjectReference Include="..\Issues\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj" />
       <ProjectReference Include="..\Issues\SachkovTech.Issues.Presentation\SachkovTech.Issues.Presentation.csproj" />
       <ProjectReference Include="..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
