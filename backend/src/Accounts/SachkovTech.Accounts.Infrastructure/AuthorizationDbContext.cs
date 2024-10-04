@@ -42,6 +42,19 @@ public class AuthorizationDbContext(IConfiguration configuration)
 
         modelBuilder.Entity<IdentityUserRole<Guid>>()
             .ToTable("user_roles");
+
+        modelBuilder.Entity<RolePermission>()
+            .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+
+        modelBuilder.Entity<RolePermission>()
+            .HasOne(rp => rp.Role)
+            .WithMany(r => r.RolePermissions)
+            .HasForeignKey(rp => rp.RoleId);
+
+        modelBuilder.Entity<RolePermission>()
+            .HasOne(rp => rp.Permission)
+            .WithMany()
+            .HasForeignKey(rp => rp.PermissionId);
     }
 
     private ILoggerFactory CreateLoggerFactory() =>
