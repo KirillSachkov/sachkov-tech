@@ -1,9 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.Issues.Application.Commands.AddIssue;
 using SachkovTech.Issues.Application.Commands.Create;
 using SachkovTech.Issues.Application.Commands.Delete;
+using SachkovTech.Issues.Application.Commands.DeleteIssue;
+using SachkovTech.Issues.Application.Commands.DeleteIssue.SoftDeleteIssue;
+using SachkovTech.Issues.Application.Commands.ForceDeleteIssue;
+using SachkovTech.Issues.Application.Commands.UpdateIssueMainInfo;
+using SachkovTech.Issues.Application.Commands.UpdateIssuePosition;
 using SachkovTech.Issues.Application.Commands.UpdateMainInfo;
 using SachkovTech.Issues.Presentation.Modules.Requests;
 
@@ -55,7 +59,7 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpDelete("{id:guid}/issue/{issueId:guid}/soft")]
     public async Task<ActionResult> SoftDeleteIssue(
         [FromRoute] Guid id,
@@ -71,7 +75,7 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpDelete("{id:guid}/issue/{issueId:guid}/force")]
     public async Task<ActionResult> ForceDeleteIssue(
         [FromRoute] Guid id,
@@ -84,7 +88,7 @@ public class ModulesController : ApplicationController
 
         if (result.IsFailure)
             return result.Error.ToResponse();
-        
+
         return Ok(result.Value);
     }
 
@@ -121,7 +125,7 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpPut("{id:guid}/issue/{issueId:guid}/main-info")]
     public async Task<ActionResult> UpdateIssueMainInfo(
         [FromRoute] Guid id,
@@ -130,7 +134,7 @@ public class ModulesController : ApplicationController
         [FromServices] UpdateIssueMainInfoHandler handler,
         CancellationToken cancellationToken)
     {
-        var command = request.ToCommand(id, issueId);;
+        var command = request.ToCommand(id, issueId);
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
@@ -138,24 +142,4 @@ public class ModulesController : ApplicationController
 
         return Ok(result.Value);
     }
-
-    // [HttpPost("{id:guid}/issue/{issueId:guid}/files")]
-    // public async Task<ActionResult> UploadFilesToIssue(
-    //     [FromRoute] Guid id,
-    //     [FromRoute] Guid issueId,
-    //     [FromForm] IFormFileCollection files,
-    //     [FromServices] UploadFilesToIssueHandler handler,
-    //     CancellationToken cancellationToken)
-    // {
-    //     await using var fileProcessor = new FormFileProcessor();
-    //     var fileDtos = fileProcessor.Process(files);
-    //
-    //     var command = new UploadFilesToIssueCommand(id, issueId, fileDtos);
-    //
-    //     var result = await handler.Handle(command, cancellationToken);
-    //     if (result.IsFailure)
-    //         return result.Error.ToResponse();
-    //
-    //     return Ok(result.Value);
-    // }
 }

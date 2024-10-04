@@ -5,4 +5,5 @@ namespace SachkovTech.Issues.Application.Commands.AddIssue;
 public record AddIssueCommand(
     Guid ModuleId,
     string Title,
-    string Description) : ICommand;
+    string Description,
+    int Experience) : ICommand;

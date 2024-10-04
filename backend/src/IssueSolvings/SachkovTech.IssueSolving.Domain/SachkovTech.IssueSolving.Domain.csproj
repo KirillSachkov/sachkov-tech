@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SachkovTech.Core\SachkovTech.Core.csproj" />
       <ProjectReference Include="..\..\Shared\SachkovTech.SharedKernel\SachkovTech.SharedKernel.csproj" />
     </ItemGroup>
 

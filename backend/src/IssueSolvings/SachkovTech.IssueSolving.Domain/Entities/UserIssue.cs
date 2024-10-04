@@ -28,9 +28,9 @@ public class UserIssue : Entity<UserIssueId>
     
     public DateTime EndDateOfExecution { get; private set; }
     
-    public Attempts Attempts { get; private set; }
+    public Attempts Attempts { get; private set; } = null!;
 
-    public PullRequestUrl PullRequestUrl { get; private set; }
+    public PullRequestUrl PullRequestUrl { get; private set; } = null!;
 
     public void TakeTask()
     {

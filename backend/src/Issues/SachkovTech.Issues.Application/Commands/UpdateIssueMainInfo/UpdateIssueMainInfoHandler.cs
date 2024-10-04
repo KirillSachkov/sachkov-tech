@@ -3,28 +3,25 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
-using SachkovTech.Issues.Domain.Entities;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Issues.Application.Commands.AddIssue;
+namespace SachkovTech.Issues.Application.Commands.UpdateIssueMainInfo;
 
-public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
+public class UpdateIssueMainInfoHandler : ICommandHandler<Guid, UpdateIssueMainInfoCommand>
 {
-    private const string BUCKET_NAME = "files";
-
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<AddIssueCommand> _validator;
-    private readonly ILogger<AddIssueHandler> _logger;
+    private readonly IValidator<UpdateIssueMainInfoCommand> _validator;
+    private readonly ILogger<UpdateIssueMainInfoHandler> _logger;
 
-    public AddIssueHandler(
+    public UpdateIssueMainInfoHandler(
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
-        IValidator<AddIssueCommand> validator,
-        ILogger<AddIssueHandler> logger)
+        IValidator<UpdateIssueMainInfoCommand> validator,
+        ILogger<UpdateIssueMainInfoHandler> logger)
     {
         _modulesRepository = modulesRepository;
         _unitOfWork = unitOfWork;
@@ -33,7 +30,7 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        AddIssueCommand command,
+        UpdateIssueMainInfoCommand command,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -42,38 +39,35 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
             return validationResult.ToList();
         }
 
-        var moduleResult = await _modulesRepository
-            .GetById(ModuleId.Create(command.ModuleId), cancellationToken);
-
+        var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)
             return moduleResult.Error.ToErrorList();
 
-        var issue = InitIssue(command);
-        moduleResult.Value.AddIssue(issue);
+        var issueResult = moduleResult.Value.Issues.FirstOrDefault(i => i.Id.Value == command.IssueId);
+        if (issueResult == null)
+            return Errors.General.NotFound(command.IssueId).ToErrorList();
 
-        await _unitOfWork.SaveChanges(cancellationToken);
-        
-        _logger.LogInformation(
-            "Issue {issueId} was created in module {moduleId}",
-            issue.Id,
-            command.ModuleId);
-        
-        return issue.Id.Value;
-    }
-
-    private Issue InitIssue(AddIssueCommand command)
-    {
-        var issueId = IssueId.NewIssueId();
         var title = Title.Create(command.Title).Value;
         var description = Description.Create(command.Description).Value;
-        var lessonId = LessonId.Empty();
         var experience = Experience.Create(command.Experience).Value;
+        var lessonId = LessonId.Empty();
 
-        return new Issue(
-            issueId,
+        var updateResult = moduleResult.Value.UpdateIssueInfo(
+            issueResult.Id.Value,
             title,
             description,
             lessonId,
             experience);
+        if (updateResult.IsFailure)
+            return updateResult.Error.ToErrorList();
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
+        _logger.LogInformation(
+            "Issue main info was updated with id {issueId} in module {moduleId}",
+            command.IssueId,
+            command.ModuleId);
+
+        return moduleResult.Value.Id.Value;
     }
 }

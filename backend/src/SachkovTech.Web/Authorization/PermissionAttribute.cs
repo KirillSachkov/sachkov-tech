@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace SachkovTech.Framework.Authorization;
+namespace SachkovTech.Web.Authorization;
 
 public class PermissionAttribute : AuthorizeAttribute, IAuthorizationRequirement
 {

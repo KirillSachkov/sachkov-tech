@@ -8,11 +8,11 @@ using SachkovTech.Web.Middlewares;
 using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Options;
-using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
+using SachkovTech.Web.Authorization;
 using Serilog;
 using Serilog.Events;
 

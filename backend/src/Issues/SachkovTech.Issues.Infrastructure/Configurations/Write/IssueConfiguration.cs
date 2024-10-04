@@ -59,12 +59,6 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                 .HasColumnName("description");
         });
         
-        builder.Property(i => i.Files)
-            .ValueObjectsCollectionJsonConversion(
-                file => new IssueFileDto { PathToStorage = file.PathToStorage.Path },
-                dto => new IssueFile(FilePath.Create(dto.PathToStorage).Value))
-            .HasColumnName("files");
-
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
