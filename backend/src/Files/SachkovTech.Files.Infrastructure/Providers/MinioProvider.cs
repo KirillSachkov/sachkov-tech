@@ -3,12 +3,13 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using SachkovTech.Files.Domain.ValueObjects;
+using SachkovTech.Files.Infrastructure.Interfaces;
 using SachkovTech.Files.Infrastructure.Modles;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Files.Infrastructure.Providers
 {
-    internal class MinioProvider
+    internal class MinioProvider : IFileProvider
     {
         private const int MAX_DEGREE_OF_PARALLELISM = 10;
 
