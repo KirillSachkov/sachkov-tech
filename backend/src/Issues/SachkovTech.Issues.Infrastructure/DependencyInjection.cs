@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure.DbContexts;

@@ -5,7 +5,7 @@ using SachkovTech.Files.Domain;
 
 namespace SachkovTech.Files.Infrastructure.Database
 {
-    internal class WriteDbContext(IConfiguration configuration) : DbContext
+    internal class FilesWriteDbContext(IConfiguration configuration) : DbContext
     {
         public DbSet<FileData> FileDatas => Set<FileData>();
 
@@ -22,7 +22,7 @@ namespace SachkovTech.Files.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
-                typeof(WriteDbContext).Assembly,
+                typeof(FilesWriteDbContext).Assembly,
                 type => type.FullName?.Contains("Configurations.Write") ?? false);
         }
 

@@ -19,7 +19,7 @@ namespace SachkovTech.Files.Infrastructure
 
         private static IServiceCollection AddDbContexts(this IServiceCollection services)
         {
-            services.AddScoped<WriteDbContext>();
+            services.AddScoped<FilesWriteDbContext>();
             //services.AddScoped<IReadDbContext, ReadDbContext>();
 
             return services;
