@@ -22,8 +22,4 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\SachkovTech.Application\SachkovTech.Application.csproj" />
-    </ItemGroup>
-
 </Project>
