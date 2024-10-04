@@ -28,13 +28,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Presen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Core", "src\Shared\SachkovTech.Core\SachkovTech.Core.csproj", "{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesManagement.Domain", "src\IssuesManagement\SachkovTech.IssuesManagement.Domain\SachkovTech.IssuesManagement.Domain.csproj", "{890B3F8D-E258-45A1-834C-CBC73F159A52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Domain", "src\Issues\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj", "{890B3F8D-E258-45A1-834C-CBC73F159A52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesManagement.Application", "src\IssuesManagement\SachkovTech.IssuesManagement.Application\SachkovTech.IssuesManagement.Application.csproj", "{21393E38-CE4C-4472-80A3-D0DD4D05131D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Application", "src\Issues\SachkovTech.Issues.Application\SachkovTech.Issues.Application.csproj", "{21393E38-CE4C-4472-80A3-D0DD4D05131D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesManagement.Infrastructure", "src\IssuesManagement\SachkovTech.IssuesManagement.Infrastructure\SachkovTech.IssuesManagement.Infrastructure.csproj", "{780E0171-DC71-46A4-8ADE-3815ACCF014E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Infrastructure", "src\Issues\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj", "{780E0171-DC71-46A4-8ADE-3815ACCF014E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesManagement.Presentation", "src\IssuesManagement\SachkovTech.IssuesManagement.Presentation\SachkovTech.IssuesManagement.Presentation.csproj", "{345C5ECC-C139-4C59-90BD-33C5864787A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Presentation", "src\Issues\SachkovTech.Issues.Presentation\SachkovTech.Issues.Presentation.csproj", "{345C5ECC-C139-4C59-90BD-33C5864787A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{0F5BCE9B-E821-499E-A48C-F47F19E4A632}"
 EndProject
@@ -42,9 +42,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Contra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{339CC8AA-025D-4D5B-A585-4189E4335EF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesManagement", "FilesManagement", "{6F46DBCC-BE2E-4288-868C-7B32F00A3F82}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{6F46DBCC-BE2E-4288-868C-7B32F00A3F82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Files.Domain", "src\FilesManagement\SachkovTech.Files.Domain\SachkovTech.Files.Domain.csproj", "{FB465275-7A1F-4A8B-B46E-7F2461BE8886}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Files.Domain", "src\Files\SachkovTech.Files.Domain\SachkovTech.Files.Domain.csproj", "{FB465275-7A1F-4A8B-B46E-7F2461BE8886}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueReviews", "IssueReviews", "{5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}"
 EndProject
@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueSolving", "IssueSolvin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Domain", "src\IssueSolvings\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj", "{80C3AD5A-B666-4695-9E45-A93AE28A27A2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssuesManagement", "IssuesManagement", "{1955B47D-2627-4897-9AF0-863F215DA712}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issues", "Issues", "{1955B47D-2627-4897-9AF0-863F215DA712}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.SharedKernel", "src\Shared\SachkovTech.SharedKernel\SachkovTech.SharedKernel.csproj", "{37121EAE-FD51-403B-9E8B-3393C9F5BA9D}"
 EndProject

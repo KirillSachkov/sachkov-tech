@@ -9,10 +9,10 @@ using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Options;
 using SachkovTech.Framework.Authorization;
-using SachkovTech.IssuesManagement.Application;
-using SachkovTech.IssuesManagement.Infrastructure;
-using SachkovTech.IssuesManagement.Presentation.Issues;
-using SachkovTech.IssuesManagement.Presentation.Modules;
+using SachkovTech.Issues.Application;
+using SachkovTech.Issues.Infrastructure;
+using SachkovTech.Issues.Presentation.Issues;
+using SachkovTech.Issues.Presentation.Modules;
 using Serilog;
 using Serilog.Events;
 
