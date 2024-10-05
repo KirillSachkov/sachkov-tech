@@ -64,6 +64,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Infrastructure", "src\Files\SachkovTech.Files.Infrastructure\SachkovTech.Files.Infrastructure.csproj", "{C9741E48-CA42-46B6-BF43-0F7B782A1C88}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Presentation", "src\Files\SachkovTech.Files.Presentation\SachkovTech.Files.Presentation.csproj", "{3D3C982A-1F34-411C-829E-37E380EBDBCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +152,10 @@ Global
 		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
 		{C9741E48-CA42-46B6-BF43-0F7B782A1C88} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4C037AF-BCC5-4398-B9C2-23770A907520}

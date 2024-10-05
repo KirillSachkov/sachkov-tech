@@ -2,19 +2,29 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Files.Domain;
+using static CSharpFunctionalExtensions.Result;
 
 namespace SachkovTech.Files.Infrastructure.Database
 {
-    internal class FilesWriteDbContext(IConfiguration configuration) : DbContext
+    internal class FilesWriteDbContext : DbContext
     {
-        public DbSet<FileData> FileDatas => Set<FileData>();
+        private readonly IConfiguration _configuration;
+        private readonly ILoggerFactory _loggeFactory;
+
+        public FilesWriteDbContext(IConfiguration configuration, ILoggerFactory loggeFactory)
+        {
+            _configuration = configuration;
+            _loggeFactory = loggeFactory;
+        }
+
+        public DbSet<FileData> FileData => Set<FileData>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Database"));
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+            optionsBuilder.UseLoggerFactory(_loggeFactory);
 
             // optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
@@ -23,10 +33,7 @@ namespace SachkovTech.Files.Infrastructure.Database
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(FilesWriteDbContext).Assembly,
-                type => type.FullName?.Contains("Configurations.Write") ?? false);
+                type => type.FullName?.Contains("Database.Configurations.Write") ?? false);
         }
-
-        private ILoggerFactory CreateLoggerFactory() =>
-            LoggerFactory.Create(builder => { builder.AddConsole(); });
     }
 }

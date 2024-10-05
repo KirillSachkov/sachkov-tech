@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Core.Extensions;
 using SachkovTech.Files.Domain;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
-namespace SachkovTech.Files.Infrastructure.Database.Configerations.Write
+
+namespace SachkovTech.Files.Infrastructure.Database.Configurations.Write
 {
-    internal class FileDataConfiguration
+    internal class FileDataConfiguration : IEntityTypeConfiguration<FileData>
     {
         public void Configure(EntityTypeBuilder<FileData> builder)
         {

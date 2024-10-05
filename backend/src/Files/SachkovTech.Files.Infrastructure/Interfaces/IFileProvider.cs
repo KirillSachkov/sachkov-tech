@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
-using SachkovTech.Files.Domain.ValueObjects;
-using SachkovTech.Files.Infrastructure.Modles;
+using SachkovTech.Files.Application.Modles;
+using SachkovTech.Files.Infrastructure.Models;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Files.Infrastructure.Interfaces
 {
     internal interface IFileProvider
     {
-        Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(IEnumerable<UploadFileData> filesData, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<Result<UploadFilesResponse, Error>> UploadFiles(IEnumerable<UploadFileData> filesData, CancellationToken cancellationToken = default);
 
         Task<UnitResult<Error>> RemoveFile(FileLocation filesLocation, CancellationToken cancellationToken = default);
     }

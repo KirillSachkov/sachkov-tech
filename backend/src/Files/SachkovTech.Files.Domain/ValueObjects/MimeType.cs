@@ -28,7 +28,7 @@ public class MimeType : ValueObject
         Value = value;
     }
 
-    public Result<MimeType, Error> Create(string input)
+    public static Result<MimeType, Error> Create(string input)
     {
         var mimeType = input.Trim().ToUpper();
 
