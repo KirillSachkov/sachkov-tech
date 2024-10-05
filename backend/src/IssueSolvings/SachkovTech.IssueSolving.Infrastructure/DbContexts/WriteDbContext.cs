@@ -22,6 +22,7 @@ namespace SachkovTech.IssueSolving.Infrastructure.DbContexts
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(WriteDbContext).Assembly,
                 type => type.FullName?.Contains("Configurations.Write") ?? false);
+            modelBuilder.HasDefaultSchema("issues-solving");
         }
 
         private ILoggerFactory CreateLoggerFactory() =>
