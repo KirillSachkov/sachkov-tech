@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace SachkovTech.Web.Authorization;
+namespace SachkovTech.Framework.Authorization;
 
 public class PermissionPolicyProvider : IAuthorizationPolicyProvider
 {
@@ -12,6 +12,7 @@ public class PermissionPolicyProvider : IAuthorizationPolicyProvider
         }
 
         var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
             .AddRequirements(new PermissionAttribute(policyName))
             .Build();
 

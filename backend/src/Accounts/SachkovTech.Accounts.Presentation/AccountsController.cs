@@ -1,21 +1,23 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Accounts.Application.Commands.Login;
 using SachkovTech.Accounts.Application.Commands.Register;
 using SachkovTech.Accounts.Contracts.Requests;
 using SachkovTech.Framework;
+using SachkovTech.Framework.Authorization;
 
 namespace SachkovTech.Accounts.Presentation;
 
 public class AccountsController : ApplicationController
 {
-    //[Permission("issues.create")]
+    [Permission(Permissions.Accounts.CreateIssue)]
     [HttpPost("create")]
     public IActionResult CreateIssue()
     {
         return Ok();
     }
 
-    //[Permission("update.create")]
+    [Permission("update.create")]
     [HttpPost("update")]
     public IActionResult UpdateIssue()
     {
@@ -47,7 +49,7 @@ public class AccountsController : ApplicationController
         var result = await handler.Handle(
             new LoginCommand(request.Email, request.Password),
             cancellationToken);
-        
+
         if (result.IsFailure)
             return result.Error.ToResponse();
 
