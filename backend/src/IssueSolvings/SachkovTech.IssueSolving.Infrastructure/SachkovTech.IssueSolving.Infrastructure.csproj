@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
+    <ProjectReference Include="..\SachkovTech.IssueSolving.Application\SachkovTech.IssueSolving.Application.csproj" />
     <ProjectReference Include="..\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj" />
   </ItemGroup>
 
