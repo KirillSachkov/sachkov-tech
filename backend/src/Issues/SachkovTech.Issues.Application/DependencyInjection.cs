@@ -6,7 +6,7 @@ namespace SachkovTech.Issues.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddIssuesManagementApplication(this IServiceCollection services)
+    public static IServiceCollection AddIssuesApplication(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjection).Assembly;
 

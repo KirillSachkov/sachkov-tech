@@ -8,11 +8,11 @@ using SachkovTech.Web.Middlewares;
 using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Options;
+using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
-using SachkovTech.Web.Authorization;
 using Serilog;
 using Serilog.Events;
 
@@ -92,18 +92,18 @@ builder.Services.AddAuthorization();
 builder.Services
     .AddAccountsApplication()
     .AddAccountsInfrastructure(builder.Configuration)
-    
-    .AddIssuesManagementApplication()
+    .AddIssuesApplication()
     .AddIssuesManagementInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(AccountsController).Assembly)
-    .AddApplicationPart(typeof(ModulesController).Assembly)
-    .AddApplicationPart(typeof(IssuesController).Assembly);
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+
+await accountsSeeder.SeedAsync();
 
 app.UseExceptionMiddleware();
 
