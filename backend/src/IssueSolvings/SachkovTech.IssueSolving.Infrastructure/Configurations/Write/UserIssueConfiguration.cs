@@ -40,17 +40,9 @@ namespace SachkovTech.IssueSolving.Infrastructure.Configurations.Write
                     pull => Enum.Parse<IssueStatus>(pull)
                 );
 
-            builder.Property(u => u.StartDateOfExecution)
-                .HasConversion(
-                    push => push.ToUniversalTime(),
-                    pull => pull.ToLocalTime()
-                );
+            builder.Property(u => u.StartDateOfExecution);
 
-            builder.Property(u => u.EndDateOfExecution)
-                .HasConversion(
-                    push => push.ToUniversalTime(),
-                    pull => pull.ToLocalTime()
-                );
+            builder.Property(u => u.EndDateOfExecution);
 
             builder.ComplexProperty(u => u.Attempts, pb =>
             {
@@ -58,12 +50,6 @@ namespace SachkovTech.IssueSolving.Infrastructure.Configurations.Write
                     .IsRequired()
                     .HasColumnName("attempts");
             });
-
-
-            //builder.Property(u => u.PullRequestUrl)
-            //.HasConversion(
-            //push => push.Value,
-            //pull => PullRequestUrl.Create(pull).Value);
 
             builder.ComplexProperty(u => u.PullRequestUrl, pb =>
             {
