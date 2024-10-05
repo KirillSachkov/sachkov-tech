@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Dtos;
+using SachkovTech.IssueSolving.Application;
 
 namespace SachkovTech.IssueSolving.Infrastructure.DbContexts
 {
-    public class ReadDbContext(IConfiguration configuration) : DbContext
+    public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
     {
         public IQueryable<UserIssueDto> UserIssues => Set<UserIssueDto>();
 
