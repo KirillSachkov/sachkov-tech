@@ -32,6 +32,34 @@ public class FileType : ValueObject
         return new FileType(fileType);
     }
 
+    public static Result<FileType, Error> Parse(string fileName)
+    {
+        var fileExtension = Path.GetExtension(fileName).ToLower();
+
+        string type = "";
+
+        switch (fileExtension)
+        {
+            case ".png":
+                type = Image.Value;
+                break;
+            case ".jpeg":
+                type = Image.Value;
+                break;
+            case ".gif":
+                type = Image.Value;
+                break;
+            case ".svg":
+                type = Image.Value;
+                break;
+            case ".icon":
+                type = Image.Value;
+                break;
+        }
+
+        return Create(type);
+    }
+
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
         yield return Value;

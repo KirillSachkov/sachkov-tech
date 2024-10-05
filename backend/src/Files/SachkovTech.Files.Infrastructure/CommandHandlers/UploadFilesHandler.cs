@@ -1,10 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Files.Application.Commands;
+using SachkovTech.Files.Application.Commands.UploadFiles;
+using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Application.Modles;
-using SachkovTech.Files.Domain;
-using SachkovTech.Files.Domain.ValueObjects;
-using SachkovTech.Files.Infrastructure.Database;
 using SachkovTech.Files.Infrastructure.Interfaces;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
@@ -15,13 +13,13 @@ namespace SachkovTech.Files.Infrastructure.CommandHandlers
     {
         private readonly IFileProvider _fileProvider;
         private readonly ILogger<UploadFilesHandler> _logger;
-        private readonly FilesWriteDbContext _dbContext;
+        private readonly IFilesRepository _filesRepository;
 
-        public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger, FilesWriteDbContext dbContext)
+        public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger, IFilesRepository filesRepository)
         {
             _fileProvider = fileProvider;
             _logger = logger;
-            _dbContext = dbContext;
+            _filesRepository = filesRepository;
         }
 
         public async Task<Result<UploadFilesResult, ErrorList>> Handle(UploadFilesCommand command, CancellationToken cancellationToken = default)
@@ -37,33 +35,13 @@ namespace SachkovTech.Files.Infrastructure.CommandHandlers
                 {
                     var fileResult = uploadFileResult.Value;
 
-                    var fileId = FileId.NewFileId();
-                    var fileName = FileName.Create(fileResult.FileName).Value;
-                    var ownerId = command.ownerId;
-                    var storagePath = fileResult.FilePath;
-                    var isUploaded = true;
-                    var fileSize = FileSize.Create(fileResult.FileSize).Value;
-                    var mimeType = MimeType.Png;
-                    var fileType = FileType.Image;
-                    var ownerType = OwnerType.Create(command.ownerTypeName).Value;
+                    FileId fileId = FileId.NewFileId();
 
                     try
                     {
-                        var fileData = new FileData(
-                            fileId,
-                            fileName,
-                            ownerId,
-                            storagePath,
-                            isUploaded,
-                            fileSize,
-                            mimeType,
-                            fileType,
-                            ownerType);
+                        await _filesRepository.Add(fileId, fileResult.FileName, fileResult.FilePath, fileResult.FileSize, command.ownerId, command.ownerTypeName, cancellationToken);
 
-                        await _dbContext.FileData.AddAsync(fileData, cancellationToken);
-                        await _dbContext.SaveChangesAsync(cancellationToken);
-
-                        fileIds.Add(fileData.Id);
+                        fileIds.Add(fileId);
                     }
                     catch(Exception ex)
                     {
@@ -72,7 +50,7 @@ namespace SachkovTech.Files.Infrastructure.CommandHandlers
 
                         errors.Add(Error.Failure("file.upload", "Fail to upload file in minio"));
 
-                        var fileLocation = new FileLocation(fileResult.BucketName, storagePath);
+                        var fileLocation = new FileLocation(fileResult.BucketName, fileResult.FilePath);
 
                         await _fileProvider.RemoveFile(fileLocation, cancellationToken);
                     }

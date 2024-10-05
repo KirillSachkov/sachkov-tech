@@ -10,6 +10,8 @@ public class Issue : Entity<IssueId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
+    private List<FileId> _files = [];
+
     //ef core navigation
     public Module Module { get; private set; }
 
@@ -23,12 +25,14 @@ public class Issue : Entity<IssueId>, ISoftDeletable
         Title title,
         Description description,
         LessonId lessonId,
-        Experience experience) : base(id)
+        Experience experience,
+        ValueObjectList<FileId>? files = null) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
         Experience = experience;
+        _files = files ?? new ValueObjectList<FileId>([]);
     }
 
     public Experience Experience { get; private set; } = default!;
@@ -38,6 +42,14 @@ public class Issue : Entity<IssueId>, ISoftDeletable
     public Position Position { get; private set; }
 
     public LessonId LessonId { get; private set; }
+
+    public IReadOnlyList<FileId> Files => _files;
+
+
+    public void UpdateFiles(List<FileId> files)
+    {
+        _files = files;
+    }
 
     public void SetPosition(Position position) =>
         Position = position;

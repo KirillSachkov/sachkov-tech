@@ -77,7 +77,7 @@ namespace SachkovTech.Files.Infrastructure.Providers
                     .WithObject(filesLocation.FilePath.Value);
 
                 var objectStat = await _minioClient.StatObjectAsync(statArgs, cancellationToken);
-                if (objectStat is null)
+                if (objectStat.ContentType == null)
                     return Result.Success<Error>();
 
                 var removeArgs = new RemoveObjectArgs()

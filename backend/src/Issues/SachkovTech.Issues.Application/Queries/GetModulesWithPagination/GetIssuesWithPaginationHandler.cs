@@ -96,7 +96,7 @@ public class GetIssuesWithPaginationHandlerDapper
             sql.ToString(),
             (issue, jsonFiles) =>
             {
-                var files = JsonSerializer.Deserialize<IssueFileDto[]>(jsonFiles) ?? [];
+                var files = JsonSerializer.Deserialize<Guid[]>(jsonFiles) ?? [];
 
                 issue.Files = files;
 

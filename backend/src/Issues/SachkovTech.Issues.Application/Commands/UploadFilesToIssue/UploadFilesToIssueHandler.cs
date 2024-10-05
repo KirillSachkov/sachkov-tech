@@ -4,10 +4,12 @@ using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
 using SachkovTech.Files.Application.Commands;
+using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Application.Modles;
 using SachkovTech.Issues.Domain.Entities;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using System.Collections.Generic;
 
 namespace SachkovTech.Issues.Application.Commands.UploadFilesToIssue;
 
@@ -15,14 +17,14 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResult, Uplo
 {
     private const string BUCKET_NAME = "files";
 
-    private readonly IUploadFilesHandler _uploadFilesHandler;
+    private readonly IFilesContract _uploadFilesHandler;
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToIssueCommand> _validator;
     private readonly ILogger<UploadFilesToIssueHandler> _logger;
 
     public UploadFilesToIssueHandler(
-        IUploadFilesHandler uploadFilesHandler,
+        IFilesContract uploadFilesHandler,
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
         IValidator<UploadFilesToIssueCommand> validator,
@@ -65,21 +67,22 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResult, Uplo
             filesData.Add(fileData);
         }
 
-        var uploadFilesCommand = new UploadFilesCommand(nameof(Issue), command.IssueId, filesData);
+        var uploadFileResult = await _uploadFilesHandler.UploadFiles(nameof(Issue), command.IssueId, filesData, cancellationToken);
 
-        var uploadFileResult = await _uploadFilesHandler.Handle(uploadFilesCommand, cancellationToken);
-
-        //var filePathsResult = await _uploadFilesHandler.UploadFiles(filesData, cancellationToken);
         if (uploadFileResult.IsFailure)
         {
             return uploadFileResult.Error;
         }
 
         //// уставовить всё в тру
+        
+        var issueFiles = issueResult.Value.Files.ToList();
 
-        //issueResult.Value.UpdateFiles(issueFiles);
+        issueFiles.AddRange(uploadFileResult.Value.UploadedFileIds);
 
-        //await _unitOfWork.SaveChanges(cancellationToken);
+        issueResult.Value.UpdateFiles(issueFiles);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Success uploaded files to issue - {id}", issueResult.Value.Id.Value);
 
