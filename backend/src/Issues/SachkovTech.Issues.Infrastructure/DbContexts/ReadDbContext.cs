@@ -26,6 +26,8 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);
+
+        modelBuilder.Entity<IssueDto>().HasQueryFilter(i => !i.IsDeleted);
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

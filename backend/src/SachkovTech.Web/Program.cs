@@ -14,6 +14,7 @@ using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
+using SachkovTech.IssuesReviews.Application;
 using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure;
 using Serilog;
@@ -94,6 +95,7 @@ builder.Services.AddAuthorization();
 
 builder.Services
     .AddAccountsApplication()
+    .AddIssuesReviewsApplication()
     .AddAccountsInfrastructure(builder.Configuration)
     .AddIssuesPresentation()
     .AddIssuesApplication()
