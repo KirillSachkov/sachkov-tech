@@ -46,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{6F46DBCC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Files.Domain", "src\Files\SachkovTech.Files.Domain\SachkovTech.Files.Domain.csproj", "{FB465275-7A1F-4A8B-B46E-7F2461BE8886}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueReviews", "IssueReviews", "{5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssuesReviews", "IssuesReviews", "{5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Domain", "src\IssuesReviews\SachkovTech.IssuesReviews.Domain\SachkovTech.IssuesReviews.Domain.csproj", "{79112B66-183C-49D8-A99E-5D71CD83B433}"
 EndProject
@@ -63,6 +63,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Application", "src\IssuesReviews\SachkovTech.IssuesReviews.Application\SachkovTech.IssuesReviews.Application.csproj", "{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Presentation", "src\IssuesReviews\SachkovTech.IssuesReviews.Presentation\SachkovTech.IssuesReviews.Presentation.csproj", "{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Contracts", "src\IssuesReviews\SachkovTech.IssuesReviews.Contracts\SachkovTech.IssuesReviews.Contracts.csproj", "{E85EEAF1-664A-4790-A642-C752FAB6A5EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,10 @@ Global
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
@@ -181,5 +187,6 @@ Global
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
+		{E85EEAF1-664A-4790-A642-C752FAB6A5EB} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 	EndGlobalSection
 EndGlobal

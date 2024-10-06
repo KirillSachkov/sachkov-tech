@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.IssuesReviews.Application.Commands.AddComment;
 using SachkovTech.IssuesReviews.Application.Queries.GetCommentsWithPagination;
-using SachkovTech.IssuesReviews.Presentation.IssuesReviews.Requests;
+using SachkovTech.IssuesReviews.Contracts.Requests;
 using SachkovTech.SharedKernel;
 
-namespace SachkovTech.IssuesReviews.Presentation.IssuesReviews;
+namespace SachkovTech.IssuesReviews.Presentation;
 
 public class IssuesReviewsController : ApplicationController
 {
     private const string Sub = "sub";
 
-    [HttpGet]
-    public async Task<ActionResult> GetAll(
+    [HttpGet("{issueReviewId:guid}/comments")]
+
+    public async Task<ActionResult> GetByIssueReviewId(
         [FromServices] GetCommentsWithPaginationHandler handler,
         [FromRoute] Guid issueReviewId,
         [FromQuery] GetCommentsWithPaginationQuery query,
@@ -25,8 +26,8 @@ public class IssuesReviewsController : ApplicationController
         return Ok(result);
     }
     
-    [HttpPost("{id:guid}")]
-    public async Task<ActionResult> Create(
+    [HttpPost("{id:guid}/comment")]
+    public async Task<ActionResult> Comment(
         [FromServices] AddCommentHandler handler,
         [FromRoute] Guid issueReviewId,
         [FromBody] AddCommentRequest request,
@@ -37,8 +38,10 @@ public class IssuesReviewsController : ApplicationController
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
         
-        var result = await handler.Handle(request
-            .ToCommand(issueReviewId, Guid.Parse(userId)), cancellationToken);
+        var result = await handler.Handle(
+            new AddCommentCommand(issueReviewId, 
+                Guid.Parse(userId),
+                request.Message), cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
