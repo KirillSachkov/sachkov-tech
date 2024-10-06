@@ -3,62 +3,70 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Web", "src\SachkovTech.Web\SachkovTech.Web.csproj", "{C2063B39-6BC1-451E-B961-00EFC1AB5A2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Web", "src\SachkovTech.Web\SachkovTech.Web.csproj", "{C2063B39-6BC1-451E-B961-00EFC1AB5A2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9227B646-C84B-41D7-B2AC-28BD2AA4C6CF}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Domain.UnitTests", "tests\SachkovTech.Domain.UnitTests\SachkovTech.Domain.UnitTests.csproj", "{EC9BCD7E-EF6A-4409-9987-7042788E4328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Domain.UnitTests", "tests\SachkovTech.Domain.UnitTests\SachkovTech.Domain.UnitTests.csproj", "{EC9BCD7E-EF6A-4409-9987-7042788E4328}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{696505DF-F3E6-478B-AA1E-A35BECBB3AF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC60138D-E08D-4EAB-8309-3D381D52962C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Application.UnitTests", "tests\SachkovTech.Application.UnitTests\SachkovTech.Application.UnitTests.csproj", "{C398512E-9F0A-4DDF-A0B1-7C76918373D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Application.UnitTests", "tests\SachkovTech.Application.UnitTests\SachkovTech.Application.UnitTests.csproj", "{C398512E-9F0A-4DDF-A0B1-7C76918373D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Infrastructure", "src\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj", "{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Accounts.Infrastructure", "src\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj", "{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Application", "src\Accounts\SachkovTech.Accounts.Application\SachkovTech.Accounts.Application.csproj", "{DC09494D-69C3-4FF7-BED4-65869B3A32C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Accounts.Application", "src\Accounts\SachkovTech.Accounts.Application\SachkovTech.Accounts.Application.csproj", "{DC09494D-69C3-4FF7-BED4-65869B3A32C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Domain", "src\Accounts\SachkovTech.Accounts.Domain\SachkovTech.Accounts.Domain.csproj", "{94E3B672-37F1-4373-8C8B-48B64C335826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Accounts.Domain", "src\Accounts\SachkovTech.Accounts.Domain\SachkovTech.Accounts.Domain.csproj", "{94E3B672-37F1-4373-8C8B-48B64C335826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Presentation", "src\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj", "{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Accounts.Presentation", "src\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj", "{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Core", "src\Shared\SachkovTech.Core\SachkovTech.Core.csproj", "{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Core", "src\Shared\SachkovTech.Core\SachkovTech.Core.csproj", "{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Domain", "src\Issues\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj", "{890B3F8D-E258-45A1-834C-CBC73F159A52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Issues.Domain", "src\Issues\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj", "{890B3F8D-E258-45A1-834C-CBC73F159A52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Application", "src\Issues\SachkovTech.Issues.Application\SachkovTech.Issues.Application.csproj", "{21393E38-CE4C-4472-80A3-D0DD4D05131D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Issues.Application", "src\Issues\SachkovTech.Issues.Application\SachkovTech.Issues.Application.csproj", "{21393E38-CE4C-4472-80A3-D0DD4D05131D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Infrastructure", "src\Issues\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj", "{780E0171-DC71-46A4-8ADE-3815ACCF014E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Issues.Infrastructure", "src\Issues\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj", "{780E0171-DC71-46A4-8ADE-3815ACCF014E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Presentation", "src\Issues\SachkovTech.Issues.Presentation\SachkovTech.Issues.Presentation.csproj", "{345C5ECC-C139-4C59-90BD-33C5864787A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Issues.Presentation", "src\Issues\SachkovTech.Issues.Presentation\SachkovTech.Issues.Presentation.csproj", "{345C5ECC-C139-4C59-90BD-33C5864787A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{0F5BCE9B-E821-499E-A48C-F47F19E4A632}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Accounts.Contracts", "src\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj", "{0601F2F9-092D-4416-8967-959121C46B8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Accounts.Contracts", "src\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj", "{0601F2F9-092D-4416-8967-959121C46B8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{339CC8AA-025D-4D5B-A585-4189E4335EF7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{6F46DBCC-BE2E-4288-868C-7B32F00A3F82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Files.Domain", "src\Files\SachkovTech.Files.Domain\SachkovTech.Files.Domain.csproj", "{FB465275-7A1F-4A8B-B46E-7F2461BE8886}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Domain", "src\Files\SachkovTech.Files.Domain\SachkovTech.Files.Domain.csproj", "{FB465275-7A1F-4A8B-B46E-7F2461BE8886}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssuesReviews", "IssuesReviews", "{5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Domain", "src\IssuesReviews\SachkovTech.IssuesReviews.Domain\SachkovTech.IssuesReviews.Domain.csproj", "{79112B66-183C-49D8-A99E-5D71CD83B433}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.IssuesReviews.Domain", "src\IssuesReviews\SachkovTech.IssuesReviews.Domain\SachkovTech.IssuesReviews.Domain.csproj", "{79112B66-183C-49D8-A99E-5D71CD83B433}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueSolving", "IssueSolving", "{584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Domain", "src\IssueSolvings\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj", "{80C3AD5A-B666-4695-9E45-A93AE28A27A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.IssueSolving.Domain", "src\IssueSolvings\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj", "{80C3AD5A-B666-4695-9E45-A93AE28A27A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issues", "Issues", "{1955B47D-2627-4897-9AF0-863F215DA712}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.SharedKernel", "src\Shared\SachkovTech.SharedKernel\SachkovTech.SharedKernel.csproj", "{37121EAE-FD51-403B-9E8B-3393C9F5BA9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.SharedKernel", "src\Shared\SachkovTech.SharedKernel\SachkovTech.SharedKernel.csproj", "{37121EAE-FD51-403B-9E8B-3393C9F5BA9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Framework", "src\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj", "{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Framework", "src\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj", "{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Infrastructure", "src\IssueSolvings\SachkovTech.IssueSolving.Infrastructure\SachkovTech.IssueSolving.Infrastructure.csproj", "{9263832B-805F-4A8A-ADD3-B88578404914}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Presentation", "src\IssueSolvings\SachkovTech.IssueSolving.Presentation\SachkovTech.IssueSolving.Presentation.csproj", "{99CD2D9C-5982-4D7A-946A-2543B884D4DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Application", "src\IssueSolvings\SachkovTech.IssueSolving.Application\SachkovTech.IssueSolving.Application.csproj", "{9E21193C-D7F8-45DF-AEA6-68AA30F53307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Issues.Contracts", "src\Issues\SachkovTech.Issues.Contracts\SachkovTech.Issues.Contracts.csproj", "{300DC72B-68C8-435A-A64D-57A1D150C4B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Application", "src\IssuesReviews\SachkovTech.IssuesReviews.Application\SachkovTech.IssuesReviews.Application.csproj", "{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481}"
 EndProject
@@ -70,9 +78,6 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -159,19 +164,42 @@ Global
 		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E85EEAF1-664A-4790-A642-C752FAB6A5EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9263832B-805F-4A8A-ADD3-B88578404914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9263832B-805F-4A8A-ADD3-B88578404914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9263832B-805F-4A8A-ADD3-B88578404914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9263832B-805F-4A8A-ADD3-B88578404914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99CD2D9C-5982-4D7A-946A-2543B884D4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99CD2D9C-5982-4D7A-946A-2543B884D4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99CD2D9C-5982-4D7A-946A-2543B884D4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99CD2D9C-5982-4D7A-946A-2543B884D4DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E21193C-D7F8-45DF-AEA6-68AA30F53307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E21193C-D7F8-45DF-AEA6-68AA30F53307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E21193C-D7F8-45DF-AEA6-68AA30F53307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E21193C-D7F8-45DF-AEA6-68AA30F53307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C2063B39-6BC1-451E-B961-00EFC1AB5A2B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{EC9BCD7E-EF6A-4409-9987-7042788E4328} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
 		{C398512E-9F0A-4DDF-A0B1-7C76918373D7} = {AC60138D-E08D-4EAB-8309-3D381D52962C}
-		{0F5BCE9B-E821-499E-A48C-F47F19E4A632} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
-		{DC09494D-69C3-4FF7-BED4-65869B3A32C6} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
-		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
-		{94E3B672-37F1-4373-8C8B-48B64C335826} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
 		{0F297B2C-3A9D-4919-8E01-57EDBCD4B10B} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{DC09494D-69C3-4FF7-BED4-65869B3A32C6} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{94E3B672-37F1-4373-8C8B-48B64C335826} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{71B9AE58-FC5A-4E25-AFA8-31DA8CD21175} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
+		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
+		{890B3F8D-E258-45A1-834C-CBC73F159A52} = {1955B47D-2627-4897-9AF0-863F215DA712}
+		{21393E38-CE4C-4472-80A3-D0DD4D05131D} = {1955B47D-2627-4897-9AF0-863F215DA712}
+		{780E0171-DC71-46A4-8ADE-3815ACCF014E} = {1955B47D-2627-4897-9AF0-863F215DA712}
+		{345C5ECC-C139-4C59-90BD-33C5864787A4} = {1955B47D-2627-4897-9AF0-863F215DA712}
+		{0F5BCE9B-E821-499E-A48C-F47F19E4A632} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{0601F2F9-092D-4416-8967-959121C46B8E} = {0F5BCE9B-E821-499E-A48C-F47F19E4A632}
 		{339CC8AA-025D-4D5B-A585-4189E4335EF7} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
-		{A2F1FDD2-AF13-4A09-9483-0DABC8E19E2D} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{6F46DBCC-BE2E-4288-868C-7B32F00A3F82} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{FB465275-7A1F-4A8B-B46E-7F2461BE8886} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
 		{5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
@@ -179,14 +207,17 @@ Global
 		{584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{80C3AD5A-B666-4695-9E45-A93AE28A27A2} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
 		{1955B47D-2627-4897-9AF0-863F215DA712} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
-		{21393E38-CE4C-4472-80A3-D0DD4D05131D} = {1955B47D-2627-4897-9AF0-863F215DA712}
-		{345C5ECC-C139-4C59-90BD-33C5864787A4} = {1955B47D-2627-4897-9AF0-863F215DA712}
-		{890B3F8D-E258-45A1-834C-CBC73F159A52} = {1955B47D-2627-4897-9AF0-863F215DA712}
-		{780E0171-DC71-46A4-8ADE-3815ACCF014E} = {1955B47D-2627-4897-9AF0-863F215DA712}
 		{37121EAE-FD51-403B-9E8B-3393C9F5BA9D} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 		{E85EEAF1-664A-4790-A642-C752FAB6A5EB} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
+		{9263832B-805F-4A8A-ADD3-B88578404914} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
+		{99CD2D9C-5982-4D7A-946A-2543B884D4DF} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
+		{9E21193C-D7F8-45DF-AEA6-68AA30F53307} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
+		{300DC72B-68C8-435A-A64D-57A1D150C4B2} = {1955B47D-2627-4897-9AF0-863F215DA712}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06591CB3-5D76-4012-AA6A-ACA4A8D2D8DF}
 	EndGlobalSection
 EndGlobal

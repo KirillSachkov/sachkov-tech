@@ -2,11 +2,11 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
 
-namespace SachkovTech.Issues.Application;
+namespace SachkovTech.IssueSolving.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddIssuesApplication(this IServiceCollection services)
+    public static IServiceCollection AddIssueSolvingApplication(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjection).Assembly;
 
