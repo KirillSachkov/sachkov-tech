@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using SachkovTech.Files.Application.Commands;
 using SachkovTech.Files.Application.Commands.UploadFiles;
 using SachkovTech.Files.Contracts;
 using SachkovTech.Files.Contracts.Requests;
 using SachkovTech.Files.Contracts.Responses;
-using SachkovTech.Files.Infrastructure.CommandHandlers;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Files.Application

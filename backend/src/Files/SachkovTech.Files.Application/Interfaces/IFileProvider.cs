@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.Files.Contracts.Dtos;
-using SachkovTech.Files.Infrastructure.Models;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Files.Application.Interfaces
