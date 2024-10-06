@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
     <ProjectReference Include="..\SachkovTech.Files.Application\SachkovTech.Files.Application.csproj" />
+    <ProjectReference Include="..\SachkovTech.Files.Contracts\SachkovTech.Files.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

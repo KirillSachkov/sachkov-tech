@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
-using SachkovTech.Files.Application.Modles;
+using SachkovTech.Files.Application.Interfaces;
+using SachkovTech.Files.Contracts.Dtos;
 using SachkovTech.Files.Domain.ValueObjects;
-using SachkovTech.Files.Infrastructure.Interfaces;
 using SachkovTech.Files.Infrastructure.Models;
 using SachkovTech.SharedKernel;
 using System.Runtime.CompilerServices;
@@ -24,25 +24,18 @@ namespace SachkovTech.Files.Infrastructure.Providers
             _logger = logger;
         }
 
-        public async IAsyncEnumerable<Result<UploadFilesResponse, Error>> UploadFiles(
+        public async IAsyncEnumerable<Result<UploadFilesResult, Error>> UploadFiles(
         IEnumerable<UploadFileData> filesData,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             SemaphoreSlim semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
 
-            List<UploadFilesResponse> results = new();
+            List<UploadFilesResult> results = new();
 
-            try
-            {
-                await IfBucketsNotExistCreateBucket(filesData.Select(file => file.BucketName).Distinct(), cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,
-                    "Fail to upload files in minio, files amount: {amount}", filesData.Count());
+            var bucketsExistResult = await IfBucketsNotExistCreateBucket(filesData.Select(file => file.BucketName).Distinct(), cancellationToken);
 
+            if (bucketsExistResult.IsFailure)
                 yield break;
-            }
 
             var tasks = filesData.Select(async file =>
                     await PutObject(file, semaphoreSlim, cancellationToken)).ToList();
@@ -68,9 +61,14 @@ namespace SachkovTech.Files.Infrastructure.Providers
             FileLocation filesLocation,
             CancellationToken cancellationToken = default)
         {
+
+            var bucketsExistResult = await IfBucketsNotExistCreateBucket([filesLocation.BucketName], cancellationToken);
+
+            if (bucketsExistResult.IsFailure)
+                return bucketsExistResult.Error;
+
             try
             {
-                await IfBucketsNotExistCreateBucket([filesLocation.BucketName], cancellationToken);
 
                 var statArgs = new StatObjectArgs()
                     .WithBucket(filesLocation.BucketName)
@@ -101,7 +99,7 @@ namespace SachkovTech.Files.Infrastructure.Providers
 
 
 
-        private async Task<Result<UploadFilesResponse, Error>> PutObject(
+        private async Task<Result<UploadFilesResult, Error>> PutObject(
             UploadFileData fileData,
             SemaphoreSlim semaphoreSlim,
             CancellationToken cancellationToken)
@@ -127,7 +125,7 @@ namespace SachkovTech.Files.Infrastructure.Providers
                 var filePath = FilePath.Create(response.ObjectName).Value;
                 var fileSize = FileSize.Create(response.Size).Value;
 
-                var result = new UploadFilesResponse(
+                var result = new UploadFilesResult(
                     fileData.BucketName,
                     fileData.FileName,
                     filePath,
@@ -150,7 +148,7 @@ namespace SachkovTech.Files.Infrastructure.Providers
             }
         }
 
-        private async Task IfBucketsNotExistCreateBucket(
+        private async Task<UnitResult<Error>> IfBucketsNotExistCreateBucket(
             IEnumerable<string> buckets,
             CancellationToken cancellationToken)
         {
@@ -158,20 +156,34 @@ namespace SachkovTech.Files.Infrastructure.Providers
 
             foreach (var bucketName in bucketNames)
             {
-                var bucketExistArgs = new BucketExistsArgs()
-                    .WithBucket(bucketName);
-
-                var bucketExist = await _minioClient
-                    .BucketExistsAsync(bucketExistArgs, cancellationToken);
-
-                if (bucketExist == false)
+                try
                 {
-                    var makeBucketArgs = new MakeBucketArgs()
+                    var bucketExistArgs = new BucketExistsArgs()
                         .WithBucket(bucketName);
 
-                    await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
+                    var bucketExist = await _minioClient
+                        .BucketExistsAsync(bucketExistArgs, cancellationToken);
+
+                    if (bucketExist == false)
+                    {
+                        var makeBucketArgs = new MakeBucketArgs()
+                            .WithBucket(bucketName);
+
+                        await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        "Error checking the existence of a bucket named : {bucketName}", bucketName);
+
+                    return Error.Failure("file.bucket.not.exists", $"Error checking the existence of a bucket named : {bucketName}");
                 }
             }
+
+            return UnitResult.Success<Error>();
+
         }
+
     }
 }

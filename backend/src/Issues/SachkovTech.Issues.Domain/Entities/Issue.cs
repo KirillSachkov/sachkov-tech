@@ -26,13 +26,13 @@ public class Issue : Entity<IssueId>, ISoftDeletable
         Description description,
         LessonId lessonId,
         Experience experience,
-        ValueObjectList<FileId>? files = null) : base(id)
+        IEnumerable<FileId>? files = null) : base(id)
     {
         Title = title;
         Description = description;
         LessonId = lessonId;
         Experience = experience;
-        _files = files ?? new ValueObjectList<FileId>([]);
+        _files = files?.ToList() ?? new List<FileId>();
     }
 
     public Experience Experience { get; private set; } = default!;
@@ -46,9 +46,9 @@ public class Issue : Entity<IssueId>, ISoftDeletable
     public IReadOnlyList<FileId> Files => _files;
 
 
-    public void UpdateFiles(List<FileId> files)
+    public void UpdateFiles(IEnumerable<FileId> files)
     {
-        _files = files;
+        _files = files.ToList();
     }
 
     public void SetPosition(Position position) =>

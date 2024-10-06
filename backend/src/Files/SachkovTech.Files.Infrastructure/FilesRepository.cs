@@ -1,7 +1,9 @@
-﻿using SachkovTech.Files.Application.Interfaces;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
+using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Domain;
-using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.Files.Infrastructure.Database;
+using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Files.Infrastructure
@@ -9,38 +11,30 @@ namespace SachkovTech.Files.Infrastructure
     internal class FilesRepository : IFilesRepository
     {
         private readonly FilesWriteDbContext _dbContext;
+        private readonly ILogger<FilesRepository> _logger;
 
-        public FilesRepository(FilesWriteDbContext dbContext)
+        public FilesRepository(FilesWriteDbContext dbContext, ILogger<FilesRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
-        public async Task<FileId> Add(FileId fileId, string fileName, FilePath filePath, long fileSize, Guid ownerId, string ownerTypeName, CancellationToken cancellationToken)
+        public async Task<Result<FileId, Error>> Add(FileData fileData, CancellationToken cancellationToken)
         {
-            var _fileName = FileName.Create(fileName).Value;
-            var sownerId = ownerId;
-            var storagePath = filePath;
-            var isUploaded = true;
-            var _fileSize = FileSize.Create(fileSize).Value;
-            var mimeType = MimeType.Parse(fileName).Value;
-            var fileType = FileType.Parse(fileName).Value;
-            var ownerType = OwnerType.Create(ownerTypeName).Value;
+            try
+            {
+                await _dbContext.FileData.AddAsync(fileData, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
-            var fileData = new FileData(
-                fileId,
-                _fileName,
-                ownerId,
-                storagePath,
-                isUploaded,
-                _fileSize,
-                mimeType,
-                fileType,
-                ownerType);
+                return fileData.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to save file data with id \"{fileId}\" to the database.", fileData.Id.Value.ToString());
 
-            await _dbContext.FileData.AddAsync(fileData, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            return fileData.Id;
+                return Error.Failure("file.upload", "Fail to upload file in minio");
+            }
         }
     }
 }

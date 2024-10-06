@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using SachkovTech.Core.Abstractions;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Infrastructure.Database;
-using SachkovTech.Files.Infrastructure.Interfaces;
 using SachkovTech.Files.Infrastructure.Options;
 using SachkovTech.Files.Infrastructure.Providers;
 
@@ -15,7 +13,6 @@ namespace SachkovTech.Files.Infrastructure
         public static IServiceCollection AddFilesInfrastructure(
             this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCommands();
             services.AddDatabase();
             services.AddMinio(configuration);
 
@@ -27,19 +24,6 @@ namespace SachkovTech.Files.Infrastructure
             services.AddScoped<FilesWriteDbContext>();
 
             services.AddScoped<IFilesRepository, FilesRepository>();
-
-            return services;
-        }
-
-        private static IServiceCollection AddCommands(this IServiceCollection services)
-        {
-            var assembly = typeof(DependencyInjection).Assembly;
-
-            services.Scan(scan => scan.FromAssemblies(assembly)
-                .AddClasses(classes => classes
-                    .AssignableToAny(typeof(ICommandHandler<,>), typeof(ICommandHandler<>)))
-                .AsSelfWithInterfaces()
-                .WithScopedLifetime());
 
             return services;
         }

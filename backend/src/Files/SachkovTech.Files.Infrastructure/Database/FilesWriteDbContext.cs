@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Files.Domain;
-using static CSharpFunctionalExtensions.Result;
 
 namespace SachkovTech.Files.Infrastructure.Database
 {
@@ -25,8 +24,6 @@ namespace SachkovTech.Files.Infrastructure.Database
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(_loggeFactory);
-
-            // optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

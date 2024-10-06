@@ -3,41 +3,41 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
-using SachkovTech.Files.Application.Commands;
-using SachkovTech.Files.Application.Interfaces;
-using SachkovTech.Files.Application.Modles;
+using SachkovTech.Files.Contracts;
+using SachkovTech.Files.Contracts.Dtos;
+using SachkovTech.Files.Contracts.Requests;
+using SachkovTech.Files.Contracts.Responses;
 using SachkovTech.Issues.Domain.Entities;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
-using System.Collections.Generic;
 
 namespace SachkovTech.Issues.Application.Commands.UploadFilesToIssue;
 
-public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResult, UploadFilesToIssueCommand>
+public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, UploadFilesToIssueCommand>
 {
     private const string BUCKET_NAME = "files";
 
-    private readonly IFilesContract _uploadFilesHandler;
+    private readonly IFilesContracts _filesContracts;
     private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToIssueCommand> _validator;
     private readonly ILogger<UploadFilesToIssueHandler> _logger;
 
     public UploadFilesToIssueHandler(
-        IFilesContract uploadFilesHandler,
+        IFilesContracts filesContracts,
         IModulesRepository modulesRepository,
         IUnitOfWork unitOfWork,
         IValidator<UploadFilesToIssueCommand> validator,
         ILogger<UploadFilesToIssueHandler> logger)
     {
-        _uploadFilesHandler = uploadFilesHandler;
+        _filesContracts = filesContracts;
         _modulesRepository = modulesRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
         _logger = logger;
     }
 
-    public async Task<Result<UploadFilesResult, ErrorList>> Handle(
+    public async Task<Result<UploadFilesResponse, ErrorList>> Handle(
         UploadFilesToIssueCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -59,22 +59,18 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResult, Uplo
         if (issueResult.IsFailure)
             return issueResult.Error.ToErrorList();
 
-        List<UploadFileData> filesData = [];
-        foreach (var file in command.Files)
-        {
-            var fileData = new UploadFileData(file.Content, BUCKET_NAME, file.FileName);
+        List<UploadFileData> filesData = (from file in command.Files
+                                          select new UploadFileData(file.Content, BUCKET_NAME, file.FileName)).ToList();
 
-            filesData.Add(fileData);
-        }
 
-        var uploadFileResult = await _uploadFilesHandler.UploadFiles(nameof(Issue), command.IssueId, filesData, cancellationToken);
+        var request = new UploadFilesRequest(nameof(Issue), command.IssueId, filesData);
+
+        var uploadFileResult = await _filesContracts.UploadFiles(request, cancellationToken);
 
         if (uploadFileResult.IsFailure)
         {
             return uploadFileResult.Error;
         }
-
-        //// уставовить всё в тру
         
         var issueFiles = issueResult.Value.Files.ToList();
 

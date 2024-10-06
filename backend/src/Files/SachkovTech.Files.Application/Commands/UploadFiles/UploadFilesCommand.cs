@@ -1,7 +1,7 @@
 ﻿using SachkovTech.Core.Abstractions;
-using SachkovTech.Files.Application.Modles;
+using SachkovTech.Files.Contracts.Dtos;
 
 namespace SachkovTech.Files.Application.Commands.UploadFiles
 {
-    public record UploadFilesCommand(string ownerTypeName, Guid ownerId, IEnumerable<UploadFileData> Files) : ICommand;
+    public record UploadFilesCommand(string OwnerTypeName, Guid OwnerId, IEnumerable<UploadFileData> Files) : ICommand;
 }

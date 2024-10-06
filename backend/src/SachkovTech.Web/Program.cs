@@ -97,6 +97,7 @@ builder.Services
 
     .AddFilesApplication()
     .AddFilesInfrastructure(builder.Configuration)
+    .AddFilesPresentation()
 
     .AddIssuesManagementApplication()
     .AddIssuesManagementInfrastructure(builder.Configuration);

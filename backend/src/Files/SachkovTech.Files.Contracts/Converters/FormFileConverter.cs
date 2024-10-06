@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using SachkovTech.Core.Dtos;
 
-namespace SachkovTech.Files.Presentation.Converters
+namespace SachkovTech.Files.Contracts.Converters
 {
     public class FormFileConverter : IAsyncDisposable
     {

@@ -1,15 +1,14 @@
-﻿using SachkovTech.Files.Application.Modles;
-using SachkovTech.SharedKernel;
+﻿using SachkovTech.Files.Contracts.Responses;
 
 namespace SachkovTech.Issues.Presentation.Modules.Responses
 {
-    public record UploadFilesToIssueResponse(IEnumerable<Guid> FileIds, ErrorList UploadErrors, int UploadFilesCount, int NotUploadedFilesCount)
+    public record UploadFilesToIssueResponse(IEnumerable<Guid> FileIds, int UploadFilesCount, int NotUploadedFilesCount)
     {
-        public static UploadFilesToIssueResponse MapFromUploadFilesResult(UploadFilesResult uploadFilesResult)
+        public static UploadFilesToIssueResponse MapFromUploadFilesResult(UploadFilesResponse uploadFilesResponse)
         {
-            var responsefileIds = uploadFilesResult.UploadedFileIds.Select(id => id.Value);
+            var responsefileIds = uploadFilesResponse.UploadedFileIds.Select(id => id.Value);
 
-            return new UploadFilesToIssueResponse(responsefileIds, uploadFilesResult.UploadErrors, uploadFilesResult.UploadFilesCount, uploadFilesResult.NotUploadedFilesCount);
+            return new UploadFilesToIssueResponse(responsefileIds, uploadFilesResponse.UploadFilesCount, uploadFilesResponse.NotUploadedFilesCount);
         }
     }
 }

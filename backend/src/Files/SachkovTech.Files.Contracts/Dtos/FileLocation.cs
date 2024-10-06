@@ -1,6 +1,6 @@
 ﻿using SachkovTech.Files.Domain.ValueObjects;
 
-namespace SachkovTech.Files.Application.Modles
+namespace SachkovTech.Files.Contracts.Dtos
 {
     public record FileLocation(string BucketName, FilePath FilePath);
 }
