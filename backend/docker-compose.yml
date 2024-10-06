@@ -1,25 +1,27 @@
 ﻿services:
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:16
     restart: always
     environment:
-      POSTGRES_DB: sachkov_tech
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5434:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
   seq:
     image: datalust/seq:latest
     container_name: seq
     restart: always
     environment:
-      - ACCEPT_EULA=Y
+      - ACCEPT_EULA=${SEQ_ACCEPT_EULA}
     ports:
       - 5341:5341
       - 8081:80
+
   minio:
     container_name: minio
     image: minio/minio
@@ -30,6 +32,30 @@
       - minio_data:/data
     command: server --console-address ":9001" /data
     restart: always
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+
+  webapp:
+    container_name: webapp
+    image: sachkovtech.api
+    build:
+      context: .
+      dockerfile: src/SachkovTech.Web/Dockerfile
+    ports:
+      - 8080:8080
+      - 8082:8082
+    depends_on:
+      - postgres
+      - seq
+      - minio
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+      Seq__ServerUrl: ${SEQ_SERVER_URL}
+      Minio__Endpoint: ${MINIO_ENDPOINT}
+      Minio__AccessKey: ${MINIO_ACCESS_KEY}
+      Minio__SecretKey: ${MINIO_SECRET_KEY}
 
 volumes:
   postgres-data:
