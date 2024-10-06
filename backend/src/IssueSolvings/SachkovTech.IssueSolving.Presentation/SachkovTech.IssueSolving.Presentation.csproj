@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj" />
+    <ProjectReference Include="..\..\Shared\SachkovTech.SharedKernel\SachkovTech.SharedKernel.csproj" />
+    <ProjectReference Include="..\SachkovTech.IssueSolving.Application\SachkovTech.IssueSolving.Application.csproj" />
+    <ProjectReference Include="..\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
+
 </Project>

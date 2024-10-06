@@ -26,7 +26,7 @@ namespace SachkovTech.IssueSolving.Infrastructure.Configurations.Write
                     .HasColumnName("user_id");
             });
 
-            builder.ComplexProperty(u => u.UserId, pb =>
+            builder.ComplexProperty(u => u.IssueId, pb =>
             {
                 pb.Property(a => a.Value)
                     .IsRequired()

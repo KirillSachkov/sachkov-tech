@@ -9,7 +9,7 @@ namespace SachkovTech.IssueSolving.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddIssuesManagementInfrastructure(
+        public static IServiceCollection AddIssueSolvingInfrastructure(
             this IServiceCollection services, IConfiguration configuration)
         {
             services

@@ -13,6 +13,7 @@ using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
+using SachkovTech.IssueSolving.Infrastructure;
 using Serilog;
 using Serilog.Events;
 

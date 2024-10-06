@@ -17,6 +17,11 @@ public class UserIssue : Entity<UserIssueId>
         Status = IssueStatus.NotCompleted;
     }
 
+    private UserIssue(UserIssueId id) : base(id)
+    {
+        
+    }
+
     public UserId UserId { get; private set; }
 
     public IssueId IssueId { get; private set; }
@@ -31,7 +36,7 @@ public class UserIssue : Entity<UserIssueId>
 
     public PullRequestUrl PullRequestUrl { get; private set; } = null!;
 
-    public void TakeTask()
+    public void TakeOnWork()
     {
         StartDateOfExecution = DateTime.Now;
         Status = IssueStatus.AtWork;
