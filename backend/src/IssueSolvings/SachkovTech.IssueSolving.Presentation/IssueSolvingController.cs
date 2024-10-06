@@ -7,8 +7,7 @@ namespace SachkovTech.IssueSolving.Presentation;
 
 public class IssueSolvingController : ApplicationController
 {
-    [Authorize]
-    [HttpGet("{issueId:guid}")]
+    [HttpPost("{issueId:guid}")]
     public async Task<ActionResult> TakeOnWork(
         [FromRoute] Guid issueId,
         [FromServices] TakeOnWorkHandler handler,

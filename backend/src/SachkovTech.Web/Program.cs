@@ -11,8 +11,10 @@ using SachkovTech.Core.Options;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
+using SachkovTech.Issues.Presentation;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
+using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure;
 using Serilog;
 using Serilog.Events;
@@ -93,8 +95,11 @@ builder.Services.AddAuthorization();
 builder.Services
     .AddAccountsApplication()
     .AddAccountsInfrastructure(builder.Configuration)
+    .AddIssuesPresentation()
     .AddIssuesApplication()
-    .AddIssuesManagementInfrastructure(builder.Configuration);
+    .AddIssuesManagementInfrastructure(builder.Configuration)
+    .AddIssueSolvingApplication()
+    .AddIssueSolvingInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 

@@ -16,6 +16,8 @@ namespace SachkovTech.IssueSolving.Infrastructure.Repositories
         public async Task<Guid> Add(UserIssue userIssue, CancellationToken cancellationToken = default)
         {
             await _dbContext.UserIssues.AddAsync(userIssue, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            
             return userIssue.Id;
         }
     }

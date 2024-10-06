@@ -13,22 +13,19 @@ namespace SachkovTech.IssueSolving.Application.Commands.TakeOnWork;
 public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
 {
     private readonly IUserIssueRepository _repository;
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssueSolvingReadDbContext _issueSolvingReadDbContext;
     private readonly IIssuesContract _issuesContract;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<TakeOnWorkHandler> _logger;
 
     public TakeOnWorkHandler(
         IUserIssueRepository repository,
-        IReadDbContext readDbContext,
+        IIssueSolvingReadDbContext issueSolvingReadDbContext,
         IIssuesContract issuesContract,
-        IUnitOfWork unitOfWork,
         ILogger<TakeOnWorkHandler> logger)
     {
         _repository = repository;
-        _readDbContext = readDbContext;
+        _issueSolvingReadDbContext = issueSolvingReadDbContext;
         _issuesContract = issuesContract;
-        _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
@@ -49,7 +46,7 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
             if (previousIssueResult.IsFailure)
                 return previousIssueResult.Error;
         
-            var previousUserIssue = await _readDbContext.UserIssues
+            var previousUserIssue = await _issueSolvingReadDbContext.UserIssues
                 .FirstOrDefaultAsync(u => u.UserId == command.UserId && 
                                           u.IssueId == previousIssueResult.Value.Id, cancellationToken);
 
@@ -70,8 +67,6 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
         userIssue.TakeOnWork();
 
         var result = await _repository.Add(userIssue, cancellationToken);
-
-        await _unitOfWork.SaveChanges(cancellationToken);
         
         _logger.LogInformation("User took issue on work. A record was created with id {userIssueId}",
             userIssueId);
