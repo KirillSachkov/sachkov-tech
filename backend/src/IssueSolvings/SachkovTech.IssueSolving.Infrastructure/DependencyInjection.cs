@@ -9,7 +9,7 @@ namespace SachkovTech.IssueSolving.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddIssuesManagementInfrastructure(
+        public static IServiceCollection AddIssueSolvingInfrastructure(
             this IServiceCollection services, IConfiguration configuration)
         {
             services
@@ -22,7 +22,7 @@ namespace SachkovTech.IssueSolving.Infrastructure
 
         private static IServiceCollection AddDatabase(this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
@@ -40,7 +40,7 @@ namespace SachkovTech.IssueSolving.Infrastructure
         private static IServiceCollection AddDbContexts(this IServiceCollection services)
         {
             services.AddScoped<WriteDbContext>();
-            services.AddScoped<IReadDbContext, ReadDbContext>();
+            services.AddScoped<IIssueSolvingReadDbContext, IssueSolvingReadDbContext>();
 
             return services;
         }
