@@ -12,18 +12,18 @@ namespace SachkovTech.IssueSolving.Application.Commands.TakeOnWork;
 
 public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
 {
-    private readonly IUserIssueRepository _repository;
+    private readonly IUserIssueRepository _userIssueRepository;
     private readonly IIssueSolvingReadDbContext _issueSolvingReadDbContext;
     private readonly IIssuesContract _issuesContract;
     private readonly ILogger<TakeOnWorkHandler> _logger;
 
     public TakeOnWorkHandler(
-        IUserIssueRepository repository,
+        IUserIssueRepository userIssueRepository,
         IIssueSolvingReadDbContext issueSolvingReadDbContext,
         IIssuesContract issuesContract,
         ILogger<TakeOnWorkHandler> logger)
     {
-        _repository = repository;
+        _userIssueRepository = userIssueRepository;
         _issueSolvingReadDbContext = issueSolvingReadDbContext;
         _issuesContract = issuesContract;
         _logger = logger;
@@ -51,7 +51,7 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
                                           u.IssueId == previousIssueResult.Value.Id, cancellationToken);
 
             if (previousUserIssue is null)
-                return Errors.General.NotFound().ToErrorList();
+                return Errors.General.NotFound(null, "Previous solved issue").ToErrorList();
 
             var previousUserIssueStatus = Enum.Parse<IssueStatus>(previousUserIssue.Status);
 
@@ -63,10 +63,8 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
         var userId = UserId.Create(command.UserId);
 
         var userIssue = new UserIssue(userIssueId, userId, command.IssueId);
-        
-        userIssue.TakeOnWork();
 
-        var result = await _repository.Add(userIssue, cancellationToken);
+        var result = await _userIssueRepository.Add(userIssue, cancellationToken);
         
         _logger.LogInformation("User took issue on work. A record was created with id {userIssueId}",
             userIssueId);

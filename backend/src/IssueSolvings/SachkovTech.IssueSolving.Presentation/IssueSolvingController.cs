@@ -14,7 +14,7 @@ public class IssueSolvingController : ApplicationController
         [FromServices] TakeOnWorkHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var userId = HttpContext.User.Claims.First(c => c.Type == "UserId").Value;
+        var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
         
         var command = new TakeOnWorkCommand(Guid.Parse(userId), issueId);
 
