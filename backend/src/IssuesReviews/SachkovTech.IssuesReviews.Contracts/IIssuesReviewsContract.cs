@@ -9,6 +9,6 @@ public interface IIssuesReviewsContract
     Task<UnitResult<ErrorList>> AddComment(
         Guid issueReviewId,
         Guid userId,
-        AddCommentRequest request, 
+        AddCommentRequest request,
         CancellationToken cancellationToken = default);
 }

@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj" />
       <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
-      <ProjectReference Include="..\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj" />
+      <ProjectReference Include="..\SachkovTech.IssuesReviews.Domain\SachkovTech.IssuesReviews.Domain.csproj" />
     </ItemGroup>
 
 </Project>
