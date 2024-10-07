@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Files.Contracts.Converters;
 using SachkovTech.Framework;
 using SachkovTech.Issues.Application.Commands.AddIssue;
 using SachkovTech.Issues.Application.Commands.Create;
@@ -9,7 +11,9 @@ using SachkovTech.Issues.Application.Commands.ForceDeleteIssue;
 using SachkovTech.Issues.Application.Commands.UpdateIssueMainInfo;
 using SachkovTech.Issues.Application.Commands.UpdateIssuePosition;
 using SachkovTech.Issues.Application.Commands.UpdateMainInfo;
+using SachkovTech.Issues.Application.Commands.UploadFilesToIssue;
 using SachkovTech.Issues.Presentation.Modules.Requests;
+using SachkovTech.Issues.Presentation.Modules.Responses;
 
 namespace SachkovTech.Issues.Presentation.Modules;
 
@@ -141,5 +145,28 @@ public class ModulesController : ApplicationController
             return result.Error.ToResponse();
 
         return Ok(result.Value);
+    }
+
+    [HttpPost("{id:guid}/issue/{issueId:guid}/files")]
+    public async Task<ActionResult> UploadFilesToIssue(
+        [FromRoute] Guid id,
+        [FromRoute] Guid issueId,
+        [FromForm] IFormFileCollection files,
+        [FromServices] UploadFilesToIssueHandler handler,
+        CancellationToken cancellationToken)
+    {
+        await using var formFileConverter = new FormFileConverter(files);
+        var fileDtos = formFileConverter.ToUploadFileDtos();
+
+        var command = new UploadFilesToIssueCommand(id, issueId, fileDtos);
+
+        var result = await handler.Handle(command, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        var response = UploadFilesToIssueResponse
+            .MapFromUploadFilesResult(result.Value);
+
+        return Ok(response);
     }
 }

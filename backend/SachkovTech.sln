@@ -60,6 +60,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.SharedKernel", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Framework", "src\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj", "{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}"
 EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Application", "src\Files\SachkovTech.Files.Application\SachkovTech.Files.Application.csproj", "{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Infrastructure", "src\Files\SachkovTech.Files.Infrastructure\SachkovTech.Files.Infrastructure.csproj", "{C9741E48-CA42-46B6-BF43-0F7B782A1C88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SachkovTech.Files.Presentation", "src\Files\SachkovTech.Files.Presentation\SachkovTech.Files.Presentation.csproj", "{3D3C982A-1F34-411C-829E-37E380EBDBCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Files.Contracts", "src\Files\SachkovTech.Files.Contracts\SachkovTech.Files.Contracts.csproj", "{6ACF992C-AE81-4B31-AB41-9923A7510116}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Infrastructure", "src\IssueSolvings\SachkovTech.IssueSolving.Infrastructure\SachkovTech.IssueSolving.Infrastructure.csproj", "{9263832B-805F-4A8A-ADD3-B88578404914}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssueSolving.Presentation", "src\IssueSolvings\SachkovTech.IssueSolving.Presentation\SachkovTech.IssueSolving.Presentation.csproj", "{99CD2D9C-5982-4D7A-946A-2543B884D4DF}"
@@ -73,6 +82,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Presentation", "src\IssuesReviews\SachkovTech.IssuesReviews.Presentation\SachkovTech.IssuesReviews.Presentation.csproj", "{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Contracts", "src\IssuesReviews\SachkovTech.IssuesReviews.Contracts\SachkovTech.IssuesReviews.Contracts.csproj", "{E85EEAF1-664A-4790-A642-C752FAB6A5EB}"
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,6 +162,22 @@ Global
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9741E48-CA42-46B6-BF43-0F7B782A1C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ACF992C-AE81-4B31-AB41-9923A7510116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ACF992C-AE81-4B31-AB41-9923A7510116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ACF992C-AE81-4B31-AB41-9923A7510116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ACF992C-AE81-4B31-AB41-9923A7510116}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -209,6 +235,13 @@ Global
 		{1955B47D-2627-4897-9AF0-863F215DA712} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
 		{37121EAE-FD51-403B-9E8B-3393C9F5BA9D} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
 		{9F60D3D8-0E87-4FD8-A5AF-6FB8232722E4} = {339CC8AA-025D-4D5B-A585-4189E4335EF7}
+		{EFFE0BA0-4789-42BF-9BF4-1EB0DA8F651D} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
+		{C9741E48-CA42-46B6-BF43-0F7B782A1C88} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
+		{3D3C982A-1F34-411C-829E-37E380EBDBCD} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
+		{6ACF992C-AE81-4B31-AB41-9923A7510116} = {6F46DBCC-BE2E-4288-868C-7B32F00A3F82}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4C037AF-BCC5-4398-B9C2-23770A907520}
 		{B7BA7DF0-BA15-4585-A93A-0C99FEFAA481} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 		{54EFBAD4-31BB-4FE2-A3E2-1B5409822B8C} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}
 		{E85EEAF1-664A-4790-A642-C752FAB6A5EB} = {5E44087C-3942-4C56-9CD4-0FDBF7EBEE8B}

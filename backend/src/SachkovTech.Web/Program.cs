@@ -19,6 +19,8 @@ using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure;
 using Serilog;
 using Serilog.Events;
+using SachkovTech.Files.Infrastructure;
+using SachkovTech.Files.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,9 +99,15 @@ builder.Services
     .AddAccountsApplication()
     .AddIssuesReviewsApplication()
     .AddAccountsInfrastructure(builder.Configuration)
-    .AddIssuesPresentation()
-    .AddIssuesApplication()
+
+    .AddFilesApplication()
+    .AddFilesInfrastructure(builder.Configuration)
+    .AddFilesPresentation()
+
+    .AddIssuesManagementApplication()
     .AddIssuesManagementInfrastructure(builder.Configuration)
+    .AddIssuesPresentation()
+  
     .AddIssueSolvingApplication()
     .AddIssueSolvingInfrastructure(builder.Configuration);
 

@@ -28,9 +28,9 @@ public class MimeType : ValueObject
         Value = value;
     }
 
-    public Result<MimeType, Error> Create(string input)
+    public static Result<MimeType, Error> Create(string input)
     {
-        var mimeType = input.Trim().ToUpper();
+        var mimeType = input.Trim().ToLower();
 
         if (_types.Any(t => t.Value == mimeType) == false)
         {
@@ -41,6 +41,23 @@ public class MimeType : ValueObject
             return Errors.General.ValueIsInvalid("mime type");
 
         return new MimeType(mimeType);
+    }
+
+    public static Result<MimeType, Error> Parse (string fileName)
+    {
+        var fileExtension = Path.GetExtension(fileName).Replace(".", "").ToLower();
+
+        foreach (var type in _types)
+        {
+            var typeParts = type.Value.Split("/");
+
+            if(fileExtension == typeParts.Last())
+            {
+                return Create(type.Value);
+            }
+        }
+
+        return Errors.General.ValueIsInvalid("mime type");
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
