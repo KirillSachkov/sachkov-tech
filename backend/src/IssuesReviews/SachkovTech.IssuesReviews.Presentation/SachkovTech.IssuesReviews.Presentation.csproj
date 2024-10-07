@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
+      <ProjectReference Include="..\..\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj" />
+      <ProjectReference Include="..\SachkovTech.IssuesReviews.Application\SachkovTech.IssuesReviews.Application.csproj" />
+      <ProjectReference Include="..\SachkovTech.IssuesReviews.Contracts\SachkovTech.IssuesReviews.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

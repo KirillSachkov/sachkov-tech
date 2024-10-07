@@ -7,7 +7,7 @@ namespace SachkovTech.Issues.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddIssuesManagementApplication(this IServiceCollection services)
+    public static IServiceCollection AddIssuesApplication(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjection).Assembly;
 
@@ -19,7 +19,7 @@ public static class DependencyInjection
 
         services.Scan(scan => scan.FromAssemblies(assembly)
             .AddClasses(classes => classes
-                .AssignableTo(typeof(IQueryHandler<,>)))
+                .AssignableToAny(typeof(IQueryHandler<,>), typeof(IQueryHandlerWithResult<,>)))
             .AsSelfWithInterfaces()
             .WithScopedLifetime());
 

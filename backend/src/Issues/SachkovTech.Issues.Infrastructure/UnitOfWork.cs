@@ -1,4 +1,6 @@
 using System.Data;
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Infrastructure.DbContexts;
@@ -14,15 +16,16 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
     }
 
-    public async Task<IDbTransaction> BeginTransaction(CancellationToken cancellationToken = default)
+    public async Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken = default)
     {
         var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
         return transaction.GetDbTransaction();
     }
 
-    public async Task SaveChanges(CancellationToken cancellationToken = default)
+    public async Task SaveChanges(CancellationToken cancellationToken = default, DbTransaction? dbTransaction = null)
     {
+        await _dbContext.Database.UseTransactionAsync(dbTransaction, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

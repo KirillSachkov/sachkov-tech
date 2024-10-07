@@ -26,9 +26,17 @@
     <ItemGroup>
       <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj" />
       <ProjectReference Include="..\Accounts\SachkovTech.Accounts.Presentation\SachkovTech.Accounts.Presentation.csproj" />
+
       <ProjectReference Include="..\Files\SachkovTech.Files.Application\SachkovTech.Files.Application.csproj" />
       <ProjectReference Include="..\Files\SachkovTech.Files.Infrastructure\SachkovTech.Files.Infrastructure.csproj" />
       <ProjectReference Include="..\Files\SachkovTech.Files.Presentation\SachkovTech.Files.Presentation.csproj" />
+
+      <ProjectReference Include="..\IssuesReviews\SachkovTech.IssuesReviews.Presentation\SachkovTech.IssuesReviews.Presentation.csproj" />
+      <ProjectReference Include="..\IssueSolvings\SachkovTech.IssueSolving.Application\SachkovTech.IssueSolving.Application.csproj" />
+      <ProjectReference Include="..\IssueSolvings\SachkovTech.IssueSolving.Domain\SachkovTech.IssueSolving.Domain.csproj" />
+      <ProjectReference Include="..\IssueSolvings\SachkovTech.IssueSolving.Infrastructure\SachkovTech.IssueSolving.Infrastructure.csproj" />
+      <ProjectReference Include="..\IssueSolvings\SachkovTech.IssueSolving.Presentation\SachkovTech.IssueSolving.Presentation.csproj" />
+
       <ProjectReference Include="..\Issues\SachkovTech.Issues.Infrastructure\SachkovTech.Issues.Infrastructure.csproj" />
       <ProjectReference Include="..\Issues\SachkovTech.Issues.Presentation\SachkovTech.Issues.Presentation.csproj" />
       <ProjectReference Include="..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />

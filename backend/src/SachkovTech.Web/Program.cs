@@ -8,11 +8,15 @@ using SachkovTech.Web.Middlewares;
 using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Options;
+using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
+using SachkovTech.Issues.Presentation;
 using SachkovTech.Issues.Presentation.Issues;
 using SachkovTech.Issues.Presentation.Modules;
-using SachkovTech.Web.Authorization;
+using SachkovTech.IssuesReviews.Application;
+using SachkovTech.IssueSolving.Application;
+using SachkovTech.IssueSolving.Infrastructure;
 using Serilog;
 using Serilog.Events;
 using SachkovTech.Files.Infrastructure;
@@ -93,6 +97,7 @@ builder.Services.AddAuthorization();
 
 builder.Services
     .AddAccountsApplication()
+    .AddIssuesReviewsApplication()
     .AddAccountsInfrastructure(builder.Configuration)
 
     .AddFilesApplication()
@@ -100,16 +105,21 @@ builder.Services
     .AddFilesPresentation()
 
     .AddIssuesManagementApplication()
-    .AddIssuesManagementInfrastructure(builder.Configuration);
+    .AddIssuesManagementInfrastructure(builder.Configuration)
+    .AddIssuesPresentation()
+  
+    .AddIssueSolvingApplication()
+    .AddIssueSolvingInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(AccountsController).Assembly)
-    .AddApplicationPart(typeof(ModulesController).Assembly)
-    .AddApplicationPart(typeof(IssuesController).Assembly);
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+
+await accountsSeeder.SeedAsync();
 
 app.UseExceptionMiddleware();
 
