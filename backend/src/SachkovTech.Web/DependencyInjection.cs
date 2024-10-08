@@ -22,12 +22,19 @@ namespace SachkovTech.Web
     public static class DependencyInjection
     {
 
+        public static IServiceCollection AddAccountsModule(
+            this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAccountsInfrastructure(configuration);
+
+            return services;
+        }
+
         public static IServiceCollection AddIssuesReviewsModule(
             this IServiceCollection services, IConfiguration configuration)
         {
 
             services.AddIssuesReviewsApplication();
-            services.AddAccountsInfrastructure(configuration);
 
             return services;
         }

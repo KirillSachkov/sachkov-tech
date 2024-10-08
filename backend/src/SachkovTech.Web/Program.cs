@@ -44,9 +44,10 @@ builder.Services.AddLogging(builder.Configuration);
 
 builder.Services.AddAuthServices(builder.Configuration);
 
-builder.Services.AddIssuesReviewsModule(builder.Configuration);
+builder.Services.AddAccountsModule(builder.Configuration);
 builder.Services.AddFilesModule(builder.Configuration);
 builder.Services.AddIssuesModule(builder.Configuration);
+builder.Services.AddIssuesReviewsModule(builder.Configuration);
 builder.Services.AddIssueSolvingModule(builder.Configuration);
 
 builder.Services.AddControllers();
