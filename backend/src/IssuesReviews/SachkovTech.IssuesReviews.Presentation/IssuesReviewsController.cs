@@ -13,7 +13,6 @@ public class IssuesReviewsController : ApplicationController
     private const string Sub = "sub";
 
     [HttpGet("{issueReviewId:guid}/comments")]
-
     public async Task<ActionResult> GetByIssueReviewId(
         [FromServices] GetCommentsWithPaginationHandler handler,
         [FromRoute] Guid issueReviewId,
@@ -25,7 +24,7 @@ public class IssuesReviewsController : ApplicationController
 
         return Ok(result);
     }
-    
+
     [HttpPost("{id:guid}/comment")]
     public async Task<ActionResult> Comment(
         [FromServices] AddCommentHandler handler,
@@ -37,9 +36,9 @@ public class IssuesReviewsController : ApplicationController
 
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
-        
+
         var result = await handler.Handle(
-            new AddCommentCommand(issueReviewId, 
+            new AddCommentCommand(issueReviewId,
                 Guid.Parse(userId),
                 request.Message), cancellationToken);
 

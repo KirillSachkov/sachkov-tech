@@ -12,6 +12,7 @@ public class AccountsDbContext(IConfiguration configuration)
 {
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -27,6 +28,23 @@ public class AccountsDbContext(IConfiguration configuration)
 
         modelBuilder.Entity<User>()
             .ToTable("users");
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Roles)
+            .WithMany()
+            .UsingEntity<IdentityUserRole<Guid>>();
+
+        modelBuilder.Entity<AdminAccount>()
+            .HasOne(a => a.User)
+            .WithOne()
+            .HasForeignKey<AdminAccount>(a => a.UserId);
+
+        modelBuilder.Entity<AdminAccount>()
+            .ComplexProperty(a => a.FullName, fb =>
+            {
+                fb.Property(a => a.FirstName).IsRequired().HasColumnName("first_name");
+                fb.Property(a => a.SecondName).IsRequired().HasColumnName("second_name");
+            });
 
         modelBuilder.Entity<Role>()
             .ToTable("roles");

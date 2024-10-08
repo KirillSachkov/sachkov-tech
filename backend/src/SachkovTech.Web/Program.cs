@@ -3,17 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SachkovTech.Accounts.Application;
 using SachkovTech.Web.Middlewares;
 using SachkovTech.Accounts.Infrastructure;
-using SachkovTech.Accounts.Presentation;
+using SachkovTech.Accounts.Infrastructure.Seeding;
 using SachkovTech.Core.Options;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation;
-using SachkovTech.Issues.Presentation.Issues;
-using SachkovTech.Issues.Presentation.Modules;
 using SachkovTech.IssuesReviews.Application;
 using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure;
@@ -21,6 +18,8 @@ using Serilog;
 using Serilog.Events;
 using SachkovTech.Files.Infrastructure;
 using SachkovTech.Files.Application;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +69,18 @@ builder.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandle
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
 builder.Services
+    .AddIssuesReviewsApplication()
+    .AddAccountsInfrastructure(builder.Configuration)
+    .AddFilesApplication()
+    .AddFilesInfrastructure(builder.Configuration)
+    .AddFilesPresentation()
+    .AddIssuesApplication()
+    .AddIssuesInfrastructure(builder.Configuration)
+    .AddIssuesPresentation()
+    .AddIssueSolvingApplication()
+    .AddIssueSolvingInfrastructure(builder.Configuration);
+
+builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,22 +105,6 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
-
-builder.Services
-    .AddAccountsApplication()
-    .AddIssuesReviewsApplication()
-    .AddAccountsInfrastructure(builder.Configuration)
-
-    .AddFilesApplication()
-    .AddFilesInfrastructure(builder.Configuration)
-    .AddFilesPresentation()
-
-    .AddIssuesManagementApplication()
-    .AddIssuesManagementInfrastructure(builder.Configuration)
-    .AddIssuesPresentation()
-  
-    .AddIssueSolvingApplication()
-    .AddIssueSolvingInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 

@@ -1,5 +1,4 @@
-﻿using SachkovTech.SharedKernel;
-using SachkovTech.SharedKernel.ValueObjects.Ids;
+﻿using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Files.Contracts.Responses
 {

@@ -11,7 +11,7 @@ public class IssuesReviewsContract(AddCommentHandler addCommentHandler) : IIssue
     public async Task<UnitResult<ErrorList>> AddComment(
         Guid issueReviewId,
         Guid userId,
-        AddCommentRequest request, 
+        AddCommentRequest request,
         CancellationToken cancellationToken = default)
     {
         return await addCommentHandler.Handle(

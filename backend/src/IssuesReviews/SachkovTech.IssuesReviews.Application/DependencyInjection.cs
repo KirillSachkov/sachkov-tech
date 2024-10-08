@@ -8,6 +8,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddIssuesReviewsApplication(this IServiceCollection services)
     {
+        services.AddScoped<IIssueReviewRepository, IssueReviewRepository>();
+        services.AddScoped<IReadDbContext, ReadDbContext>();
+        
         var assembly = typeof(DependencyInjection).Assembly;
 
         services.Scan(scan => scan.FromAssemblies(assembly)
@@ -19,6 +22,12 @@ public static class DependencyInjection
         services.Scan(scan => scan.FromAssemblies(assembly)
             .AddClasses(classes => classes
                 .AssignableTo(typeof(IQueryHandler<,>)))
+            .AsSelfWithInterfaces()
+            .WithScopedLifetime());
+        
+        services.Scan(scan => scan.FromAssemblies(assembly)
+            .AddClasses(classes => classes
+                .AssignableTo(typeof(IQueryHandlerWithResult<,>)))
             .AsSelfWithInterfaces()
             .WithScopedLifetime());
 

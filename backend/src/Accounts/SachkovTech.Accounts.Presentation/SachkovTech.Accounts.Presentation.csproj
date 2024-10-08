@@ -10,6 +10,7 @@
       <ProjectReference Include="..\..\Shared\SachkovTech.Framework\SachkovTech.Framework.csproj" />
       <ProjectReference Include="..\SachkovTech.Accounts.Application\SachkovTech.Accounts.Application.csproj" />
       <ProjectReference Include="..\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj" />
+      <ProjectReference Include="..\SachkovTech.Accounts.Infrastructure\SachkovTech.Accounts.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
