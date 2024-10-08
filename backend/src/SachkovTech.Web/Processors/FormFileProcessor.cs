@@ -1,4 +1,4 @@
-using SachkovTech.Core.Dtos;
+using SachkovTech.Files.Contracts.Dtos;
 
 namespace SachkovTech.Web.Processors;
 

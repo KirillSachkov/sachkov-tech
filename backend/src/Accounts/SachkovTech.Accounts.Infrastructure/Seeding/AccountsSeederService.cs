@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Accounts.Infrastructure.IdentityManagers;
+using SachkovTech.Accounts.Infrastructure.Options;
 using SachkovTech.SharedKernel.ValueObjects;
 
 namespace SachkovTech.Accounts.Infrastructure.Seeding;

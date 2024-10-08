@@ -24,22 +24,26 @@ namespace SachkovTech.Files.Infrastructure.Providers
         }
 
         public async IAsyncEnumerable<Result<UploadFilesResult, Error>> UploadFiles(
-        IEnumerable<UploadFileData> filesData,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            IEnumerable<UploadFileData> filesData,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
+            var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
 
-            List<UploadFilesResult> results = new();
+            List<UploadFilesResult> results = [];
 
-            var bucketsExistResult = await IfBucketsNotExistCreateBucket(filesData.Select(file => file.BucketName).Distinct(), cancellationToken);
+            var uploadFileDatas = filesData.ToList();
+
+            var bucketsExistResult = await IfBucketsNotExistCreateBucket(
+                uploadFileDatas.Select(file => file.BucketName).Distinct(),
+                cancellationToken);
 
             if (bucketsExistResult.IsFailure)
                 yield break;
 
-            var tasks = filesData.Select(async file =>
-                    await PutObject(file, semaphoreSlim, cancellationToken)).ToList();
+            var tasks = uploadFileDatas.Select(async file =>
+                await PutObject(file, semaphoreSlim, cancellationToken)).ToList();
 
-            while (tasks.Count() > 0)
+            while (tasks.Count != 0)
             {
                 var task = await Task.WhenAny(tasks);
 
@@ -60,7 +64,6 @@ namespace SachkovTech.Files.Infrastructure.Providers
             FileLocation filesLocation,
             CancellationToken cancellationToken = default)
         {
-
             var bucketsExistResult = await IfBucketsNotExistCreateBucket([filesLocation.BucketName], cancellationToken);
 
             if (bucketsExistResult.IsFailure)
@@ -68,7 +71,6 @@ namespace SachkovTech.Files.Infrastructure.Providers
 
             try
             {
-
                 var statArgs = new StatObjectArgs()
                     .WithBucket(filesLocation.BucketName)
                     .WithObject(filesLocation.FilePath.Value);
@@ -97,7 +99,6 @@ namespace SachkovTech.Files.Infrastructure.Providers
         }
 
 
-
         private async Task<Result<UploadFilesResult, Error>> PutObject(
             UploadFileData fileData,
             SemaphoreSlim semaphoreSlim,
@@ -112,7 +113,7 @@ namespace SachkovTech.Files.Infrastructure.Providers
                 .WithBucket(fileData.BucketName)
                 .WithStreamData(fileData.Stream)
                 .WithObjectSize(fileData.Stream.Length)
-                .WithObject(fileData.Preffix + fileNameGuid + fileExtension);
+                .WithObject(fileData.Prefix + fileNameGuid + fileExtension);
 
             try
             {
@@ -163,26 +164,24 @@ namespace SachkovTech.Files.Infrastructure.Providers
                     var bucketExist = await _minioClient
                         .BucketExistsAsync(bucketExistArgs, cancellationToken);
 
-                    if (bucketExist == false)
-                    {
-                        var makeBucketArgs = new MakeBucketArgs()
-                            .WithBucket(bucketName);
+                    if (bucketExist) continue;
 
-                        await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
-                    }
+                    var makeBucketArgs = new MakeBucketArgs()
+                        .WithBucket(bucketName);
+
+                    await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex,
                         "Error checking the existence of a bucket named : {bucketName}", bucketName);
 
-                    return Error.Failure("file.bucket.not.exists", $"Error checking the existence of a bucket named : {bucketName}");
+                    return Error.Failure("file.bucket.not.exists",
+                        $"Error checking the existence of a bucket named : {bucketName}");
                 }
             }
 
             return UnitResult.Success<Error>();
-
         }
-
     }
 }

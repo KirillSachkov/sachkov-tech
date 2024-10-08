@@ -1,4 +1,4 @@
-namespace SachkovTech.Accounts.Infrastructure;
+namespace SachkovTech.Accounts.Infrastructure.Options;
 
 public class AdminOptions
 {

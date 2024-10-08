@@ -1,16 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Files.Application.Commands.UploadFiles;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Contracts.Dtos;
 using SachkovTech.Files.Contracts.Responses;
-using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.Files.Domain;
+using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Files.Application.Commands
+namespace SachkovTech.Files.Application.Commands.UploadFiles
 {
     public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFilesCommand>
     {
@@ -18,17 +17,19 @@ namespace SachkovTech.Files.Application.Commands
         private readonly ILogger<UploadFilesHandler> _logger;
         private readonly IFilesRepository _filesRepository;
 
-        public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger, IFilesRepository filesRepository)
+        public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger,
+            IFilesRepository filesRepository)
         {
             _fileProvider = fileProvider;
             _logger = logger;
             _filesRepository = filesRepository;
         }
 
-        public async Task<Result<UploadFilesResponse, ErrorList>> Handle(UploadFilesCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<UploadFilesResponse, ErrorList>> Handle(UploadFilesCommand command,
+            CancellationToken cancellationToken = default)
         {
-            List<FileId> fileIds = new();
-            List<Error> errors = new();
+            List<FileId> fileIds = [];
+            List<Error> errors = [];
 
             var uploadAsyncEnum = _fileProvider.UploadFiles(command.Files, cancellationToken);
 
@@ -42,8 +43,8 @@ namespace SachkovTech.Files.Application.Commands
 
                     if (saveFileResult.IsSuccess)
                         fileIds.Add(saveFileResult.Value);
-
-                    else errors.Add(saveFileResult.Error);
+                    else
+                        errors.Add(saveFileResult.Error);
                 }
                 else
                 {
@@ -51,16 +52,13 @@ namespace SachkovTech.Files.Application.Commands
                 }
             }
 
-            if (fileIds.Count > 0)
-            {
-                var result = new UploadFilesResponse(fileIds, fileIds.Count + errors.Count, errors.Count);
+            if (fileIds.Count <= 0)
+                return new ErrorList([Error.Failure("file.upload", "Fail to upload files in minio")]);
 
-                return result;
-            }
+            var result = new UploadFilesResponse(fileIds, fileIds.Count + errors.Count, errors.Count);
 
-            return new ErrorList([Error.Failure("file.upload", "Fail to upload files in minio")]);
+            return result;
         }
-
 
 
         private async Task<Result<FileId, Error>> SaveFile(
@@ -73,24 +71,20 @@ namespace SachkovTech.Files.Application.Commands
             var saveFileResult = await _filesRepository.Add(fileData, cancellationToken);
 
             if (saveFileResult.IsSuccess)
-            {
                 return fileData.Id;
-            }
-            else
-            {
-                var fileLocation = new FileLocation(uploadFileResult.BucketName, uploadFileResult.FilePath);
 
-                await _fileProvider.RemoveFile(fileLocation, cancellationToken);
+            var fileLocation = new FileLocation(uploadFileResult.BucketName, uploadFileResult.FilePath);
 
-                return saveFileResult.Error;
-            }
+            await _fileProvider.RemoveFile(fileLocation, cancellationToken);
+
+            return saveFileResult.Error;
         }
 
         private FileData CreateFileData(
             UploadFilesResult uploadFileResult,
             UploadFilesCommand command)
         {
-            FileId fileId = FileId.NewFileId();
+            var fileId = FileId.NewFileId();
 
             var fileName = FileName.Create(uploadFileResult.FileName).Value;
             var fileSize = FileSize.Create(uploadFileResult.FileSize).Value;

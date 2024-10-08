@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Accounts.Infrastructure.IdentityManagers;
+using SachkovTech.Accounts.Infrastructure.Options;
 using SachkovTech.Accounts.Infrastructure.Seeding;
 using SachkovTech.Core.Options;
 

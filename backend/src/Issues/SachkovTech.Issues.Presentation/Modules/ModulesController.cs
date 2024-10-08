@@ -147,18 +147,18 @@ public class ModulesController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpPost("{id:guid}/issue/{issueId:guid}/files")]
+    [HttpPost("{moduleId:guid}/issue/{issueId:guid}/files")]
     public async Task<ActionResult> UploadFilesToIssue(
-        [FromRoute] Guid id,
+        [FromRoute] Guid moduleId,
         [FromRoute] Guid issueId,
         [FromForm] IFormFileCollection files,
         [FromServices] UploadFilesToIssueHandler handler,
+        [FromServices] IFormFileConverter fileConverter,
         CancellationToken cancellationToken)
     {
-        await using var formFileConverter = new FormFileConverter(files);
-        var fileDtos = formFileConverter.ToUploadFileDtos();
+        var fileDtos = fileConverter.ToUploadFileDtos(files);
 
-        var command = new UploadFilesToIssueCommand(id, issueId, fileDtos);
+        var command = new UploadFilesToIssueCommand(moduleId, issueId, fileDtos);
 
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
