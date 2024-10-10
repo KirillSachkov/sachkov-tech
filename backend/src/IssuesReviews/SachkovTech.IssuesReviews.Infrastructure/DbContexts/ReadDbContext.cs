@@ -17,7 +17,7 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
-        
+
         optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
@@ -30,6 +30,4 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
 
     private ILoggerFactory CreateLoggerFactory() =>
         LoggerFactory.Create(builder => { builder.AddConsole(); });
-
-    
 }

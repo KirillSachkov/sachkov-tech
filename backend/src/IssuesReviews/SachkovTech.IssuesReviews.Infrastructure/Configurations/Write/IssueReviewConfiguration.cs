@@ -18,30 +18,33 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
         builder.ToTable("issue_reviews");
 
         builder.HasKey(i => i.Id);
-        
+
         builder.Property(i => i.Id)
             .HasConversion(
                 id => id.Value,
                 value => IssueReviewId.Create(value));
 
-        builder.Property(i => i.UserIssueId)
-            .HasConversion(
-                id => id.Value,
-                value => UserIssueId.Create(value));
+        builder.ComplexProperty(i => i.UserIssueId, ub =>
+        {
+            ub.Property(i => i.Value)
+                .HasColumnName("user_issue_id")
+                .IsRequired();
+        });
 
-        builder.Property(i => i.UserId)
-            .HasConversion(
-                id => id.Value,
-                value => UserId.Create(value))
-            .HasColumnName("user_id")
-            .IsRequired();
+        builder.ComplexProperty(i => i.UserId, ub =>
+        {
+            ub.Property(i => i.Value)
+                .HasColumnName("user_id")
+                .IsRequired();
+        });
 
-        builder.Property(i => i.ReviewerId)
-            .HasConversion(
-                id => id.Value,
-                value => UserId.Create(value))
-            .HasColumnName("reviewer_id")
-            .IsRequired(false);
+        builder.ComplexProperty(i => i.ReviewerId, rb =>
+        {
+            rb.Property(i => i.Value)
+                .HasColumnName("reviewer_id")
+                .IsRequired();
+        });
+
 
         builder.Property(i => i.IssueReviewStatus)
             .HasConversion(
@@ -55,15 +58,15 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
             .HasForeignKey("issue_review_id")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
-        
+
         builder.Property(i => i.ReviewStartedTime)
             .HasColumnName("review_started_time")
             .IsRequired();
-        
+
         builder.Property(i => i.IssueTakenTime)
             .HasColumnName("issue_taken_time")
             .IsRequired(false);
-        
+
         builder.Property(i => i.IssueApprovedTime)
             .HasColumnName("issue_approved_time")
             .IsRequired(false);
@@ -75,6 +78,5 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
                 .HasColumnName("pull_request_link")
                 .IsRequired();
         });
-
     }
 }
