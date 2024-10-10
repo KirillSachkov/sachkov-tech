@@ -1,6 +1,19 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using SachkovTech.Accounts.Application;
+using SachkovTech.Web.Middlewares;
+using SachkovTech.Accounts.Infrastructure;
+using SachkovTech.Core.Options;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.IssuesReviews.Application;
+using Serilog;
+using Serilog.Events;
+using SachkovTech.Files.Infrastructure;
+using SachkovTech.Files.Application;
+using SachkovTech.Files.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
