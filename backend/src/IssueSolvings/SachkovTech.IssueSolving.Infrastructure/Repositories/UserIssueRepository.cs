@@ -1,6 +1,10 @@
-﻿using SachkovTech.IssueSolving.Application;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Domain.Entities;
 using SachkovTech.IssueSolving.Infrastructure.DbContexts;
+using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssueSolving.Infrastructure.Repositories
 
