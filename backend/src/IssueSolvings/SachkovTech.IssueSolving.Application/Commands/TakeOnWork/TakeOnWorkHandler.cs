@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Contracts;
 using SachkovTech.IssueSolving.Domain.Entities;
-using SachkovTech.IssueSolving.Domain.ValueObjects;
+using SachkovTech.IssueSolving.Domain.Enums;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
