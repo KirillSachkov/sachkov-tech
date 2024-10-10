@@ -39,7 +39,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
 
     public IssueReviewStatus IssueReviewStatus { get; private set; }
 
-    private List<Comment> _comments = [];
+    private readonly List<Comment> _comments = [];
     public IReadOnlyList<Comment> Comments => _comments;
 
     public DateTime ReviewStartedTime { get; private set; }
