@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Files.Contracts;
 
-namespace SachkovTech.Files.Application
+namespace SachkovTech.Files.Presentation
 {
     public static class DependencyInjection
     {

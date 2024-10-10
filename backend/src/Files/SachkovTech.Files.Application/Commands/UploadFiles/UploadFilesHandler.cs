@@ -1,16 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Files.Application.Commands.UploadFiles;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Contracts.Dtos;
 using SachkovTech.Files.Contracts.Responses;
-using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.Files.Domain;
+using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Files.Application.Commands
+namespace SachkovTech.Files.Application.Commands.UploadFiles
 {
     public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFilesCommand>
     {

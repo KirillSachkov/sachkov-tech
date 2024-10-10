@@ -30,6 +30,7 @@
       <ProjectReference Include="..\Files\SachkovTech.Files.Application\SachkovTech.Files.Application.csproj" />
       <ProjectReference Include="..\Files\SachkovTech.Files.Infrastructure\SachkovTech.Files.Infrastructure.csproj" />
       <ProjectReference Include="..\Files\SachkovTech.Files.Presentation\SachkovTech.Files.Presentation.csproj" />
+      <ProjectReference Include="..\IssuesReviews\SachkovTech.IssuesReviews.Infrastructure\SachkovTech.IssuesReviews.Infrastructure.csproj" />
 
       <ProjectReference Include="..\IssuesReviews\SachkovTech.IssuesReviews.Presentation\SachkovTech.IssuesReviews.Presentation.csproj" />
       <ProjectReference Include="..\IssueSolvings\SachkovTech.IssueSolving.Application\SachkovTech.IssueSolving.Application.csproj" />
