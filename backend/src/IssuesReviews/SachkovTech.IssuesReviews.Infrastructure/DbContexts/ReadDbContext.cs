@@ -9,7 +9,7 @@ namespace SachkovTech.IssuesReviews.Infrastructure.DbContexts;
 public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
     public IQueryable<IssueReviewDto> IssueReviewDtos => Set<IssueReviewDto>();
-    public IQueryable<CommentDto> Comments { get; }
+    public IQueryable<CommentDto> Comments => Set<CommentDto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

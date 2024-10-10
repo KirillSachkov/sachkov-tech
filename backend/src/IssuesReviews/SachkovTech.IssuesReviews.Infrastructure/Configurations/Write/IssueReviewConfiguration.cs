@@ -50,17 +50,10 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
             .HasColumnName("issue_review_status")
             .IsRequired();
 
-        builder.Property(i => i.Comments)
-            .ValueObjectsCollectionJsonConversion(
-                comment => new CommentDto(
-                    comment.UserId.Value,
-                    comment.Message.Value,
-                    comment.CreatedAt,
-                    comment.Id.Value),
-                dto => Comment.Create(
-                    UserId.Create(dto.UserId),
-                    Message.Create(dto.Message).Value).Value)
-            .HasColumnName("comments")
+        builder.HasMany(c => c.Comments)
+            .WithOne(c => c.IssueReview)
+            .HasForeignKey("issue_review_id")
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
         
         builder.Property(i => i.ReviewStartedTime)
@@ -77,7 +70,7 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
 
         builder.ComplexProperty(i => i.PullRequestLink, pb =>
         {
-            pb.Property(pb => pb.Value)
+            pb.Property(p => p.Value)
                 .HasMaxLength(Constants.Default.MAX_LOW_TEXT_LENGTH)
                 .HasColumnName("pull_request_link")
                 .IsRequired();

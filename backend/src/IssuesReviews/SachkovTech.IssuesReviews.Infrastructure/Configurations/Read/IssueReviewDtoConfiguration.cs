@@ -17,6 +17,10 @@ public class IssueReviewDtoConfiguration: IEntityTypeConfiguration<IssueReviewDt
         builder.ToTable("issue_reviews");
 
         builder.HasKey(i => i.Id);
+        
+        builder.HasMany(i => i.Comments)
+            .WithOne()
+            .HasForeignKey(i => i.IssueReviewId);
 
     }
 }

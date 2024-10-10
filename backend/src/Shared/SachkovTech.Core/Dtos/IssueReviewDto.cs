@@ -1,6 +1,6 @@
 ﻿namespace SachkovTech.Core.Dtos;
 
-public class IssueReviewDto
+public record IssueReviewDto
 {
     public Guid Id { get; set; }
     
@@ -21,4 +21,6 @@ public class IssueReviewDto
     public DateTime? IssueApprovedTime { get; init; }
 
     public string PullRequestLink { get; init; } = string.Empty;
+    
+    public Guid IssueReviewId { get; init; }
 }
