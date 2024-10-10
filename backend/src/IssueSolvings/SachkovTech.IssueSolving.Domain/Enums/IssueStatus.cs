@@ -1,4 +1,4 @@
-namespace SachkovTech.IssueSolving.Domain.ValueObjects;
+namespace SachkovTech.IssueSolving.Domain.Enums;
 
 public enum IssueStatus
 {
