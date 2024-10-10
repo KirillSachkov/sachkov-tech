@@ -19,4 +19,6 @@ public class IssueReviewId : ValueObject
     {
         yield return Value;
     }
+    public static implicit operator Guid(IssueReviewId issueReviewId) => issueReviewId.Value;
+    
 }

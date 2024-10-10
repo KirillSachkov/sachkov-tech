@@ -2,6 +2,7 @@ namespace SachkovTech.Core.Dtos;
 
 public class IssueDto
 {
+    public bool IsDeleted { get; init; }
     public Guid Id { get; init; }
 
     public Guid ModuleId { get; init; }
@@ -16,7 +17,7 @@ public class IssueDto
 
     public Guid? ParentId { get; set; }
 
-    public IssueFileDto[] Files { get; set; } = null!;
+    public Guid[] Files { get; set; } = null!;
 }
 
 public class IssueFileDto

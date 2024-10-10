@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\SachkovTech.Core\SachkovTech.Core.csproj" />
+      <ProjectReference Include="..\SachkovTech.IssuesReviews.Application\SachkovTech.IssuesReviews.Application.csproj" />
+      <ProjectReference Include="..\SachkovTech.IssuesReviews.Domain\SachkovTech.IssuesReviews.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

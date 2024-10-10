@@ -18,8 +18,9 @@ public static class DependencyInjection
 
         services.RegisterIdentity();
 
-        services.AddScoped<AuthorizationDbContext>();
+        services.AddScoped<AccountsDbContext>();
 
+        services.AddSingleton<AccountsSeeder>();
         return services;
     }
 
@@ -27,7 +28,10 @@ public static class DependencyInjection
     {
         services
             .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
-            .AddEntityFrameworkStores<AuthorizationDbContext>()
+            .AddEntityFrameworkStores<AccountsDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddScoped<PermissionManager>();
+        services.AddScoped<RolePermissionManager>();
     }
 }

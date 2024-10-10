@@ -9,14 +9,14 @@ namespace SachkovTech.IssuesReviews.Domain;
 
 public sealed class IssueReview : Entity<IssueReviewId>
 {
-
     // ef core
     private IssueReview(IssueReviewId id) : base(id)
     {
     }
 
-    public IssueReview(IssueReviewId issueReviewId,
-        IssueId issueId,
+    public IssueReview(
+        IssueReviewId issueReviewId,
+        UserIssueId userIssueId,
         UserId userId,
         IssueReviewStatus issueReviewStatus,
         DateTime reviewStartedTime,
@@ -24,7 +24,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
         PullRequestLink pullRequestLink)
         : base(issueReviewId)
     {
-        IssueId = issueId;
+        UserIssueId = userIssueId;
         UserId = userId;
         IssueReviewStatus = issueReviewStatus;
         ReviewStartedTime = reviewStartedTime;
@@ -32,37 +32,22 @@ public sealed class IssueReview : Entity<IssueReviewId>
         PullRequestLink = pullRequestLink;
     }
 
-    public IssueId IssueId { get; private set; } 
-
-    public UserId UserId { get; private set; } 
-    
-    public IssueReviewStatus IssueReviewStatus { get; private set; }
+    public UserIssueId UserIssueId { get; private set; }
+    public UserId UserId { get; private set; }
 
     public UserId? ReviewerId { get; private set; } = null;
+
+    public IssueReviewStatus IssueReviewStatus { get; private set; }
 
     private List<Comment> _comments = [];
     public IReadOnlyList<Comment> Comments => _comments;
 
     public DateTime ReviewStartedTime { get; private set; }
     public DateTime? IssueTakenTime { get; private set; }
-    
-    public DateTime? IssueApprovedTime { get; private set; }
-    
-    public PullRequestLink PullRequestLink { get; private set; }
 
-    public static Result<IssueReview, Error> Create(IssueId issueId,
-        UserId userId,
-        PullRequestLink pullRequestLink)
-    {
-        return Result.Success<IssueReview, Error>(new(
-            IssueReviewId.NewIssueReviewId(),
-            issueId,
-            userId,
-            IssueReviewStatus.WaitingForReviewer,
-            DateTime.UtcNow,
-            null,
-            pullRequestLink));
-    }
+    public DateTime? IssueApprovedTime { get; private set; }
+
+    public PullRequestLink PullRequestLink { get; private set; }
 
     public void StartReview(UserId reviewerId)
     {
@@ -74,7 +59,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
             IssueTakenTime = DateTime.UtcNow;
         }
     }
-    
+
     public UnitResult<Error> SendIssueForRevision()
     {
         if (IssueReviewStatus != IssueReviewStatus.OnReview)
@@ -83,10 +68,10 @@ public sealed class IssueReview : Entity<IssueReviewId>
         }
 
         IssueReviewStatus = IssueReviewStatus.AskedForRevision;
-        
+
         return UnitResult.Success<Error>();
     }
-    
+
     public UnitResult<Error> Approve()
     {
         if (IssueReviewStatus != IssueReviewStatus.OnReview)
@@ -95,27 +80,17 @@ public sealed class IssueReview : Entity<IssueReviewId>
         }
 
         IssueReviewStatus = IssueReviewStatus.Accepted;
-        
+
         return UnitResult.Success<Error>();
     }
 
     public UnitResult<Error> AddComment(Comment comment)
     {
-        if (ReviewerId is null)
+        if (comment.UserId != UserId || (ReviewerId != null && ReviewerId != comment.UserId))
         {
-            if (comment.UserId != UserId)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
+            return Errors.General.ValueIsInvalid("userId");
         }
-        else
-        {
-            if ((comment.UserId == UserId || comment.UserId == ReviewerId) == false)
-            {
-                return Errors.General.ValueIsInvalid("comment");
-            }
-        }
-        
+
         _comments.Add(comment);
 
         return UnitResult.Success<Error>();

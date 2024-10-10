@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Domain.Entities;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
@@ -58,7 +59,13 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                 .HasMaxLength(Description.MAX_LENGTH)
                 .HasColumnName("description");
         });
-        
+
+        builder.Property(i => i.Files)
+            .ValueObjectsCollectionJsonConversion(
+                fileId => fileId.Value,
+                fileGuid => FileId.Create(fileGuid))
+            .HasColumnName("files");
+
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");

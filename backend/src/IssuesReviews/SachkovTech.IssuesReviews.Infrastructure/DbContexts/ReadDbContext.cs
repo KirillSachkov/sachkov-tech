@@ -1,0 +1,35 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using SachkovTech.Core.Dtos;
+using SachkovTech.IssuesReviews.Application;
+
+namespace SachkovTech.IssuesReviews.Infrastructure.DbContexts;
+
+public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+{
+    public IQueryable<IssueReviewDto> IssueReviewDtos => Set<IssueReviewDto>();
+    public IQueryable<CommentDto> Comments { get; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
+        optionsBuilder.UseSnakeCaseNamingConvention();
+        optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+        
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(WriteDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Read") ?? false);
+    }
+
+    private ILoggerFactory CreateLoggerFactory() =>
+        LoggerFactory.Create(builder => { builder.AddConsole(); });
+
+    
+}

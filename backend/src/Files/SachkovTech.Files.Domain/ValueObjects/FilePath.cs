@@ -7,6 +7,10 @@ public class FilePath : ValueObject
 {
     public string Value { get; }
 
+    public string FileName => GetFileName();
+
+    public string FileExtension => GetFileExtension();
+
     private FilePath(string value)
     {
         Value = value;
@@ -27,4 +31,16 @@ public class FilePath : ValueObject
 
     public static implicit operator string(FilePath filePath) =>
         filePath.Value;
+
+    private string GetFileName()
+    {
+        var filePathParts = Value.Split('/');
+
+        return filePathParts.Last();
+    }
+
+    private string GetFileExtension()
+    {
+        return Path.GetExtension(FileName);
+    }
 }

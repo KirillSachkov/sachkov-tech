@@ -21,6 +21,6 @@ public class IssueDtoConfiguration : IEntityTypeConfiguration<IssueDto>
         builder.Property(i => i.Files)
             .HasConversion(
                 files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<IssueFileDto[]>(json, JsonSerializerOptions.Default)!);
+                json => JsonSerializer.Deserialize<Guid[]>(json, JsonSerializerOptions.Default)!);
     }
 }

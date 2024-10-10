@@ -1,0 +1,29 @@
+{
+  "Roles": {
+    "Admin": [
+      "issues.read",
+      "issues.create",
+      "issues.update",
+      "issues.delete",
+      "solving.issues.read",
+      "solving.issues.send.on.review"
+    ],
+    "Student": [
+      "issues.read",
+      "solving.issues.read",
+      "solving.issues.send.on.review"
+    ]
+  },
+  "Permissions": {
+    "Issues": [
+      "issues.read",
+      "issues.create",
+      "issues.update",
+      "issues.delete"
+    ],
+    "SolvingIssues": [
+      "solving.issues.read",
+      "solving.issues.send.on.review"
+    ]
+  }
+}
