@@ -28,4 +28,11 @@ public class IssueReviewRepository : IIssueReviewRepository
 
         return issueReview;
     }
+
+    public UnitResult<Error> Add(IssueReview issueReview, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Add(issueReview);
+
+        return UnitResult.Success<Error>();
+    }
 }

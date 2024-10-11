@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure.DbContexts;
 
 namespace SachkovTech.IssueSolving.Infrastructure;

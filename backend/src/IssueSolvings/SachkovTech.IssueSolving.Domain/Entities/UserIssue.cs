@@ -38,18 +38,18 @@ public class UserIssue : Entity<UserIssueId>
 
     public Attempts Attempts { get; private set; } = null!;
 
-    public PullRequestUrl PullRequestUrl { get; private set; } = null!;
+    public PullRequestUrl PullRequestUrl { get; private set; } = PullRequestUrl.Empty();
 
     private void TakeOnWork()
     {
-        StartDateOfExecution = DateTime.Now;
+        StartDateOfExecution = DateTime.UtcNow;
         Status = IssueStatus.AtWork;
         Attempts = Attempts.Create();
     }
 
     public UnitResult<Error> SendOnReview(PullRequestUrl pullRequestUrl)
     {
-        EndDateOfExecution = DateTime.Now;
+        EndDateOfExecution = DateTime.UtcNow;
 
         if (Status != IssueStatus.AtWork)
             return Error.Failure("issue.status.invalid", "issue not at work");

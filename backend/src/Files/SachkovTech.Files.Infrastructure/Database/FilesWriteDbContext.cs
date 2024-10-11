@@ -5,7 +5,7 @@ using SachkovTech.Files.Domain;
 
 namespace SachkovTech.Files.Infrastructure.Database;
 
-internal class FilesWriteDbContext : DbContext
+public class FilesWriteDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
     private readonly ILoggerFactory _loggeFactory;

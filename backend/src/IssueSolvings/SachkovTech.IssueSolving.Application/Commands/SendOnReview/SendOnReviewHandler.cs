@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.Core.Extensions;
 using SachkovTech.IssuesReviews.Contracts;
 using SachkovTech.IssuesReviews.Contracts.Requests;
 using SachkovTech.SharedKernel;
@@ -15,21 +17,31 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
     private readonly ILogger<SendOnReviewHandler> _logger;
     private readonly IIssuesReviewsContract _contract;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<SendOnReviewCommand> _validator;
 
     public SendOnReviewHandler(IUserIssueRepository repository,
         ILogger<SendOnReviewHandler> logger,
         IIssuesReviewsContract contract,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IValidator<SendOnReviewCommand> validator)
     {
         _repository = repository;
         _logger = logger;
         _contract = contract;
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
 
     public async Task<UnitResult<ErrorList>> Handle(SendOnReviewCommand command,
         CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+
+        if (validationResult.IsValid == false)
+        {
+            return validationResult.ToList();
+        }
+        
         var userIssue = await _repository
             .GetUserIssueById(UserIssueId.Create(command.UserIssueId), cancellationToken);
 
@@ -51,7 +63,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
         var createIssueReviewRes = await _contract.CreateIssueReview(command.UserIssueId, command.UserId,
             new CreateIssueReviewRequest(command.PullRequestUrl), cancellationToken);
 
-        if (createIssueReviewRes.Error.Any())
+        if (createIssueReviewRes.IsFailure)
         {
             return createIssueReviewRes.Error;
         }

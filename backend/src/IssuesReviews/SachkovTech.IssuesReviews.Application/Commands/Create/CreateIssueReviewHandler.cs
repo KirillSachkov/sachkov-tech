@@ -49,7 +49,7 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
             return issueReview.Error.ToErrorList();
         }
         
-        await _issueReviewRepository.Add(issueReview.Value, cancellationToken);
+        _issueReviewRepository.Add(issueReview.Value, cancellationToken);
         
         await _unitOfWork.SaveChanges(cancellationToken);
 
