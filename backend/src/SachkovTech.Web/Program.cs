@@ -1,8 +1,7 @@
 using Microsoft.OpenApi.Models;
 using SachkovTech.Web;
 using SachkovTech.Web.Middlewares;
-using SachkovTech.Accounts.Infrastructure.Seeding;
-using Serilog;
+
 
 DotNetEnv.Env.Load();
 

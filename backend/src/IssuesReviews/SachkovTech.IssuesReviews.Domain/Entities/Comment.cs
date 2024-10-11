@@ -8,6 +8,7 @@ namespace SachkovTech.IssuesReviews.Domain.Entities;
 public class Comment : Entity<CommentId>
 {
     //Ef core
+    public IssueReview IssueReview { get; private set; }
     private Comment(CommentId id) : base(id)
     {
     }

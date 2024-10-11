@@ -84,6 +84,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Contracts", "src\IssuesReviews\SachkovTech.IssuesReviews.Contracts\SachkovTech.IssuesReviews.Contracts.csproj", "{E85EEAF1-664A-4790-A642-C752FAB6A5EB}"
 
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Infrastructure", "src\IssuesReviews\SachkovTech.IssuesReviews.Infrastructure\SachkovTech.IssuesReviews.Infrastructure.csproj", "{367FDBAC-5D93-49C9-8133-6B385F6A7482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -206,6 +208,10 @@ Global
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367FDBAC-5D93-49C9-8133-6B385F6A7482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367FDBAC-5D93-49C9-8133-6B385F6A7482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367FDBAC-5D93-49C9-8133-6B385F6A7482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367FDBAC-5D93-49C9-8133-6B385F6A7482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

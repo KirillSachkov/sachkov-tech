@@ -9,9 +9,7 @@ using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Files.Application.Commands.UploadFiles;
 
-public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFilesCommand>
 {
     private readonly IFileProvider _fileProvider;
     private readonly ILogger<UploadFilesHandler> _logger;
