@@ -26,6 +26,8 @@ public static class DependencyInjection
 
         services.AddSingleton<AccountsSeeder>();
         services.AddScoped<AccountsSeederService>();
+        
+        services.AddScoped<UnitOfWork>();
         return services;
     }
 

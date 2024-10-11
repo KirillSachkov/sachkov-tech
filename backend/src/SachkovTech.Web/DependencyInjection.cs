@@ -16,16 +16,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SachkovTech.Core.Options;
 using System.Text;
+using SachkovTech.Accounts.Application;
+using SachkovTech.Accounts.Presentation;
+using SachkovTech.IssuesReviews.Presentation;
 
 namespace SachkovTech.Web
 {
     public static class DependencyInjection
     {
-
         public static IServiceCollection AddAccountsModule(
             this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAccountsInfrastructure(configuration);
+            services.AddAccountsApplication();
+            services.AddAccountsPresentation();
 
             return services;
         }
@@ -33,8 +37,8 @@ namespace SachkovTech.Web
         public static IServiceCollection AddIssuesReviewsModule(
             this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddIssuesReviewsApplication();
+            services.AddIssuesReviewsPresentation();
 
             return services;
         }
@@ -42,7 +46,6 @@ namespace SachkovTech.Web
         public static IServiceCollection AddFilesModule(
             this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddFilesApplication();
             services.AddFilesInfrastructure(configuration);
             services.AddFilesPresentation();
