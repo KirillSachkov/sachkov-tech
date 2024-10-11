@@ -40,7 +40,7 @@ public class DeleteModuleHandler : ICommandHandler<Guid, DeleteModuleCommand>
         if (moduleResult.IsFailure)
             return moduleResult.Error.ToErrorList();
         
-        _modulesRepository.Delete(moduleResult.Value);
+        moduleResult.Value.Delete();
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

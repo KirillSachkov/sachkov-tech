@@ -26,10 +26,6 @@ public class DeleteExpiredIssuesBackgroundService : BackgroundService
             
         var deleteExpiredIssuesService = scope.ServiceProvider
             .GetRequiredService<DeleteExpiredIssuesService>();
-        
-        await Task.Delay(
-            TimeSpan.FromHours(Constants.DELETE_EXPIRED_ISSUES_SERVICE_REDUCTION_HOURS),
-            cancellationToken);
 
         while (!cancellationToken.IsCancellationRequested)
         {

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Issues.Domain;
-using SachkovTech.Issues.Infrastructure.Interceptors;
 
 namespace SachkovTech.Issues.Infrastructure.DbContexts;
 
@@ -16,8 +15,6 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
-
-        optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

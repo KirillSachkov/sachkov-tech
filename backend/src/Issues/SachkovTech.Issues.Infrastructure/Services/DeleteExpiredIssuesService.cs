@@ -21,7 +21,7 @@ public class DeleteExpiredIssuesService
 
         foreach (var module in modules)
         {
-            DeleteExpiredIssuesFromModule(module);
+            module.DeleteExpiredIssues();
         }
 
         await _writeDbContext.SaveChangesAsync(cancellationToken);
@@ -30,18 +30,5 @@ public class DeleteExpiredIssuesService
     private async Task<IEnumerable<Module>> GetModulesWithIssuesAsync(CancellationToken cancellationToken)
     {
         return await _writeDbContext.Modules.Include(m => m.Issues).ToListAsync(cancellationToken);
-    }
-
-    private void DeleteExpiredIssuesFromModule(Module module)
-    {
-        var expiredTasks = module.Issues
-            .Where(i => i.DeletionDate != null 
-                        && i.DeletionDate < DateTime.UtcNow.AddDays(Constants.LIFETIME_AFTER_DELETION))
-            .ToList();
-
-        foreach (var expiredTask in expiredTasks)
-        {
-            module.DeleteIssue(expiredTask.Id);
-        }
     }
 }

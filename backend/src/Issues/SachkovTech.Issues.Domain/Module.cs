@@ -56,6 +56,11 @@ public class Module : Entity<ModuleId>, ISoftDeletable
         {
             _isDeleted = true;
             DeletionDate = DateTime.UtcNow;
+
+            foreach (var issue in _issues)
+            {
+                issue.Delete();
+            }
         }
     }
 
@@ -81,8 +86,15 @@ public class Module : Entity<ModuleId>, ISoftDeletable
         if (result.IsFailure)
             return result.Error;
 
-        _issues.Remove(issue);
+        issue.Delete();
         return Result.Success<Error>();
+    }
+
+    public void DeleteExpiredIssues()
+    {
+        _issues.RemoveAll(i => i.DeletionDate != null 
+                               && DateTime.UtcNow >= i.DeletionDate.Value
+                                   .AddDays(Constants.Issues.LIFETIME_AFTER_DELETION));
     }
 
     public UnitResult<Error> RestoreIssue(IssueId issueId)
@@ -106,6 +118,11 @@ public class Module : Entity<ModuleId>, ISoftDeletable
 
         _isDeleted = false;
         DeletionDate = null;
+
+        foreach (var issue in _issues)
+        {
+            issue.Restore();
+        }
     }
 
     public UnitResult<Error> AddIssue(Issue issue)
