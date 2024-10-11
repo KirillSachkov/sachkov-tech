@@ -2,7 +2,7 @@
 
 public record IssueReviewDto
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     public Guid UserIssueId { get; init; }
 

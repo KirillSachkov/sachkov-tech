@@ -18,12 +18,13 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
             .HasConversion(
                 id => id.Value,
                 value => CommentId.Create(value));
-
-        builder.Property(c => c.UserId)
-            .HasConversion(
-                id => id.Value,
-                value => UserId.Create(value))
-            .HasColumnName("user_id");
+        
+        builder.ComplexProperty(i => i.UserId, ub =>
+        {
+            ub.Property(i => i.Value)
+                .HasColumnName("user_id")
+                .IsRequired();
+        });
 
         builder.ComplexProperty(c => c.Message, cb =>
         {
