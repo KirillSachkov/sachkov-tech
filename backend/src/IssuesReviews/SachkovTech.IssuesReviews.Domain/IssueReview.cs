@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using SachkovTech.IssueSolving.Domain.ValueObjects;
 using SachkovTech.IssuesReviews.Domain.Entities;
 using SachkovTech.IssuesReviews.Domain.Enums;
-using SachkovTech.IssuesReviews.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssuesReviews.Domain;

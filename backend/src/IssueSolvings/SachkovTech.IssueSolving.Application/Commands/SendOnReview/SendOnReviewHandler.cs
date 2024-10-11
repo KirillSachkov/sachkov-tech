@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.IssueSolving.Domain.ValueObjects;
 using SachkovTech.IssuesReviews.Contracts;
 using SachkovTech.IssuesReviews.Contracts.Requests;
 using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssueSolving.Application.Commands.SendOnReview;

@@ -1,8 +1,7 @@
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using SachkovTech.SharedKernel;
 
-namespace SachkovTech.IssueSolving.Domain.ValueObjects;
+namespace SachkovTech.SharedKernel.ValueObjects;
 
 public class PullRequestUrl : ValueObject
 {
