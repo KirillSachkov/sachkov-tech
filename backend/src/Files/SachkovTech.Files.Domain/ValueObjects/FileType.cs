@@ -20,9 +20,21 @@ public class FileType : ValueObject
         Value = value;
     }
 
-    public static Result<FileType, Error> Create(string input)
+    public static Result<FileType, Error> Create(string fileName)
     {
-        var fileType = input.Trim().ToUpper();
+        var fileExtension = Path.GetExtension(fileName).ToLower();
+
+        var type = fileExtension switch
+        {
+            ".png" => Image.Value,
+            ".jpeg" => Image.Value,
+            ".gif" => Image.Value,
+            ".svg" => Image.Value,
+            ".icon" => Image.Value,
+            _ => ""
+        };
+
+        var fileType = type.Trim().ToUpper();
 
         if (_types.Any(t => t.Value == fileType) == false)
         {
@@ -30,34 +42,6 @@ public class FileType : ValueObject
         }
 
         return new FileType(fileType);
-    }
-
-    public static Result<FileType, Error> Parse(string fileName)
-    {
-        var fileExtension = Path.GetExtension(fileName).ToLower();
-
-        string type = "";
-
-        switch (fileExtension)
-        {
-            case ".png":
-                type = Image.Value;
-                break;
-            case ".jpeg":
-                type = Image.Value;
-                break;
-            case ".gif":
-                type = Image.Value;
-                break;
-            case ".svg":
-                type = Image.Value;
-                break;
-            case ".icon":
-                type = Image.Value;
-                break;
-        }
-
-        return Create(type);
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

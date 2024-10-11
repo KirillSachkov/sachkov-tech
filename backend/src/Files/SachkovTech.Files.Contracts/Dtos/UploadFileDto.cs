@@ -1,3 +1,3 @@
-namespace SachkovTech.Core.Dtos;
+namespace SachkovTech.Files.Contracts.Dtos;
 
 public record UploadFileDto(Stream Content, string FileName);

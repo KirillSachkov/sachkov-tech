@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Domain;
+using SachkovTech.Accounts.Infrastructure.IdentityManagers;
+using SachkovTech.Accounts.Infrastructure.Options;
+using SachkovTech.Accounts.Infrastructure.Seeding;
 using SachkovTech.Core.Options;
 
 namespace SachkovTech.Accounts.Infrastructure;
@@ -15,12 +18,16 @@ public static class DependencyInjection
         services.AddTransient<ITokenProvider, JwtTokenProvider>();
 
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.JWT));
+        services.Configure<AdminOptions>(configuration.GetSection(AdminOptions.ADMIN));
 
         services.RegisterIdentity();
 
         services.AddScoped<AccountsDbContext>();
 
         services.AddSingleton<AccountsSeeder>();
+        services.AddScoped<AccountsSeederService>();
+        
+        services.AddScoped<UnitOfWork>();
         return services;
     }
 
@@ -33,5 +40,6 @@ public static class DependencyInjection
 
         services.AddScoped<PermissionManager>();
         services.AddScoped<RolePermissionManager>();
+        services.AddScoped<AdminAccountManager>();
     }
 }

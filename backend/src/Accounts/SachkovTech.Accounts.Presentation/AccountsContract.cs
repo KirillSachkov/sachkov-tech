@@ -1,26 +1,19 @@
-﻿using System.Data;
-using System.Data.Common;
-using CSharpFunctionalExtensions;
-using SachkovTech.Accounts.Application.Commands.Register;
-using SachkovTech.Accounts.Contracts;
-using SachkovTech.Accounts.Contracts.Requests;
-using SachkovTech.Core.Abstractions;
-using SachkovTech.SharedKernel;
+﻿using SachkovTech.Accounts.Contracts;
+using SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
 namespace SachkovTech.Accounts.Presentation;
 
-public class AccountsContract(RegisterUserHandler registerUserHandler, IUnitOfWork unitOfWork) : IAccountsContract
+public class AccountsContract : IAccountsContract
 {
-    public async Task<UnitResult<ErrorList>> RegisterUser(
-        RegisterUserRequest request, CancellationToken cancellationToken = default)
+    private readonly PermissionManager _permissionManager;
+
+    public AccountsContract(PermissionManager permissionManager)
     {
-        return await registerUserHandler.Handle(
-            new RegisterUserCommand(request.Email, request.UserName, request.Password),
-            cancellationToken);
+        _permissionManager = permissionManager;
     }
 
-    public async Task SaveChanges(DbTransaction transaction, CancellationToken cancellationToken = default)
+    public async Task<HashSet<string>> GetUserPermissionCodes(Guid userId)
     {
-        await unitOfWork.SaveChanges(cancellationToken, transaction);
+        return await _permissionManager.GetUserPermissionCodes(userId);
     }
 }

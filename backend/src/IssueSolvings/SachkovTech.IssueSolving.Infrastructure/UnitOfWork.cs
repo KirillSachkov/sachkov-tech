@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Core.Abstractions;

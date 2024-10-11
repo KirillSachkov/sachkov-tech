@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Accounts.Domain;
 
-namespace SachkovTech.Accounts.Infrastructure;
+namespace SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
 public class PermissionManager(AccountsDbContext accountsContext)
 {
@@ -22,5 +22,18 @@ public class PermissionManager(AccountsDbContext accountsContext)
         }
 
         await accountsContext.SaveChangesAsync();
+    }
+
+    public async Task<HashSet<string>> GetUserPermissionCodes(Guid userId)
+    {
+        var permissions = await accountsContext.Users
+            .Include(u => u.Roles)
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.Roles)
+            .SelectMany(r => r.RolePermissions)
+            .Select(rp => rp.Permission.Code)
+            .ToListAsync();
+
+        return permissions.ToHashSet();
     }
 }

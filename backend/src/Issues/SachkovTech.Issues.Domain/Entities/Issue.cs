@@ -32,7 +32,7 @@ public class Issue : Entity<IssueId>, ISoftDeletable
         Description = description;
         LessonId = lessonId;
         Experience = experience;
-        _files = files?.ToList() ?? new List<FileId>();
+        _files = files?.ToList() ?? [];
     }
 
     public Experience Experience { get; private set; } = default!;

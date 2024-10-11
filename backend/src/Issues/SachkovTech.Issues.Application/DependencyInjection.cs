@@ -1,7 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Application.Commands.UploadFilesToIssue;
 
 namespace SachkovTech.Issues.Application;
 

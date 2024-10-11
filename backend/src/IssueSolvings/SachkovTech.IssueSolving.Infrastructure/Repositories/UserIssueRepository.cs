@@ -2,23 +2,22 @@
 using SachkovTech.IssueSolving.Domain.Entities;
 using SachkovTech.IssueSolving.Infrastructure.DbContexts;
 
-namespace SachkovTech.IssueSolving.Infrastructure.Repositories
+namespace SachkovTech.IssueSolving.Infrastructure.Repositories;
+
+public class UserIssueRepository : IUserIssueRepository
 {
-    public class UserIssueRepository : IUserIssueRepository
+    private readonly WriteDbContext _dbContext;
+
+    public UserIssueRepository(WriteDbContext dbContext)
     {
-        private readonly WriteDbContext _dbContext;
+        _dbContext = dbContext;
+    }
 
-        public UserIssueRepository(WriteDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        public async Task<Guid> Add(UserIssue userIssue, CancellationToken cancellationToken = default)
-        {
-            await _dbContext.UserIssues.AddAsync(userIssue, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+    public async Task<Guid> Add(UserIssue userIssue, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.UserIssues.AddAsync(userIssue, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
             
-            return userIssue.Id;
-        }
+        return userIssue.Id;
     }
 }

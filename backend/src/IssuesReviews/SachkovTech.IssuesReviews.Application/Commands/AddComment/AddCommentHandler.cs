@@ -60,7 +60,7 @@ public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
             return addCommentResult.Error.ToErrorList();
 
         await _unitOfWork.SaveChanges(cancellationToken);
-        
+
         _logger.LogInformation(
             "Comment {commentId} was created in issueReview {issueReviewId}",
             comment.Value.Id.Value,

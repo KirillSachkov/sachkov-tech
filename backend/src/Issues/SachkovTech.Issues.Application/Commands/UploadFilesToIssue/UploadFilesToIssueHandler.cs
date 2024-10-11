@@ -59,9 +59,9 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, Up
         if (issueResult.IsFailure)
             return issueResult.Error.ToErrorList();
 
-        List<UploadFileData> filesData = (from file in command.Files
-                                          select new UploadFileData(file.Content, BUCKET_NAME, file.FileName)).ToList();
-
+        List<UploadFileData> filesData = (
+            from file in command.Files
+            select new UploadFileData(file.Content, BUCKET_NAME, file.FileName)).ToList();
 
         var request = new UploadFilesRequest(nameof(Issue), command.IssueId, filesData);
 
@@ -71,7 +71,7 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, Up
         {
             return uploadFileResult.Error;
         }
-        
+
         var issueFiles = issueResult.Value.Files.ToList();
 
         issueFiles.AddRange(uploadFileResult.Value.UploadedFileIds);

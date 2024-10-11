@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using SachkovTech.Accounts.Contracts;
+using SachkovTech.Core.Models;
 
 namespace SachkovTech.Framework.Authorization;
 
@@ -16,9 +18,30 @@ public class PermissionRequirementHandler : AuthorizationHandler<PermissionAttri
         AuthorizationHandlerContext context,
         PermissionAttribute permission)
     {
-        // получить id пользователя из клэймов
-        // получить пользователя по id из бд
-        // проверить что у пользователя есть нужное разрешение
-        context.Succeed(permission);
+        using var scope = _serviceScopeFactory.CreateScope();
+
+        var accountContract = scope.ServiceProvider.GetRequiredService<IAccountsContract>();
+
+        // var userIdString = context.User.Claims
+        //     .FirstOrDefault(claim => claim.Type == CustomClaims.Id)?.Value;
+        //
+        // if (!Guid.TryParse(userIdString, out var userId))
+        // {
+        //     context.Fail();
+        //     return;
+        // }
+
+        var permissions = context.User.Claims
+            .Where(c => c.Type == CustomClaims.Permission)
+            .Select(c => c.Value)
+            .ToList();
+
+        if (permissions.Contains(permission.Code))
+        {
+            context.Succeed(permission);
+            return;
+        }
+
+        context.Fail();
     }
 }

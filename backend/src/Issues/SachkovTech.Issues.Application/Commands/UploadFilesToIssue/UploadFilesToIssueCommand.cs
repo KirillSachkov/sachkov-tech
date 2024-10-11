@@ -1,5 +1,5 @@
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Core.Dtos;
+using SachkovTech.Files.Contracts.Dtos;
 
 namespace SachkovTech.Issues.Application.Commands.UploadFilesToIssue;
 

@@ -39,7 +39,7 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
             return Errors.User.InvalidCredentials().ToErrorList();
         }
 
-        var token = _tokenProvider.GenerateAccessToken(user);
+        var token = await _tokenProvider.GenerateAccessToken(user);
 
         _logger.LogInformation("Successfully logged in.");
 

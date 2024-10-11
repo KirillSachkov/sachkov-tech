@@ -11,7 +11,12 @@
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\..\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj" />
       <ProjectReference Include="..\SachkovTech.Core\SachkovTech.Core.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     </ItemGroup>
 
 </Project>

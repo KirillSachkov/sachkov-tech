@@ -9,104 +9,107 @@ using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Files.Application.Commands.UploadFiles
+
 {
-    public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFilesCommand>
+    private readonly IFileProvider _fileProvider;
+    private readonly ILogger<UploadFilesHandler> _logger;
+    private readonly IFilesRepository _filesRepository;
+
+    public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger,
+        IFilesRepository filesRepository)
     {
-        private readonly IFileProvider _fileProvider;
-        private readonly ILogger<UploadFilesHandler> _logger;
-        private readonly IFilesRepository _filesRepository;
+        _fileProvider = fileProvider;
+        _logger = logger;
+        _filesRepository = filesRepository;
+    }
 
-        public UploadFilesHandler(IFileProvider fileProvider, ILogger<UploadFilesHandler> logger, IFilesRepository filesRepository)
+    public async Task<Result<UploadFilesResponse, ErrorList>> Handle(UploadFilesCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        List<FileId> fileIds = [];
+
+        var uploadAsyncEnum = _fileProvider.UploadFiles(command.Files, cancellationToken);
+
+        await foreach (var uploadFileResult in uploadAsyncEnum)
         {
-            _fileProvider = fileProvider;
-            _logger = logger;
-            _filesRepository = filesRepository;
-        }
+            if (!uploadFileResult.IsSuccess) continue;
 
-        public async Task<Result<UploadFilesResponse, ErrorList>> Handle(UploadFilesCommand command, CancellationToken cancellationToken = default)
-        {
-            List<FileId> fileIds = new();
-            List<Error> errors = new();
+            var uploadResult = uploadFileResult.Value;
 
-            var uploadAsyncEnum = _fileProvider.UploadFiles(command.Files, cancellationToken);
-
-            await foreach (var uploadFileResult in uploadAsyncEnum)
-            {
-                if (uploadFileResult.IsSuccess)
-                {
-                    var uploadResult = uploadFileResult.Value;
-
-                    var saveFileResult = await SaveFile(uploadResult, command, cancellationToken);
-
-                    if (saveFileResult.IsSuccess)
-                        fileIds.Add(saveFileResult.Value);
-
-                    else errors.Add(saveFileResult.Error);
-                }
-                else
-                {
-                    errors.Add(uploadFileResult.Error);
-                }
-            }
-
-            if (fileIds.Count > 0)
-            {
-                var result = new UploadFilesResponse(fileIds, fileIds.Count + errors.Count, errors.Count);
-
-                return result;
-            }
-
-            return new ErrorList([Error.Failure("file.upload", "Fail to upload files in minio")]);
-        }
-
-
-
-        private async Task<Result<FileId, Error>> SaveFile(
-            UploadFilesResult uploadFileResult,
-            UploadFilesCommand command,
-            CancellationToken cancellationToken)
-        {
-            var fileData = CreateFileData(uploadFileResult, command);
-
-            var saveFileResult = await _filesRepository.Add(fileData, cancellationToken);
+            var saveFileResult = await SaveFile(uploadResult, command, cancellationToken);
 
             if (saveFileResult.IsSuccess)
-            {
-                return fileData.Id;
-            }
-            else
-            {
-                var fileLocation = new FileLocation(uploadFileResult.BucketName, uploadFileResult.FilePath);
-
-                await _fileProvider.RemoveFile(fileLocation, cancellationToken);
-
-                return saveFileResult.Error;
-            }
+                fileIds.Add(saveFileResult.Value);
         }
 
-        private FileData CreateFileData(
-            UploadFilesResult uploadFileResult,
-            UploadFilesCommand command)
-        {
-            FileId fileId = FileId.NewFileId();
+        if (fileIds.Count <= 0)
+            return new ErrorList([Error.Failure("file.upload", "Fail to upload files in minio")]);
 
-            var fileName = FileName.Create(uploadFileResult.FileName).Value;
-            var fileSize = FileSize.Create(uploadFileResult.FileSize).Value;
-            var mimeType = MimeType.Parse(uploadFileResult.FileName).Value;
-            var fileType = FileType.Parse(uploadFileResult.FileName).Value;
-            var ownerType = OwnerType.Create(command.OwnerTypeName).Value;
+        var notUploadedFilesCount = command.Files.Count() - fileIds.Count;
+        var result = new UploadFilesResponse(fileIds, fileIds.Count, notUploadedFilesCount);
 
-            return new FileData(
-                fileId,
-                fileName,
-                command.OwnerId,
-                uploadFileResult.FilePath,
-                true,
-                fileSize,
-                mimeType,
-                fileType,
-                ownerType);
-        }
+        _logger.LogInformation("Files uploaded: {notUploadedFilesCount}", notUploadedFilesCount);
+
+        return result;
+    }
+
+
+    private async Task<Result<FileId, ErrorList>> SaveFile(
+        UploadFilesResult uploadFileResult,
+        UploadFilesCommand command,
+        CancellationToken cancellationToken)
+    {
+        var fileData = CreateFileData(uploadFileResult, command);
+        if (fileData.IsFailure)
+            return fileData.Error;
+
+        var saveFileResult = await _filesRepository.Add(fileData.Value, cancellationToken);
+
+        if (saveFileResult.IsSuccess)
+            return fileData.Value.Id;
+
+        var fileLocation = new FileLocation(uploadFileResult.BucketName, uploadFileResult.FilePath);
+
+        await _fileProvider.RemoveFile(fileLocation, cancellationToken);
+
+        return saveFileResult.Error.ToErrorList();
+    }
+
+    private Result<FileData, ErrorList> CreateFileData(
+        UploadFilesResult uploadFileResult,
+        UploadFilesCommand command)
+    {
+        var fileId = FileId.NewFileId();
+
+        var fileNameResult = FileName.Create(uploadFileResult.FileName);
+        if (fileNameResult.IsFailure)
+            return fileNameResult.Error.ToErrorList();
+
+        var fileSizeResult = FileSize.Create(uploadFileResult.FileSize);
+        if (fileSizeResult.IsFailure)
+            return fileSizeResult.Error.ToErrorList();
+
+        var mimeTypeResult = MimeType.Parse(uploadFileResult.FileName);
+        if (mimeTypeResult.IsFailure)
+            return mimeTypeResult.Error.ToErrorList();
+
+        var fileTypeResult = FileType.Create(uploadFileResult.FileName);
+        if (fileTypeResult.IsFailure)
+            return fileTypeResult.Error.ToErrorList();
+
+        var ownerTypeResult = OwnerType.Create(command.OwnerTypeName);
+        if (ownerTypeResult.IsFailure)
+            return ownerTypeResult.Error.ToErrorList();
+
+        return new FileData(
+            fileId,
+            fileNameResult.Value,
+            command.OwnerId,
+            uploadFileResult.FilePath,
+            true,
+            fileSizeResult.Value,
+            mimeTypeResult.Value,
+            fileTypeResult.Value,
+            ownerTypeResult.Value);
     }
 }

@@ -77,12 +77,12 @@ public class Module : Entity<ModuleId>
 
         var result = RecalculatePositionOfOtherIssues(issue.Position);
         if (result.IsFailure)
-            return result.Error
-                ;
+            return result.Error;
+
         issue.Delete();
         return Result.Success<Error>();
     }
-    
+
     public UnitResult<Error> RestoreIssue(IssueId issueId)
     {
         var issue = _issues.FirstOrDefault(i => i.Id == issueId);
@@ -90,11 +90,11 @@ public class Module : Entity<ModuleId>
             return Result.Success<Error>();
 
         issue.Restore();
-        
+
         var resultMove = MoveIssue(issue, Position.Create(_issues.Count).Value);
         if (resultMove.IsFailure)
             return resultMove.Error;
-        
+
         return Result.Success<Error>();
     }
 
