@@ -3,18 +3,17 @@ using Npgsql;
 using SachkovTech.Core.Abstractions;
 using System.Data;
 
-namespace SachkovTech.IssueSolving.Infrastructure
+namespace SachkovTech.IssueSolving.Infrastructure;
+
+public class SqlConnectionFactory : ISqlConnectionFactory
 {
-    public class SqlConnectionFactory : ISqlConnectionFactory
+    private readonly IConfiguration _configuration;
+
+    public SqlConnectionFactory(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
-
-        public SqlConnectionFactory(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        public IDbConnection Create() =>
-            new NpgsqlConnection(_configuration.GetConnectionString("Database"));
+        _configuration = configuration;
     }
+
+    public IDbConnection Create() =>
+        new NpgsqlConnection(_configuration.GetConnectionString("Database"));
 }

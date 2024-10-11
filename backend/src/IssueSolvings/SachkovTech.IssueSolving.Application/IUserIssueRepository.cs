@@ -1,9 +1,8 @@
 ﻿using SachkovTech.IssueSolving.Domain.Entities;
 
-namespace SachkovTech.IssueSolving.Application
+namespace SachkovTech.IssueSolving.Application;
+
+public interface IUserIssueRepository
 {
-    public interface IUserIssueRepository
-    {
-        Task<Guid> Add(UserIssue userIssue, CancellationToken cancellationToken = default);
-    }
+    Task<Guid> Add(UserIssue userIssue, CancellationToken cancellationToken = default);
 }
