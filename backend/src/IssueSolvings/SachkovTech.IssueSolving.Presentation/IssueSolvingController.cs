@@ -17,19 +17,19 @@ public class IssueSolvingController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
-        
+
         var command = new TakeOnWorkCommand(Guid.Parse(userId), issueId);
 
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
-        
+
         return Ok(result.Value);
     }
-    
+
     [Authorize]
-    [HttpPut("{userIssueId:guid}")]
+    [HttpPost("{userIssueId:guid}/review")]
     public async Task<ActionResult> SendOnReview(
         [FromRoute] Guid userIssueId,
         [FromServices] SendOnReviewHandler handler,
@@ -37,14 +37,14 @@ public class IssueSolvingController : ApplicationController
         CancellationToken cancellationToken = default)
     {
         var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
-        
-        var command = new SendOnReviewCommand(userIssueId,Guid.Parse(userId), request.PullRequestUrl);
+
+        var command = new SendOnReviewCommand(userIssueId, Guid.Parse(userId), request.PullRequestUrl);
 
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
-        
+
         return Ok();
     }
 }
