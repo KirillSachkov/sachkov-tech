@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using SachkovTech.Core.Validation;
-using SachkovTech.IssueSolving.Domain.ValueObjects;
+using SachkovTech.SharedKernel.ValueObjects;
 
 namespace SachkovTech.IssuesReviews.Application.Commands.Create;
 

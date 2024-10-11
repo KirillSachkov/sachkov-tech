@@ -3,9 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
-using SachkovTech.IssueSolving.Domain.ValueObjects;
 using SachkovTech.IssuesReviews.Domain;
 using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssuesReviews.Application.Commands.Create;

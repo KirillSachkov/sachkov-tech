@@ -2,14 +2,13 @@ using CSharpFunctionalExtensions;
 using SachkovTech.IssueSolving.Domain.Enums;
 using SachkovTech.IssueSolving.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssueSolving.Domain.Entities;
 
-//TODO: переместить это агрегат а не энтити
 public class UserIssue : Entity<UserIssueId>
 {
-    //TODELETE:переместил наверх для эфкор чтобы был общий стиль
     //ef core
     private UserIssue(UserIssueId id) : base(id)
     {
