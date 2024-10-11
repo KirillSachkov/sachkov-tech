@@ -9,14 +9,16 @@ namespace SachkovTech.IssueSolving.Presentation;
 
 public class IssueSolvingController : ApplicationController
 {
-    [Authorize]
+    //[Authorize]
     [HttpPost("{issueId:guid}")]
     public async Task<ActionResult> TakeOnWork(
         [FromRoute] Guid issueId,
         [FromServices] TakeOnWorkHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
+        //var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
+
+        var userId = "b5e92402-28d4-4f9b-9272-0fa5fad90976";
 
         var command = new TakeOnWorkCommand(Guid.Parse(userId), issueId);
 

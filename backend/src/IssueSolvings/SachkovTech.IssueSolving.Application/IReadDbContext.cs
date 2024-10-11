@@ -2,7 +2,7 @@
 
 namespace SachkovTech.IssueSolving.Application;
 
-public interface IIssueSolvingReadDbContext
+public interface IReadDbContext
 {
     IQueryable<UserIssueDto> UserIssues { get; }
 }

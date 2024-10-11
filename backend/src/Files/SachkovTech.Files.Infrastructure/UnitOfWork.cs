@@ -6,7 +6,7 @@ using SachkovTech.Files.Infrastructure.Database;
 
 namespace SachkovTech.Files.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly FilesWriteDbContext _dbContext;
 
