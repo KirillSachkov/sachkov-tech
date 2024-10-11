@@ -29,9 +29,9 @@ public class IssueReviewRepository : IIssueReviewRepository
         return issueReview;
     }
 
-    public UnitResult<Error> Add(IssueReview issueReview, CancellationToken cancellationToken = default)
+    public async Task<UnitResult<Error>> Add(IssueReview issueReview, CancellationToken cancellationToken = default)
     {
-        _dbContext.Add(issueReview);
+        await _dbContext.AddAsync(issueReview, cancellationToken);
 
         return UnitResult.Success<Error>();
     }
