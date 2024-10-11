@@ -38,12 +38,10 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
                 .IsRequired();
         });
 
-        builder.ComplexProperty(i => i.ReviewerId, rb =>
-        {
-            rb.Property(i => i.Value)
-                .HasColumnName("reviewer_id")
-                .IsRequired();
-        });
+        builder.Property(i => i.ReviewerId)
+            .HasConversion(
+                id => id.Value,
+                value => UserId.Create(value));
 
 
         builder.Property(i => i.IssueReviewStatus)
