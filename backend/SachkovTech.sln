@@ -84,6 +84,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.IssuesReviews.Contracts", "src\IssuesReviews\SachkovTech.IssuesReviews.Contracts\SachkovTech.IssuesReviews.Contracts.csproj", "{E85EEAF1-664A-4790-A642-C752FAB6A5EB}"
 
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Emails", "src\Emails\SachkovTech.Emails\SachkovTech.Emails.csproj", "{7E2359DB-27AE-488C-A899-17C8519D2D43}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Emails", "Emails", "{186A4211-F98E-43BC-BF91-9AB6D17A5ACB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -206,6 +210,10 @@ Global
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E2359DB-27AE-488C-A899-17C8519D2D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2359DB-27AE-488C-A899-17C8519D2D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2359DB-27AE-488C-A899-17C8519D2D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2359DB-27AE-488C-A899-17C8519D2D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,6 +254,8 @@ Global
 		{9263832B-805F-4A8A-ADD3-B88578404914} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
 		{99CD2D9C-5982-4D7A-946A-2543B884D4DF} = {584ECBC3-5EDC-4CA9-A34E-4425EDA4DD65}
 		{300DC72B-68C8-435A-A64D-57A1D150C4B2} = {1955B47D-2627-4897-9AF0-863F215DA712}
+		{186A4211-F98E-43BC-BF91-9AB6D17A5ACB} = {696505DF-F3E6-478B-AA1E-A35BECBB3AF1}
+		{7E2359DB-27AE-488C-A899-17C8519D2D43} = {186A4211-F98E-43BC-BF91-9AB6D17A5ACB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4C037AF-BCC5-4398-B9C2-23770A907520}

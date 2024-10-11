@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Accounts.Application.Commands.Login;
 using SachkovTech.Accounts.Contracts.Requests;
+using SachkovTech.Emails;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
 
@@ -52,5 +53,15 @@ public class AccountsController : ApplicationController
             return result.Error.ToResponse();
 
         return Ok(result.Value);
+    } 
+    
+    [HttpPost("email-test")]
+    public async Task<IActionResult> Email(CancellationToken cancellationToken)
+    {
+        var emailService = new EmailSender();
+
+        await emailService.SendEmailAsync(new EmailData("kirillvirtul@yandex.ru", "подтверджение почты", "сообщение"));
+
+        return Ok();
     }
 }
