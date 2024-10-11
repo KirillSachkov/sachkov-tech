@@ -18,6 +18,7 @@ using SachkovTech.Core.Options;
 using System.Text;
 using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Presentation;
+using SachkovTech.IssuesReviews.Infrastructure;
 using SachkovTech.IssuesReviews.Presentation;
 
 namespace SachkovTech.Web;
@@ -39,6 +40,7 @@ public static class DependencyInjection
     {
         services.AddIssuesReviewsApplication();
         services.AddIssuesReviewsPresentation();
+        services.AddIssuesReviewsInfrastructure(configuration);
 
         return services;
     }
