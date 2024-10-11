@@ -8,8 +8,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddIssuesReviewsApplication(this IServiceCollection services)
     {
-        services.AddScoped<IIssueReviewRepository, IssueReviewRepository>();
-        services.AddScoped<IReadDbContext, ReadDbContext>();
         
         var assembly = typeof(DependencyInjection).Assembly;
 

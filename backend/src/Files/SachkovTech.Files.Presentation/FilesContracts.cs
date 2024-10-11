@@ -4,7 +4,9 @@ using SachkovTech.Files.Contracts;
 using SachkovTech.Files.Contracts.Requests;
 using SachkovTech.Files.Contracts.Responses;
 using SachkovTech.SharedKernel;
+namespace SachkovTech.Files.Presentation;
 
+internal class FilesContracts : IFilesContracts
 {
     private readonly UploadFilesHandler _uploadFilesHandler;
 
