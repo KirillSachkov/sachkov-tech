@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Files.Application;
 using SachkovTech.Files.Infrastructure.Database;
 
-namespace SachkovTech.Issues.Infrastructure;
+namespace SachkovTech.Files.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {

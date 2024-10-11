@@ -6,7 +6,6 @@ using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Infrastructure.Database;
 using SachkovTech.Files.Infrastructure.Options;
 using SachkovTech.Files.Infrastructure.Providers;
-using SachkovTech.Issues.Infrastructure;
 
 namespace SachkovTech.Files.Infrastructure;
 
