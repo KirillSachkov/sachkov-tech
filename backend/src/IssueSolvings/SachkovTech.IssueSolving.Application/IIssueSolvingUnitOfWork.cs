@@ -1,8 +1,8 @@
 using System.Data.Common;
 
-namespace SachkovTech.Core.Abstractions;
+namespace SachkovTech.IssueSolving.Application;
 
-public interface IUnitOfWork
+public interface IIssueSolvingUnitOfWork
 {
     Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken = default);
 

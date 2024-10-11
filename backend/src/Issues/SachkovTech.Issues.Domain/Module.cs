@@ -7,7 +7,7 @@ using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain;
 
-public class Module : Entity<ModuleId>
+public class Module : Entity<ModuleId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -30,6 +30,8 @@ public class Module : Entity<ModuleId>
     public Description Description { get; private set; } = default!;
 
     public IReadOnlyList<Issue> Issues => _issues;
+    
+    public DateTime? DeletionDate { get; private set; }
 
     public int GetNumberOfIssues() => _issues.Count;
 
@@ -51,10 +53,10 @@ public class Module : Entity<ModuleId>
     public void Delete()
     {
         if (_isDeleted == false)
+        {
             _isDeleted = true;
-
-        foreach (var issue in _issues)
-            issue.Delete();
+            DeletionDate = DateTime.UtcNow;
+        }
     }
 
     public UnitResult<Error> DeleteIssue(IssueId issueId)
@@ -79,7 +81,7 @@ public class Module : Entity<ModuleId>
         if (result.IsFailure)
             return result.Error;
 
-        issue.Delete();
+        _issues.Remove(issue);
         return Result.Success<Error>();
     }
 
@@ -103,8 +105,7 @@ public class Module : Entity<ModuleId>
         if (!_isDeleted) return;
 
         _isDeleted = false;
-        foreach (var issue in _issues)
-            issue.Restore();
+        DeletionDate = null;
     }
 
     public UnitResult<Error> AddIssue(Issue issue)

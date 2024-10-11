@@ -11,12 +11,12 @@ public class DeleteModuleHandler : ICommandHandler<Guid, DeleteModuleCommand>
 {
     private readonly IModulesRepository _modulesRepository;
     private readonly ILogger<DeleteModuleHandler> _logger;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteModuleCommand> _validator;
 
     public DeleteModuleHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<DeleteModuleCommand> validator,
         ILogger<DeleteModuleHandler> logger)
     {
@@ -39,8 +39,8 @@ public class DeleteModuleHandler : ICommandHandler<Guid, DeleteModuleCommand>
         var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)
             return moduleResult.Error.ToErrorList();
-
-        moduleResult.Value.Delete();
+        
+        _modulesRepository.Delete(moduleResult.Value);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

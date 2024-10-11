@@ -11,13 +11,13 @@ namespace SachkovTech.Issues.Application.Commands.UpdateMainInfo;
 public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateMainInfoCommand> _validator;
     private readonly ILogger<UpdateMainInfoHandler> _logger;
 
     public UpdateMainInfoHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {

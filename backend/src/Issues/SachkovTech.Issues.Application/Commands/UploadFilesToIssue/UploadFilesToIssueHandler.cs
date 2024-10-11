@@ -19,14 +19,14 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, Up
 
     private readonly IFilesContracts _filesContracts;
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToIssueCommand> _validator;
     private readonly ILogger<UploadFilesToIssueHandler> _logger;
 
     public UploadFilesToIssueHandler(
         IFilesContracts filesContracts,
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<UploadFilesToIssueCommand> validator,
         ILogger<UploadFilesToIssueHandler> logger)
     {

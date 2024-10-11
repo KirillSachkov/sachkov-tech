@@ -9,13 +9,13 @@ namespace SachkovTech.Issues.Application.Commands.DeleteIssue.SoftDeleteIssue;
 public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteIssueCommand> _validator;
     private readonly ILogger<SoftDeleteIssueHandler> _logger;
 
     public SoftDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<SoftDeleteIssueHandler> logger)
     {

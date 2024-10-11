@@ -13,13 +13,13 @@ namespace SachkovTech.Issues.Application.Commands.Create;
 public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<CreateModuleCommand> _validator;
     private readonly ILogger<CreateModuleHandler> _logger;
 
     public CreateModuleHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<CreateModuleCommand> validator,
         ILogger<CreateModuleHandler> logger)
     {

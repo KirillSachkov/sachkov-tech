@@ -11,13 +11,13 @@ namespace SachkovTech.Issues.Application.Commands.UpdateIssuePosition;
 public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePositionCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateIssuePositionCommand> _validator;
     private readonly ILogger<UpdateIssuePositionHandler> _logger;
 
     public UpdateIssuePositionHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<UpdateIssuePositionCommand> validator,
         ILogger<UpdateIssuePositionHandler> logger)
     {

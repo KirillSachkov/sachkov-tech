@@ -22,7 +22,7 @@ namespace SachkovTech.IssueSolving.Infrastructure
 
         private static IServiceCollection AddDatabase(this IServiceCollection services)
         {
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIssueSolvingUnitOfWork, UnitOfWork>();
             services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
