@@ -30,9 +30,9 @@ public class AccountsDbContext(IConfiguration configuration)
             .ToTable("users");
 
         modelBuilder.Entity<User>()
-            .HasMany(u => u.Roles)
-            .WithMany()
-            .UsingEntity<IdentityUserRole<Guid>>();
+            .HasMany(u => u.UserRoles)
+            .WithOne()
+            .HasForeignKey(ur => ur.UserId);
 
         modelBuilder.Entity<AdminAccount>()
             .HasOne(a => a.User)

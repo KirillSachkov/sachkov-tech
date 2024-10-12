@@ -10,7 +10,7 @@ public class User : IdentityUser<Guid>
 
     private List<Role> _roles = [];
 
-    public IReadOnlyList<Role> Roles => _roles;
+    public virtual List<IdentityUserRole<Guid>> UserRoles { get; set; } = [];
 
     public static User CreateAdmin(string userName, string email, Role role)
     {
