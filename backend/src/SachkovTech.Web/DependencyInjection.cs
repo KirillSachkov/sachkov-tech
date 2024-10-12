@@ -13,11 +13,10 @@ using SachkovTech.IssuesReviews.Application;
 using Serilog.Events;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using SachkovTech.Core.Options;
-using System.Text;
 using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Presentation;
+using SachkovTech.Framework;
 using SachkovTech.IssuesReviews.Infrastructure;
 using SachkovTech.IssuesReviews.Presentation;
 
@@ -93,24 +92,14 @@ public static class DependencyInjection
                 var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
                                  ?? throw new ApplicationException("Missing jwt configuration");
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
-                };
+                options.TokenValidationParameters = TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
             });
 
         services.AddAuthorization();
 
         return services;
     }
-
-
+    
     public static IServiceCollection AddLogging(
         this IServiceCollection services, IConfiguration configuration)
     {

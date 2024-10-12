@@ -26,7 +26,7 @@ public static class DependencyInjection
 
         services.AddSingleton<AccountsSeeder>();
         services.AddScoped<AccountsSeederService>();
-        
+
         services.AddScoped<UnitOfWork>();
         return services;
     }
@@ -40,6 +40,7 @@ public static class DependencyInjection
 
         services.AddScoped<PermissionManager>();
         services.AddScoped<RolePermissionManager>();
-        services.AddScoped<AdminAccountManager>();
+        services.AddScoped<AccountsManager>();
+        services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
     }
 }

@@ -12,7 +12,7 @@ namespace SachkovTech.Accounts.Infrastructure.Seeding;
 public class AccountsSeederService(
     UserManager<User> userManager,
     RoleManager<Role> roleManager,
-    AdminAccountManager adminAccountManager,
+    AccountsManager accountsManager,
     PermissionManager permissionManager,
     RolePermissionManager rolePermissionManager,
     IOptions<AdminOptions> adminOptions,
@@ -44,7 +44,7 @@ public class AccountsSeederService(
         var fullName = FullName.Create(_adminOptions.UserName, _adminOptions.UserName).Value;
         var adminAccount = new AdminAccount(fullName, adminUser);
 
-        await adminAccountManager.CreateAdminAccount(adminAccount);
+        await accountsManager.CreateAdminAccount(adminAccount);
     }
 
     private async Task SeedRolePermissions(RolePermissionOptions seedData)
