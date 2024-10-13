@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -22,7 +23,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
     public SendOnReviewHandler(IUserIssueRepository repository,
         ILogger<SendOnReviewHandler> logger,
         IIssuesReviewsContract contract,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.IssueSolving)] IUnitOfWork unitOfWork,
         IValidator<SendOnReviewCommand> validator)
     {
         _repository = repository;

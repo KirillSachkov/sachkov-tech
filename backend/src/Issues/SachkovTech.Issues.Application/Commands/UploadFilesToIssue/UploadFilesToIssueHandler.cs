@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -19,14 +20,14 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, Up
 
     private readonly IFilesContracts _filesContracts;
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UploadFilesToIssueCommand> _validator;
     private readonly ILogger<UploadFilesToIssueHandler> _logger;
 
     public UploadFilesToIssueHandler(
         IFilesContracts filesContracts,
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
         IValidator<UploadFilesToIssueCommand> validator,
         ILogger<UploadFilesToIssueHandler> logger)
     {

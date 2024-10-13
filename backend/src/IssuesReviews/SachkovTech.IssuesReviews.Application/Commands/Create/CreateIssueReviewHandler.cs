@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -19,7 +20,7 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
 
     public CreateIssueReviewHandler(
         IIssueReviewRepository issueReviewRepository,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<CreateIssueReviewCommand> validator,
         ILogger<CreateIssueReviewHandler> logger)
     {
@@ -49,7 +50,7 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
             return issueReview.Error.ToErrorList();
         }
         
-        _issueReviewRepository.Add(issueReview.Value, cancellationToken);
+        await _issueReviewRepository.Add(issueReview.Value, cancellationToken);
         
         await _unitOfWork.SaveChanges(cancellationToken);
 

@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.SharedKernel;
@@ -8,12 +9,12 @@ namespace SachkovTech.Issues.Application.Commands.RestoreIssue;
 public class RestoreIssueHandler : ICommandHandler<Guid, RestoreIssueCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<RestoreIssueHandler> _logger;
 
     public RestoreIssueHandler(
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
         ILogger<RestoreIssueHandler> logger)
     {
         _modulesRepository = modulesRepository;

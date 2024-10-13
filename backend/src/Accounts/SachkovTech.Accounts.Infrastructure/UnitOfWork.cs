@@ -1,11 +1,11 @@
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SachkovTech.Accounts.Application;
+using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Accounts.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly AccountsDbContext _accountsDbContext;
 

@@ -6,7 +6,9 @@ using SachkovTech.Accounts.Domain;
 using SachkovTech.Accounts.Infrastructure.IdentityManagers;
 using SachkovTech.Accounts.Infrastructure.Options;
 using SachkovTech.Accounts.Infrastructure.Seeding;
+using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Options;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Infrastructure;
 
@@ -27,7 +29,7 @@ public static class DependencyInjection
         services.AddSingleton<AccountsSeeder>();
         services.AddScoped<AccountsSeederService>();
         
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Constants.ContextNames.Accounts);
         return services;
     }
 

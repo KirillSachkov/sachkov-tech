@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Models;
@@ -17,7 +18,7 @@ public class RefreshTokensHandler : ICommandHandler<LoginResponse, RefreshTokens
     public RefreshTokensHandler(
         IRefreshSessionManager refreshSessionManager,
         ITokenProvider tokenProvider,
-        IUnitOfWork unitOfWork)
+        [FromKeyedServices(Constants.ContextNames.Accounts)] IUnitOfWork unitOfWork)
     {
         _refreshSessionManager = refreshSessionManager;
         _tokenProvider = tokenProvider;

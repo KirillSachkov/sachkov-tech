@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -11,13 +12,13 @@ namespace SachkovTech.Issues.Application.Commands.UpdateMainInfo;
 public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateMainInfoCommand> _validator;
     private readonly ILogger<UpdateMainInfoHandler> _logger;
 
     public UpdateMainInfoHandler(
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
         IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {

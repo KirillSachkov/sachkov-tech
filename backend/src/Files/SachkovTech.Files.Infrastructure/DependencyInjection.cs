@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using SachkovTech.Core.Abstractions;
 using SachkovTech.Files.Application;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Infrastructure.Database;
 using SachkovTech.Files.Infrastructure.Options;
 using SachkovTech.Files.Infrastructure.Providers;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Files.Infrastructure;
 
@@ -17,7 +19,7 @@ public static class DependencyInjection
         services.AddDatabase();
         services.AddMinio(configuration);
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Constants.ContextNames.Files);
         
         return services;
     }

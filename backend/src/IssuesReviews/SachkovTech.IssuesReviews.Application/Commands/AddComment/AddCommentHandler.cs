@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -13,19 +14,18 @@ namespace SachkovTech.IssuesReviews.Application.Commands.AddComment;
 public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
 {
     private readonly IIssueReviewRepository _issueReviewRepository;
-    // Добавить реализацию UOW в Infrastructure и зарегать в DI
-    // private readonly IIssuesReviewsUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<AddCommentCommand> _validator;
     private readonly ILogger<AddCommentHandler> _logger;
 
     public AddCommentHandler(
         IIssueReviewRepository issueReviewRepository,
-//        IIssuesReviewsUnitOfWork unitOfWork,
+        [FromKeyedServices(Constants.ContextNames.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<AddCommentCommand> validator,
         ILogger<AddCommentHandler> logger)
     {
         _issueReviewRepository = issueReviewRepository;
-        // _unitOfWork = unitOfWork;
+        _unitOfWork = unitOfWork;
         _validator = validator;
         _logger = logger;
     }
@@ -60,7 +60,7 @@ public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
         if (addCommentResult.IsFailure)
             return addCommentResult.Error.ToErrorList();
 
-        // await _unitOfWork.SaveChanges(cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation(
             "Comment {commentId} was created in issueReview {issueReviewId}",
