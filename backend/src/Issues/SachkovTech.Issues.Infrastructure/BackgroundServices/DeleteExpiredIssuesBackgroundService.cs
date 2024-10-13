@@ -21,14 +21,14 @@ public class DeleteExpiredIssuesBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("DeleteExpiredIssuesBackgroundService is started");
-        
-        await using var scope = _scopeFactory.CreateAsyncScope();
-            
-        var deleteExpiredIssuesService = scope.ServiceProvider
-            .GetRequiredService<DeleteExpiredIssuesService>();
 
         while (!cancellationToken.IsCancellationRequested)
         {
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            
+            var deleteExpiredIssuesService = scope.ServiceProvider
+                .GetRequiredService<DeleteExpiredIssuesService>();
+            
             _logger.LogInformation("DeleteExpiredIssuesBackgroundService is working");
             
             await deleteExpiredIssuesService.Process(cancellationToken);
