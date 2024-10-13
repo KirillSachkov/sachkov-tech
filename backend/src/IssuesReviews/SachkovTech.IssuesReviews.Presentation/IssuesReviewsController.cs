@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.IssuesReviews.Application.Commands.AddComment;
+using SachkovTech.IssuesReviews.Application.Commands.StartReview;
 using SachkovTech.IssuesReviews.Application.Queries.GetCommentsWithPagination;
 using SachkovTech.IssuesReviews.Contracts.Requests;
 using SachkovTech.SharedKernel;
@@ -47,4 +48,26 @@ public class IssuesReviewsController : ApplicationController
 
         return Ok(result.Value);
     }
+
+    [HttpPut("{id:guid}/start-review")]
+    public async Task<ActionResult> StartReview(
+        [FromServices] StartReviewHandler handler,
+        [FromRoute] Guid issueReviewId,
+        CancellationToken cancellationToken)
+    {
+        var userId = HttpContext.User.FindFirstValue(Sub);
+
+        if (userId == null)
+            return Errors.User.InvalidCredentials().ToResponse();
+
+        var result = await handler.Handle(
+            new StartReviewCommand(issueReviewId,
+                Guid.Parse(userId)), cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
 }
