@@ -4,6 +4,7 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure.DbContexts;
 using SachkovTech.Issues.Infrastructure.Repositories;
+using IUnitOfWork = SachkovTech.Issues.Application.IUnitOfWork;
 
 namespace SachkovTech.Issues.Infrastructure;
 
