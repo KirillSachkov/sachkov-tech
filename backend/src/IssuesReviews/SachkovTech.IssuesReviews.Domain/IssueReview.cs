@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.IssuesReviews.Domain.Entities;
 using SachkovTech.IssuesReviews.Domain.Enums;
-using SachkovTech.IssuesReviews.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
+using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.IssuesReviews.Domain;
@@ -14,14 +14,14 @@ public sealed class IssueReview : Entity<IssueReviewId>
     {
     }
 
-    public IssueReview(
+    private IssueReview(
         IssueReviewId issueReviewId,
         UserIssueId userIssueId,
         UserId userId,
         IssueReviewStatus issueReviewStatus,
         DateTime reviewStartedTime,
         DateTime? issueApprovedTime,
-        PullRequestLink pullRequestLink)
+        PullRequestUrl pullRequestUrl)
         : base(issueReviewId)
     {
         UserIssueId = userIssueId;
@@ -29,7 +29,7 @@ public sealed class IssueReview : Entity<IssueReviewId>
         IssueReviewStatus = issueReviewStatus;
         ReviewStartedTime = reviewStartedTime;
         IssueApprovedTime = issueApprovedTime;
-        PullRequestLink = pullRequestLink;
+        PullRequestUrl = pullRequestUrl;
     }
 
     public UserIssueId UserIssueId { get; private set; }
@@ -47,8 +47,21 @@ public sealed class IssueReview : Entity<IssueReviewId>
 
     public DateTime? IssueApprovedTime { get; private set; }
 
-    public PullRequestLink PullRequestLink { get; private set; }
+    public PullRequestUrl PullRequestUrl { get; private set; }
 
+    public static Result<IssueReview, Error> Create(UserIssueId userIssueId,
+        UserId userId,
+        PullRequestUrl pullRequestUrl)
+    {
+        return Result.Success<IssueReview, Error>(new(
+            IssueReviewId.NewIssueReviewId(),
+            userIssueId,
+            userId,
+            IssueReviewStatus.WaitingForReviewer,
+            DateTime.UtcNow,
+            null,
+            pullRequestUrl));
+    }
     public void StartReview(UserId reviewerId)
     {
         ReviewerId = reviewerId;

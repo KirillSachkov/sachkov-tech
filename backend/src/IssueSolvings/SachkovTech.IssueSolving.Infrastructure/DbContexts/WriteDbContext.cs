@@ -22,7 +22,8 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
-        modelBuilder.HasDefaultSchema("issues-solving");
+        
+        modelBuilder.HasDefaultSchema("issues_solving");
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

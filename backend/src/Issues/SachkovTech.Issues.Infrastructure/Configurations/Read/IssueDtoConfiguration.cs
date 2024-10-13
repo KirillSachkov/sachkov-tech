@@ -13,10 +13,10 @@ public class IssueDtoConfiguration : IEntityTypeConfiguration<IssueDto>
 
         builder.HasKey(i => i.Id);
 
-        builder.HasOne<IssueDto>()
+        /*builder.HasOne<IssueDto>()
             .WithMany()
             .HasForeignKey(i => i.ParentId)
-            .IsRequired(false);
+            .IsRequired(false);*/
 
         builder.Property(i => i.Files)
             .HasConversion(

@@ -11,4 +11,10 @@ public interface IIssuesReviewsContract
         Guid userId,
         AddCommentRequest request,
         CancellationToken cancellationToken = default);
+    
+    Task<UnitResult<ErrorList>> CreateIssueReview(
+        Guid userIssueId,
+        Guid userId,
+        CreateIssueReviewRequest request,
+        CancellationToken cancellationToken = default);
 }

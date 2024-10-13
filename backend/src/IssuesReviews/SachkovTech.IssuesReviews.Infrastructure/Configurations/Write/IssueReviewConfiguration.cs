@@ -65,11 +65,11 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
             .HasColumnName("issue_approved_time")
             .IsRequired(false);
 
-        builder.ComplexProperty(i => i.PullRequestLink, pb =>
+        builder.ComplexProperty(i => i.PullRequestUrl, pb =>
         {
             pb.Property(p => p.Value)
                 .HasMaxLength(Constants.Default.MAX_LOW_TEXT_LENGTH)
-                .HasColumnName("pull_request_link")
+                .HasColumnName("pull_request_url")
                 .IsRequired();
         });
     }

@@ -1,17 +1,16 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SachkovTech.Core.Abstractions;
-using SachkovTech.IssuesReviews.Application;
-using SachkovTech.IssuesReviews.Infrastructure.DbContexts;
+using SachkovTech.Files.Application;
+using SachkovTech.Files.Infrastructure.Database;
 
-namespace SachkovTech.IssuesReviews.Infrastructure;
+namespace SachkovTech.Files.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
-    private readonly WriteDbContext _dbContext;
+    private readonly FilesWriteDbContext _dbContext;
 
-    public UnitOfWork(WriteDbContext dbContext)
+    public UnitOfWork(FilesWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

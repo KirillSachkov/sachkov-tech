@@ -34,7 +34,7 @@ public class IssuesReviewsController : ApplicationController
         CancellationToken cancellationToken)
     {
         var userId = HttpContext.User.FindFirstValue(Sub);
-
+        
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
 

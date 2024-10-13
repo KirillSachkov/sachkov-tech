@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace SachkovTech.Core.Abstractions;
+namespace SachkovTech.IssuesReviews.Application;
 
 public interface IUnitOfWork
 {

@@ -1,8 +1,7 @@
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using SachkovTech.SharedKernel;
 
-namespace SachkovTech.IssueSolving.Domain.ValueObjects;
+namespace SachkovTech.SharedKernel.ValueObjects;
 
 public class PullRequestUrl : ValueObject
 {
@@ -23,6 +22,7 @@ public class PullRequestUrl : ValueObject
         return new PullRequestUrl(pullRequestUrl);
     }
 
+    public static readonly PullRequestUrl Empty = new PullRequestUrl("");
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
         yield return Value;
