@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SachkovTech.Core.Dtos;
-using SachkovTech.Core.Extensions;
 using SachkovTech.IssuesReviews.Domain;
-using SachkovTech.IssuesReviews.Domain.Entities;
 using SachkovTech.IssuesReviews.Domain.Enums;
-using SachkovTech.IssuesReviews.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 

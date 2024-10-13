@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Core.Dtos;
 using SachkovTech.IssuesReviews.Domain;
 
 namespace SachkovTech.IssuesReviews.Infrastructure.DbContexts;

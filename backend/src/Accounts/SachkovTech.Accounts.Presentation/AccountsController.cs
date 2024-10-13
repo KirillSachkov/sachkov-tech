@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Accounts.Application.Commands.Login;
+using SachkovTech.Accounts.Application.Commands.RefreshTokens;
 using SachkovTech.Accounts.Contracts.Requests;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
@@ -46,6 +47,22 @@ public class AccountsController : ApplicationController
     {
         var result = await handler.Handle(
             new LoginCommand(request.Email, request.Password),
+            cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTokens(
+        [FromBody] RefreshTokensRequest request,
+        [FromServices] RefreshTokensHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(
+            new RefreshTokensCommand(request.AccessToken, request.RefreshToken),
             cancellationToken);
 
         if (result.IsFailure)

@@ -2,7 +2,7 @@ using SachkovTech.Accounts.Domain;
 
 namespace SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
-public class AdminAccountManager(AccountsDbContext accountsContext)
+public class AccountsManager(AccountsDbContext accountsContext)
 {
     public async Task CreateAdminAccount(AdminAccount adminAccount)
     {

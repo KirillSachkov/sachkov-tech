@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using SachkovTech.Accounts.Contracts;
 using SachkovTech.Core.Models;
 
 namespace SachkovTech.Framework.Authorization;
@@ -20,7 +19,7 @@ public class PermissionRequirementHandler : AuthorizationHandler<PermissionAttri
     {
         using var scope = _serviceScopeFactory.CreateScope();
 
-        var accountContract = scope.ServiceProvider.GetRequiredService<IAccountsContract>();
+        //var accountContract = scope.ServiceProvider.GetRequiredService<IAccountsContract>();
 
         // var userIdString = context.User.Claims
         //     .FirstOrDefault(claim => claim.Type == CustomClaims.Id)?.Value;
