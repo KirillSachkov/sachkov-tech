@@ -21,7 +21,6 @@ public class UserIssue : Entity<UserIssueId>
     {
         UserId = userId;
         IssueId = issueId;
-        Status = IssueStatus.NotCompleted;
         
         TakeOnWork();
     }
@@ -38,7 +37,7 @@ public class UserIssue : Entity<UserIssueId>
 
     public Attempts Attempts { get; private set; } = null!;
 
-    public PullRequestUrl PullRequestUrl { get; private set; } = PullRequestUrl.Empty();
+    public PullRequestUrl PullRequestUrl { get; private set; } = PullRequestUrl.Empty;
 
     private void TakeOnWork()
     {
@@ -62,7 +61,7 @@ public class UserIssue : Entity<UserIssueId>
 
     public UnitResult<Error> SendForRevision()
     {
-        if (Status == IssueStatus.NotCompleted || Status == IssueStatus.UnderReview)
+        if (Status == IssueStatus.UnderReview)
         {
             Status = IssueStatus.AtWork;
             Attempts = Attempts.Add();

@@ -22,10 +22,7 @@ public class PullRequestUrl : ValueObject
         return new PullRequestUrl(pullRequestUrl);
     }
 
-    public static PullRequestUrl Empty()
-    {
-        return new PullRequestUrl("");
-    }
+    public static readonly PullRequestUrl Empty = new PullRequestUrl("");
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
         yield return Value;
