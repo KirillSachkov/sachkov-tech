@@ -28,6 +28,8 @@ internal class FilesWriteDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("files");
+
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(FilesWriteDbContext).Assembly,
             type => type.FullName?.Contains("Database.Configurations.Write") ?? false);

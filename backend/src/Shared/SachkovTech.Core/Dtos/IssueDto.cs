@@ -15,8 +15,6 @@ public class IssueDto
 
     public Guid LessonId { get; set; }
 
-    public Guid? ParentId { get; set; }
-
     public Guid[] Files { get; set; } = null!;
 }
 

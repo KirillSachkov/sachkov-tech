@@ -22,6 +22,8 @@ public class IssueSolvingReadDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("issues-solving");
+
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(IssueSolvingReadDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);
