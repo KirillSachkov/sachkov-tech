@@ -7,7 +7,7 @@ using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain;
 
-public class Module : Entity<ModuleId>
+public class Module : Entity<ModuleId>, ISoftDeletable
 {
     private bool _isDeleted = false;
 
@@ -30,6 +30,8 @@ public class Module : Entity<ModuleId>
     public Description Description { get; private set; } = default!;
 
     public IReadOnlyList<Issue> Issues => _issues;
+    
+    public DateTime? DeletionDate { get; private set; }
 
     public int GetNumberOfIssues() => _issues.Count;
 
@@ -51,10 +53,15 @@ public class Module : Entity<ModuleId>
     public void Delete()
     {
         if (_isDeleted == false)
+        {
             _isDeleted = true;
+            DeletionDate = DateTime.UtcNow;
 
-        foreach (var issue in _issues)
-            issue.Delete();
+            foreach (var issue in _issues)
+            {
+                issue.Delete();
+            }
+        }
     }
 
     public UnitResult<Error> DeleteIssue(IssueId issueId)
@@ -83,6 +90,13 @@ public class Module : Entity<ModuleId>
         return Result.Success<Error>();
     }
 
+    public void DeleteExpiredIssues()
+    {
+        _issues.RemoveAll(i => i.DeletionDate != null 
+                               && DateTime.UtcNow >= i.DeletionDate.Value
+                                   .AddDays(Constants.Issues.LIFETIME_AFTER_DELETION));
+    }
+
     public UnitResult<Error> RestoreIssue(IssueId issueId)
     {
         var issue = _issues.FirstOrDefault(i => i.Id == issueId);
@@ -103,8 +117,12 @@ public class Module : Entity<ModuleId>
         if (!_isDeleted) return;
 
         _isDeleted = false;
+        DeletionDate = null;
+
         foreach (var issue in _issues)
+        {
             issue.Restore();
+        }
     }
 
     public UnitResult<Error> AddIssue(Issue issue)

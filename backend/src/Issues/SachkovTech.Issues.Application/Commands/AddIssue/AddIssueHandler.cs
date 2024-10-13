@@ -16,13 +16,13 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
     private const string BUCKET_NAME = "files";
 
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<AddIssueCommand> _validator;
     private readonly ILogger<AddIssueHandler> _logger;
 
     public AddIssueHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<AddIssueCommand> validator,
         ILogger<AddIssueHandler> logger)
     {

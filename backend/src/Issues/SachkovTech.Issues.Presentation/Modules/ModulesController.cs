@@ -8,6 +8,7 @@ using SachkovTech.Issues.Application.Commands.Delete;
 using SachkovTech.Issues.Application.Commands.DeleteIssue;
 using SachkovTech.Issues.Application.Commands.DeleteIssue.SoftDeleteIssue;
 using SachkovTech.Issues.Application.Commands.ForceDeleteIssue;
+using SachkovTech.Issues.Application.Commands.RestoreIssue;
 using SachkovTech.Issues.Application.Commands.UpdateIssueMainInfo;
 using SachkovTech.Issues.Application.Commands.UpdateIssuePosition;
 using SachkovTech.Issues.Application.Commands.UpdateMainInfo;
@@ -168,5 +169,22 @@ public class ModulesController : ApplicationController
             .MapFromUploadFilesResult(result.Value);
 
         return Ok(response);
+    }
+
+    [HttpPut("{moduleId:guid}/issue/{issueId:guid}/restore")]
+    public async Task<ActionResult> RestoreIssue(
+        [FromRoute] Guid moduleId,
+        [FromRoute] Guid issueId,
+        [FromServices] RestoreIssueHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new RestoreIssueCommand(moduleId, issueId);
+        
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
     }
 }

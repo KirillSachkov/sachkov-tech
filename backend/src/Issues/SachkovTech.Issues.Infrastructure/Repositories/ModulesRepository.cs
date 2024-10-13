@@ -30,9 +30,10 @@ public class ModulesRepository : IModulesRepository
         return module.Id.Value;
     }
 
-    public Guid Delete(Module module, CancellationToken cancellationToken = default)
+    public Guid Delete(Module module)
     {
         _dbContext.Modules.Remove(module);
+
         return module.Id;
     }
 
