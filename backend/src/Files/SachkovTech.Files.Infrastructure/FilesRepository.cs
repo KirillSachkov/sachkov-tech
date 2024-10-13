@@ -6,35 +6,34 @@ using SachkovTech.Files.Infrastructure.Database;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
-namespace SachkovTech.Files.Infrastructure
+namespace SachkovTech.Files.Infrastructure;
+
+internal class FilesRepository : IFilesRepository
 {
-    internal class FilesRepository : IFilesRepository
+    private readonly FilesWriteDbContext _dbContext;
+    private readonly ILogger<FilesRepository> _logger;
+
+    public FilesRepository(FilesWriteDbContext dbContext, ILogger<FilesRepository> logger)
     {
-        private readonly FilesWriteDbContext _dbContext;
-        private readonly ILogger<FilesRepository> _logger;
+        _dbContext = dbContext;
+        _logger = logger;
+    }
 
-        public FilesRepository(FilesWriteDbContext dbContext, ILogger<FilesRepository> logger)
+    public async Task<Result<FileId, Error>> Add(FileData fileData, CancellationToken cancellationToken)
+    {
+        try
         {
-            _dbContext = dbContext;
-            _logger = logger;
+            await _dbContext.FileData.AddAsync(fileData, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return fileData.Id;
         }
-
-        public async Task<Result<FileId, Error>> Add(FileData fileData, CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
-            {
-                await _dbContext.FileData.AddAsync(fileData, cancellationToken);
-                await _dbContext.SaveChangesAsync(cancellationToken);
+            _logger.LogError(ex,
+                "Failed to save file data with id \"{fileId}\" to the database.", fileData.Id.Value.ToString());
 
-                return fileData.Id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,
-                    "Failed to save file data with id \"{fileId}\" to the database.", fileData.Id.Value.ToString());
-
-                return Error.Failure("file.upload", "Fail to upload file in minio");
-            }
+            return Error.Failure("file.upload", "Fail to upload file in minio");
         }
     }
 }

@@ -13,7 +13,7 @@ public class LessonId : ValueObject
 
     public static LessonId NewLessonId() => Guid.NewGuid();
 
-    public static LessonId Empty() => Guid.Empty;
+    public static LessonId Empty() => new LessonId(null);
 
     public static LessonId Create(Guid? id) => new(id);
 
@@ -28,6 +28,7 @@ public class LessonId : ValueObject
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
-        yield return Value;
+        if (Value != null)
+            yield return Value;
     }
 }

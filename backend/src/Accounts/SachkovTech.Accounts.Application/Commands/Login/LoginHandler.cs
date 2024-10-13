@@ -1,13 +1,14 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.Login;
 
-public class LoginHandler : ICommandHandler<string, LoginCommand>
+public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenProvider _tokenProvider;
@@ -24,7 +25,7 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
         _logger = logger;
     }
 
-    public async Task<Result<string, ErrorList>> Handle(
+    public async Task<Result<LoginResponse, ErrorList>> Handle(
         LoginCommand command, CancellationToken cancellationToken = default)
     {
         var user = await _userManager.FindByEmailAsync(command.Email);
@@ -39,10 +40,9 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
             return Errors.User.InvalidCredentials().ToErrorList();
         }
 
-        var token = await _tokenProvider.GenerateAccessToken(user);
+        var accessToken = await _tokenProvider.GenerateAccessToken(user, cancellationToken);
+        var refreshToken = await _tokenProvider.GenerateRefreshToken(user, accessToken.Jti, cancellationToken);
 
-        _logger.LogInformation("Successfully logged in.");
-
-        return token;
+        return new LoginResponse(accessToken.AccessToken, refreshToken);
     }
 }

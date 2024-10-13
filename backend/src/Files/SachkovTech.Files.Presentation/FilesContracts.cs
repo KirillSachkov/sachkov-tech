@@ -4,24 +4,22 @@ using SachkovTech.Files.Contracts;
 using SachkovTech.Files.Contracts.Requests;
 using SachkovTech.Files.Contracts.Responses;
 using SachkovTech.SharedKernel;
+namespace SachkovTech.Files.Presentation;
 
-namespace SachkovTech.Files.Presentation
+internal class FilesContracts : IFilesContracts
 {
-    internal class FilesContracts : IFilesContracts
+    private readonly UploadFilesHandler _uploadFilesHandler;
+
+    public FilesContracts(UploadFilesHandler uploadFilesHandler)
     {
-        private readonly UploadFilesHandler _uploadFilesHandler;
+        _uploadFilesHandler = uploadFilesHandler;
+    }
 
-        public FilesContracts(UploadFilesHandler uploadFilesHandler)
-        {
-            _uploadFilesHandler = uploadFilesHandler;
-        }
+    public async Task<Result<UploadFilesResponse, ErrorList>> UploadFiles(
+        UploadFilesRequest request, CancellationToken cancellationToken = default)
+    {
+        var command = new UploadFilesCommand(request.OwnerTypeName, request.OwnerId, request.Files);
 
-        public async Task<Result<UploadFilesResponse, ErrorList>> UploadFiles(
-            UploadFilesRequest request, CancellationToken cancellationToken = default)
-        {
-            var command = new UploadFilesCommand(request.OwnerTypeName, request.OwnerId, request.Files);
-
-            return await _uploadFilesHandler.Handle(command, cancellationToken);
-        }
+        return await _uploadFilesHandler.Handle(command, cancellationToken);
     }
 }

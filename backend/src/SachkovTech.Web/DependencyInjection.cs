@@ -13,115 +13,108 @@ using SachkovTech.IssuesReviews.Application;
 using Serilog.Events;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using SachkovTech.Core.Options;
-using System.Text;
+using SachkovTech.Accounts.Application;
+using SachkovTech.Accounts.Presentation;
+using SachkovTech.Framework;
+using SachkovTech.IssuesReviews.Infrastructure;
+using SachkovTech.IssuesReviews.Presentation;
 
-namespace SachkovTech.Web
+namespace SachkovTech.Web;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddAccountsModule(
+        this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAccountsInfrastructure(configuration);
+        services.AddAccountsApplication();
+        services.AddAccountsPresentation();
 
-        public static IServiceCollection AddAccountsModule(
-            this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAccountsInfrastructure(configuration);
+        return services;
+    }
 
-            return services;
-        }
+    public static IServiceCollection AddIssuesReviewsModule(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIssuesReviewsApplication();
+        services.AddIssuesReviewsPresentation();
+        services.AddIssuesReviewsInfrastructure(configuration);
 
-        public static IServiceCollection AddIssuesReviewsModule(
-            this IServiceCollection services, IConfiguration configuration)
-        {
+        return services;
+    }
 
-            services.AddIssuesReviewsApplication();
+    public static IServiceCollection AddFilesModule(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddFilesApplication();
+        services.AddFilesInfrastructure(configuration);
+        services.AddFilesPresentation();
 
-            return services;
-        }
+        return services;
+    }
 
-        public static IServiceCollection AddFilesModule(
-            this IServiceCollection services, IConfiguration configuration)
-        {
+    public static IServiceCollection AddIssuesModule(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIssuesApplication();
+        services.AddIssuesInfrastructure(configuration);
+        services.AddIssuesPresentation();
 
-            services.AddFilesApplication();
-            services.AddFilesInfrastructure(configuration);
-            services.AddFilesPresentation();
+        return services;
+    }
 
-            return services;
-        }
+    public static IServiceCollection AddIssueSolvingModule(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIssueSolvingApplication();
+        services.AddIssueSolvingInfrastructure(configuration);
 
-        public static IServiceCollection AddIssuesModule(
-            this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddIssuesApplication();
-            services.AddIssuesInfrastructure(configuration);
-            services.AddIssuesPresentation();
-
-            return services;
-        }
-
-        public static IServiceCollection AddIssueSolvingModule(
-            this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddIssueSolvingApplication();
-            services.AddIssueSolvingInfrastructure(configuration);
-
-            return services;
-        }
+        return services;
+    }
 
 
-        public static IServiceCollection AddAuthServices(
-            this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
-            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+    public static IServiceCollection AddAuthServices(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
-                                     ?? throw new ApplicationException("Missing jwt configuration");
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
+                                 ?? throw new ApplicationException("Missing jwt configuration");
 
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidAudience = jwtOptions.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
-                    };
-                });
+                options.TokenValidationParameters = TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
+            });
 
-            services.AddAuthorization();
+        services.AddAuthorization();
 
-            return services;
-        }
+        return services;
+    }
+    
+    public static IServiceCollection AddLogging(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Debug()
+            .WriteTo.Seq(configuration.GetConnectionString("Seq")
+                         ?? throw new ArgumentNullException("Seq"))
+            .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
+            .CreateLogger();
 
+        services.AddSerilog();
 
-        public static IServiceCollection AddLogging(
-            this IServiceCollection services, IConfiguration configuration)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.Debug()
-                .WriteTo.Seq(configuration.GetConnectionString("Seq")
-                             ?? throw new ArgumentNullException("Seq"))
-                .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
-                .CreateLogger();
-
-            services.AddSerilog();
-
-            return services;
-        }
+        return services;
     }
 }

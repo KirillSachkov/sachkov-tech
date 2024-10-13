@@ -4,6 +4,11 @@ namespace SachkovTech.SharedKernel.ValueObjects.Ids;
 
 public class UserId : ValueObject
 {
+    // ef core
+    private UserId()
+    {
+        
+    }
     private UserId(Guid value)
     {
         Value = value;

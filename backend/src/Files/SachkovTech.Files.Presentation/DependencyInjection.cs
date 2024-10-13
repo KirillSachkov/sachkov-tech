@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Files.Contracts;
 
-namespace SachkovTech.Files.Presentation
-{
-    public static class DependencyInjection
-    {
-        public static IServiceCollection AddFilesPresentation(this IServiceCollection services)
-        {
-            services.AddScoped<IFilesContracts, FilesContracts>();
+namespace SachkovTech.Files.Presentation;
 
-            return services;
-        }
+public static class DependencyInjection
+{
+    public static IServiceCollection AddFilesPresentation(this IServiceCollection services)
+    {
+        services.AddScoped<IFilesContracts, FilesContracts>();
+
+        return services;
     }
 }

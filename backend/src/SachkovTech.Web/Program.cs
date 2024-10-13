@@ -1,14 +1,13 @@
 using Microsoft.OpenApi.Models;
+using SachkovTech.Accounts.Infrastructure.Seeding;
 using SachkovTech.Web;
 using SachkovTech.Web.Middlewares;
-using SachkovTech.Accounts.Infrastructure.Seeding;
 using Serilog;
+
 
 DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -42,8 +41,6 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddLogging(builder.Configuration);
 
-builder.Services.AddAuthServices(builder.Configuration);
-
 builder.Services.AddAccountsModule(builder.Configuration);
 builder.Services.AddFilesModule(builder.Configuration);
 builder.Services.AddIssuesModule(builder.Configuration);
@@ -53,6 +50,8 @@ builder.Services.AddIssueSolvingModule(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthServices(builder.Configuration);
 
 var app = builder.Build();
 
