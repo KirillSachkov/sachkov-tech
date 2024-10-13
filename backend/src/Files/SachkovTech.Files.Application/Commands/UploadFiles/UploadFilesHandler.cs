@@ -71,9 +71,7 @@ public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFil
         if (saveFileResult.IsSuccess)
             return fileData.Value.Id;
 
-        var fileLocation = new FileLocation(uploadFileResult.BucketName, uploadFileResult.FilePath);
-
-        await _fileProvider.RemoveFile(fileLocation, cancellationToken);
+        await _fileProvider.RemoveFile(uploadFileResult.FilePath, cancellationToken);
 
         return saveFileResult.Error.ToErrorList();
     }

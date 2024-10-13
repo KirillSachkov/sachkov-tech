@@ -61,27 +61,30 @@ internal class MinioProvider : IFileProvider
     }
 
     public async Task<UnitResult<Error>> RemoveFile(
-        FileLocation filesLocation,
+        FilePath filePath,
         CancellationToken cancellationToken = default)
     {
-        var bucketsExistResult = await IfBucketsNotExistCreateBucket([filesLocation.BucketName], cancellationToken);
+        var storagePath = filePath.Prefix + "/" + filePath.FileName;
+
+        var bucketsExistResult = await IfBucketsNotExistCreateBucket([filePath.BucketName], cancellationToken);
 
         if (bucketsExistResult.IsFailure)
             return bucketsExistResult.Error;
 
         try
         {
+
             var statArgs = new StatObjectArgs()
-                .WithBucket(filesLocation.BucketName)
-                .WithObject(filesLocation.FilePath.Value);
+                .WithBucket(filePath.BucketName)
+                .WithObject(storagePath);
 
             var objectStat = await _minioClient.StatObjectAsync(statArgs, cancellationToken);
             if (objectStat.ContentType == null)
                 return Result.Success<Error>();
 
             var removeArgs = new RemoveObjectArgs()
-                .WithBucket(filesLocation.BucketName)
-                .WithObject(filesLocation.FilePath.Value);
+                .WithBucket(filePath.BucketName)
+                .WithObject(storagePath);
 
             await _minioClient.RemoveObjectAsync(removeArgs, cancellationToken);
         }
@@ -89,8 +92,8 @@ internal class MinioProvider : IFileProvider
         {
             _logger.LogError(ex,
                 "Fail to remove file in minio with path {path} in bucket {bucket}",
-                filesLocation.FilePath.Value,
-                filesLocation.BucketName);
+                storagePath,
+                filePath.BucketName);
 
             return Error.Failure("file.upload", "Fail to upload file in minio");
         }
@@ -113,7 +116,7 @@ internal class MinioProvider : IFileProvider
             .WithBucket(fileData.BucketName)
             .WithStreamData(fileData.Stream)
             .WithObjectSize(fileData.Stream.Length)
-            .WithObject(fileData.Prefix + fileNameGuid + fileExtension);
+            .WithObject(fileData.Prefix + "/" + fileNameGuid + fileExtension);
 
         try
         {
@@ -122,7 +125,7 @@ internal class MinioProvider : IFileProvider
 
             _logger.LogInformation("Uploaded file with path {path}", response.ObjectName);
 
-            var filePath = FilePath.Create(response.ObjectName).Value;
+            var filePath = FilePath.Create(fileData.BucketName + "/" + response.ObjectName).Value;
             var fileSize = FileSize.Create(response.Size).Value;
 
             var result = new UploadFilesResult(
