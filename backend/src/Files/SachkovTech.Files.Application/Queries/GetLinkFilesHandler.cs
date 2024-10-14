@@ -12,19 +12,13 @@ namespace SachkovTech.Files.Application.Queries
     public class GetLinkFilesHandler : IQueryHandler<Result<IEnumerable<FileLinkDto>, Error>, GetLinkFilesQuery>
     {
         private readonly IFileProvider _fileProvider;
-        private readonly ILogger<GetLinkFilesHandler> _logger;
-        private readonly IFilesRepository _filesRepository;
         private readonly IFilesReadDbContext _readDbContext;
 
         public GetLinkFilesHandler(
             IFileProvider fileProvider,
-            ILogger<GetLinkFilesHandler> logger,
-            IFilesRepository filesRepository,
             IFilesReadDbContext readDbContext)
         {
             _fileProvider = fileProvider;
-            _logger = logger;
-            _filesRepository = filesRepository;
             _readDbContext = readDbContext;
         }
 
