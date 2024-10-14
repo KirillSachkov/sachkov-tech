@@ -16,17 +16,20 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
     private readonly IReadDbContext _readDbContext;
     private readonly IIssuesContract _issuesContract;
     private readonly ILogger<TakeOnWorkHandler> _logger;
+    private readonly IIssueSolvingUnitOfWork _unitOfWork;
 
     public TakeOnWorkHandler(
         IUserIssueRepository userIssueRepository,
         IReadDbContext readDbContext,
         IIssuesContract issuesContract,
-        ILogger<TakeOnWorkHandler> logger)
+        ILogger<TakeOnWorkHandler> logger,
+        IIssueSolvingUnitOfWork unitOfWork)
     {
         _userIssueRepository = userIssueRepository;
         _readDbContext = readDbContext;
         _issuesContract = issuesContract;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -73,6 +76,8 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
         var userIssue = new UserIssue(userIssueId, userId, command.IssueId);
 
         var result = await _userIssueRepository.Add(userIssue, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
         
         _logger.LogInformation("User took issue on work. A record was created with id {userIssueId}",
             userIssueId);

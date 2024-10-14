@@ -11,13 +11,13 @@ namespace SachkovTech.Issues.Application.Commands.ForceDeleteIssue;
 public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IIssuesUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteIssueCommand> _validator;
     private readonly ILogger<ForceDeleteIssueHandler> _logger;
 
     public ForceDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        IIssuesUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<ForceDeleteIssueHandler> logger)
     {
