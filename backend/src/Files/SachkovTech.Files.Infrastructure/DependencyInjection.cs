@@ -22,6 +22,7 @@ public static class DependencyInjection
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
         services.AddScoped<FilesWriteDbContext>();
+        services.AddScoped<IFilesReadDbContext, FilesReadDbContext>();
 
         services.AddScoped<IFilesRepository, FilesRepository>();
 
