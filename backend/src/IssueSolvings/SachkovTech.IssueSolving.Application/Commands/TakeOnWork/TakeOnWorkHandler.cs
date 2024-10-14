@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Contracts;
@@ -16,14 +17,14 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
     private readonly IReadDbContext _readDbContext;
     private readonly IIssuesContract _issuesContract;
     private readonly ILogger<TakeOnWorkHandler> _logger;
-    private readonly IIssueSolvingUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public TakeOnWorkHandler(
         IUserIssueRepository userIssueRepository,
         IReadDbContext readDbContext,
         IIssuesContract issuesContract,
         ILogger<TakeOnWorkHandler> logger,
-        IIssueSolvingUnitOfWork unitOfWork)
+        [FromKeyedServices(Modules.IssueSolving)] IUnitOfWork unitOfWork)
     {
         _userIssueRepository = userIssueRepository;
         _readDbContext = readDbContext;

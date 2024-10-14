@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -11,13 +12,13 @@ namespace SachkovTech.Issues.Application.Commands.UpdateIssuePosition;
 public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePositionCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateIssuePositionCommand> _validator;
     private readonly ILogger<UpdateIssuePositionHandler> _logger;
 
     public UpdateIssuePositionHandler(
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<UpdateIssuePositionCommand> validator,
         ILogger<UpdateIssuePositionHandler> logger)
     {

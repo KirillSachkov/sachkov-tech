@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -9,13 +10,13 @@ namespace SachkovTech.Issues.Application.Commands.DeleteIssue.SoftDeleteIssue;
 public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteIssueCommand> _validator;
     private readonly ILogger<SoftDeleteIssueHandler> _logger;
 
     public SoftDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<SoftDeleteIssueHandler> logger)
     {

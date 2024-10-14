@@ -4,6 +4,7 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure.DbContexts;
 using SachkovTech.IssueSolving.Infrastructure.Repositories;
+using SachkovTech.SharedKernel;
 
 namespace SachkovTech.IssueSolving.Infrastructure;
 
@@ -22,7 +23,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddScoped<IIssueSolvingUnitOfWork, UnitOfWork>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.IssueSolving);
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;

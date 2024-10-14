@@ -8,7 +8,6 @@ public class Constants
 
         public const int MAX_HIGH_TEXT_LENGTH = 2000;
     }
-
     public static class Files
     {
         //Bytes

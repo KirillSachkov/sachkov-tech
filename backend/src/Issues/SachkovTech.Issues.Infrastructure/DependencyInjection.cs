@@ -26,8 +26,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddScoped<IIssuesUnitOfWork, UnitOfWork>();
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(SharedKernel.Modules.Issues);
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -37,7 +37,7 @@ public static class DependencyInjection
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IModulesRepository, ModulesRepository>();
-
+        
         return services;
     }
 

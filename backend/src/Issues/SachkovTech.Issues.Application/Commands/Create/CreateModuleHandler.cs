@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -13,13 +14,13 @@ namespace SachkovTech.Issues.Application.Commands.Create;
 public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
 {
     private readonly IModulesRepository _modulesRepository;
-    private readonly IIssuesUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateModuleCommand> _validator;
     private readonly ILogger<CreateModuleHandler> _logger;
 
     public CreateModuleHandler(
         IModulesRepository modulesRepository,
-        IIssuesUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<CreateModuleCommand> validator,
         ILogger<CreateModuleHandler> logger)
     {

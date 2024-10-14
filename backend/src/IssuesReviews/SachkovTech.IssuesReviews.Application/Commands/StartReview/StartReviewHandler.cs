@@ -1,6 +1,7 @@
 using System;
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -18,7 +19,7 @@ public class StartReviewHandler : ICommandHandler<Guid, StartReviewCommand>
 
     public StartReviewHandler(
         IIssueReviewRepository issueReviewRepository,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<StartReviewCommand> validator,
         ILogger<StartReviewHandler> logger)
     {
