@@ -13,6 +13,7 @@ namespace SachkovTech.Files.Infrastructure.Providers;
 internal class MinioProvider : IFileProvider
 {
     private const int MAX_DEGREE_OF_PARALLELISM = 10;
+    private const int LINK_EXPIRY = 604800;
 
     private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
@@ -58,6 +59,33 @@ internal class MinioProvider : IFileProvider
         }
 
         _logger.LogInformation("Uploaded files: {files}", results.Select(f => f.FilePath.Value));
+    }
+
+    public async Task<Result<IEnumerable<GetLinkFileResult>, Error>> GetLinks(
+            IEnumerable<FilePath> filePaths,
+            CancellationToken cancellationToken = default)
+    {
+        var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
+
+        List<GetLinkFileResult> results = [];
+
+        var bucketsExistResult = await IfBucketsNotExistCreateBucket(
+            filePaths.Select(file => file.BucketName).Distinct(),
+            cancellationToken);
+
+        if (bucketsExistResult.IsFailure)
+            return bucketsExistResult.Error;
+
+        var tasks = filePaths.Select(async file =>
+                await GetLink(file, semaphoreSlim, cancellationToken)).ToList();
+
+        await Task.WhenAll(tasks);
+
+        var reesults = tasks.Select(t => t.Result);
+
+        _logger.LogInformation("Received links to files: {links}", results.Select(r => r.FilePath));
+
+        return results;
     }
 
     public async Task<UnitResult<Error>> RemoveFile(
@@ -144,6 +172,70 @@ internal class MinioProvider : IFileProvider
                 fileData.BucketName);
 
             return Error.Failure("file.upload", "Fail to upload file in minio");
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+    }
+
+    private async Task<GetLinkFileResult> GetLink(
+            FilePath filePath,
+            SemaphoreSlim semaphoreSlim,
+            CancellationToken cancellationToken)
+    {
+        var objectName = filePath.Prefix + "/" + filePath.FileName;
+
+        await semaphoreSlim.WaitAsync(cancellationToken);
+
+
+        var statArgs = new StatObjectArgs()
+            .WithBucket(filePath.BucketName)
+            .WithObject(objectName);
+
+        var getLinkArgs = new PresignedGetObjectArgs()
+            .WithBucket(filePath.BucketName)
+            .WithObject(objectName)
+            .WithExpiry(LINK_EXPIRY);
+
+        try
+        {
+            var statFile = await _minioClient.StatObjectAsync(statArgs);
+
+            if (statFile.ContentType == null)
+            {
+                _logger.LogError(
+                    "The file with the bucket \"{BucketName}\" and the name \"{FileName}\" was not found",
+                    filePath.BucketName,
+                    objectName);
+
+                return new GetLinkFileResult(filePath, "");
+            }
+
+
+            var getLinkResult = await _minioClient.PresignedGetObjectAsync(getLinkArgs);
+
+            if (getLinkResult is null)
+            {
+                _logger.LogError(
+                    "The file with the bucket \"{BucketName}\" and the name \"{FileName}\" was not found",
+                    filePath.BucketName,
+                    objectName);
+
+                return new GetLinkFileResult(filePath, "");
+            }
+
+
+            return new GetLinkFileResult(filePath, getLinkResult);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Fail to get link file from minio with path {path} in bucket {bucket}",
+                filePath.Value,
+                filePath.BucketName);
+
+            return new GetLinkFileResult(filePath, "");
         }
         finally
         {
