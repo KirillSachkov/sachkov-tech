@@ -20,7 +20,7 @@ public class UpdateIssueMainInfoHandler : ICommandHandler<Guid, UpdateIssueMainI
 
     public UpdateIssueMainInfoHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<UpdateIssueMainInfoCommand> validator,
         ILogger<UpdateIssueMainInfoHandler> logger)
     {

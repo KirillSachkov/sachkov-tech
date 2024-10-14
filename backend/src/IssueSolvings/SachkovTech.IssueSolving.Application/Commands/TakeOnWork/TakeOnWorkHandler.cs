@@ -24,7 +24,7 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
         IReadDbContext readDbContext,
         IIssuesContract issuesContract,
         ILogger<TakeOnWorkHandler> logger,
-        [FromKeyedServices(ContextNames.IssueSolving)] IUnitOfWork unitOfWork)
+        [FromKeyedServices(Modules.IssueSolving)] IUnitOfWork unitOfWork)
     {
         _userIssueRepository = userIssueRepository;
         _readDbContext = readDbContext;

@@ -18,7 +18,7 @@ public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePosit
 
     public UpdateIssuePositionHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<UpdateIssuePositionCommand> validator,
         ILogger<UpdateIssuePositionHandler> logger)
     {

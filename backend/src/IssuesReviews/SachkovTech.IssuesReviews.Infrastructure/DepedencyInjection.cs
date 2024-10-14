@@ -23,7 +23,7 @@ public static class DepedencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ContextNames.IssuesReviews);
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.IssuesReviews);
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;

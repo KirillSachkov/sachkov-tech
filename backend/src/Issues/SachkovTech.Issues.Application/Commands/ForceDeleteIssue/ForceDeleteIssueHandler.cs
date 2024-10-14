@@ -18,7 +18,7 @@ public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 
     public ForceDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<ForceDeleteIssueHandler> logger)
     {

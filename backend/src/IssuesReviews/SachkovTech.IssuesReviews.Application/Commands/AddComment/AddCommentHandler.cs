@@ -20,7 +20,7 @@ public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
 
     public AddCommentHandler(
         IIssueReviewRepository issueReviewRepository,
-        [FromKeyedServices(ContextNames.IssuesReviews)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<AddCommentCommand> validator,
         ILogger<AddCommentHandler> logger)
     {

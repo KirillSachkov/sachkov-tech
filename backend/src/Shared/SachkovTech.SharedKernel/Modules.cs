@@ -1,6 +1,6 @@
 ﻿namespace SachkovTech.SharedKernel;
 
-public enum ContextNames
+public enum Modules
 {
     IssuesReviews,
     IssueSolving,

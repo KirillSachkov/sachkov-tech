@@ -18,7 +18,7 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
 
     public UpdateMainInfoHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoHandler> logger)
     {
