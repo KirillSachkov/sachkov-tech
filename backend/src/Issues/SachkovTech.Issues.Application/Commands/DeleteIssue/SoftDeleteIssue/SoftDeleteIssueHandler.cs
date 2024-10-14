@@ -16,7 +16,7 @@ public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 
     public SoftDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<SoftDeleteIssueHandler> logger)
     {

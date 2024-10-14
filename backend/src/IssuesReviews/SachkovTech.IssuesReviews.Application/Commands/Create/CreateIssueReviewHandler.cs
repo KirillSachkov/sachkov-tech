@@ -20,7 +20,7 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
 
     public CreateIssueReviewHandler(
         IIssueReviewRepository issueReviewRepository,
-        [FromKeyedServices(Constants.ContextNames.IssuesReviews)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<CreateIssueReviewCommand> validator,
         ILogger<CreateIssueReviewHandler> logger)
     {

@@ -23,7 +23,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
     public SendOnReviewHandler(IUserIssueRepository repository,
         ILogger<SendOnReviewHandler> logger,
         IIssuesReviewsContract contract,
-        [FromKeyedServices(Constants.ContextNames.IssueSolving)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.IssueSolving)] IUnitOfWork unitOfWork,
         IValidator<SendOnReviewCommand> validator)
     {
         _repository = repository;

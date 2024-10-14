@@ -20,7 +20,7 @@ public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
 
     public CreateModuleHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
         IValidator<CreateModuleCommand> validator,
         ILogger<CreateModuleHandler> logger)
     {

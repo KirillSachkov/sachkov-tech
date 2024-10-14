@@ -23,7 +23,7 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
 
     public AddIssueHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
         IValidator<AddIssueCommand> validator,
         ILogger<AddIssueHandler> logger)
     {

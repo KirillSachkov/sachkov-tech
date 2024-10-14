@@ -29,7 +29,7 @@ public static class DependencyInjection
         services.AddSingleton<AccountsSeeder>();
         services.AddScoped<AccountsSeederService>();
         
-        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Constants.ContextNames.Accounts);
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ContextNames.Accounts);
         return services;
     }
 

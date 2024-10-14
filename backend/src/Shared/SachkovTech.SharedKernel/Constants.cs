@@ -8,16 +8,6 @@ public class Constants
 
         public const int MAX_HIGH_TEXT_LENGTH = 2000;
     }
-
-    public static class ContextNames
-    {
-        public const string IssuesReviews = nameof(IssuesReviews);
-        public const string IssueSolving = nameof(IssueSolving);
-        public const string Issues = nameof(Issues);
-        public const string Files = nameof(Files);
-        public const string Accounts = nameof(Accounts);
-    }
-
     public static class Files
     {
         //Bytes

@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddDatabase();
         services.AddMinio(configuration);
 
-        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Constants.ContextNames.Files);
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ContextNames.Files);
         
         return services;
     }

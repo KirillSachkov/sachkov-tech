@@ -14,7 +14,7 @@ public class RestoreIssueHandler : ICommandHandler<Guid, RestoreIssueCommand>
 
     public RestoreIssueHandler(
         IModulesRepository modulesRepository,
-        [FromKeyedServices(Constants.ContextNames.Issues)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ContextNames.Issues)] IUnitOfWork unitOfWork,
         ILogger<RestoreIssueHandler> logger)
     {
         _modulesRepository = modulesRepository;
