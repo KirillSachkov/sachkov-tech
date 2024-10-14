@@ -67,8 +67,6 @@ internal class MinioProvider : IFileProvider
     {
         var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
 
-        List<GetLinkFileResult> results = [];
-
         var bucketsExistResult = await IfBucketsNotExistCreateBucket(
             filePaths.Select(file => file.BucketName).Distinct(),
             cancellationToken);
@@ -81,7 +79,7 @@ internal class MinioProvider : IFileProvider
 
         await Task.WhenAll(tasks);
 
-        var reesults = tasks.Select(t => t.Result);
+        var results = tasks.Select(t => t.Result).ToList();
 
         _logger.LogInformation("Received links to files: {links}", results.Select(r => r.FilePath));
 

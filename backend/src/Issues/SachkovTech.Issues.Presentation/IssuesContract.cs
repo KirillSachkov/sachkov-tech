@@ -3,6 +3,7 @@ using SachkovTech.Core.Dtos;
 using SachkovTech.Issues.Application.Queries.GetIssueById;
 using SachkovTech.Issues.Application.Queries.GetIssueByPosition;
 using SachkovTech.Issues.Contracts;
+using SachkovTech.Issues.Contracts.Responses;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Issues.Presentation;
@@ -20,7 +21,7 @@ public class IssuesContract : IIssuesContract
         _getIssueByPositionHandler = getIssueByPositionHandler;
     }
     
-    public async Task<Result<IssueDto, ErrorList>> GetIssueById(
+    public async Task<Result<IssueResponse, ErrorList>> GetIssueById(
         Guid issueId, 
         CancellationToken cancellationToken = default)
     {

@@ -1,13 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Dtos;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 
-namespace SachkovTech.Files.Application.Queries
+namespace SachkovTech.Files.Application.Queries.GetLinkFiles
 {
     public class GetLinkFilesHandler : IQueryHandler<Result<IEnumerable<FileLinkDto>, Error>, GetLinkFilesQuery>
     {
@@ -35,8 +34,8 @@ namespace SachkovTech.Files.Application.Queries
                 return getFileLinks.Error;
 
             var results = from link in getFileLinks.Value
-                      let id = files.First(f => f.StoragePath == link.FilePath).Id
-                      select new FileLinkDto(id, link.Link);
+                          let id = files.First(f => f.StoragePath == link.FilePath).Id
+                          select new FileLinkDto(id, link.Link);
 
             return results.ToList();
         }

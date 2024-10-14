@@ -13,7 +13,7 @@ public class IssueDto
 
     public int Position { get; set; }
 
-    public Guid LessonId { get; set; }
+    public Guid? LessonId { get; set; }
 
     public Guid[] Files { get; set; } = null!;
 }
