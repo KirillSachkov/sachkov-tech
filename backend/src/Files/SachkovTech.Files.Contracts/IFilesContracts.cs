@@ -10,5 +10,5 @@ public interface IFilesContracts
 {
     public Task<Result<UploadFilesResponse, ErrorList>> UploadFiles(UploadFilesRequest request, CancellationToken cancellationToken = default);
 
-    Task<Result<IEnumerable<FileLinkDto>, Error>> GetLinkFiles(IEnumerable<Guid> fileIds, CancellationToken cancellationToken = default);
+    Task<IEnumerable<FileLinkDto>> GetLinkFiles(IEnumerable<Guid> fileIds, CancellationToken cancellationToken = default);
 }

@@ -39,8 +39,6 @@ namespace SachkovTech.Files.Infrastructure.Database
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(FilesWriteDbContext).Assembly,
                 type => type.FullName?.Contains("Database.Configurations.Read") ?? false);
-
-            modelBuilder.Entity<IssueDto>().HasQueryFilter(i => !i.IsDeleted);
         }
     }
 }

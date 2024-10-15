@@ -28,7 +28,7 @@ namespace SachkovTech.Files.Presentation
             return await _uploadFilesHandler.Handle(command, cancellationToken);
         }
 
-        public async Task<Result<IEnumerable<FileLinkDto>, Error>> GetLinkFiles(
+        public async Task<IEnumerable<FileLinkDto>> GetLinkFiles(
             IEnumerable<Guid> fileIds, CancellationToken cancellationToken = default)
         {
             var command = new GetLinkFilesQuery(fileIds);

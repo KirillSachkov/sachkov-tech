@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
+using SachkovTech.Files.Application.Dtos;
 using SachkovTech.Files.Application.Interfaces;
 using SachkovTech.Files.Contracts.Dtos;
 using SachkovTech.Files.Domain.ValueObjects;
@@ -61,7 +62,7 @@ internal class MinioProvider : IFileProvider
         _logger.LogInformation("Uploaded files: {files}", results.Select(f => f.FilePath.Value));
     }
 
-    public async Task<Result<IEnumerable<GetLinkFileResult>, Error>> GetLinks(
+    public async Task<IEnumerable<GetLinkFileResult>> GetLinks(
             IEnumerable<FilePath> filePaths,
             CancellationToken cancellationToken = default)
     {
@@ -72,7 +73,7 @@ internal class MinioProvider : IFileProvider
             cancellationToken);
 
         if (bucketsExistResult.IsFailure)
-            return bucketsExistResult.Error;
+            return [];
 
         var tasks = filePaths.Select(async file =>
                 await GetLink(file, semaphoreSlim, cancellationToken)).ToList();

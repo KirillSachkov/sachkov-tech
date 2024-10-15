@@ -28,7 +28,7 @@ public class GetIssueByIdHandler : IQueryHandlerWithResult<IssueResponse, GetIss
         if (issueDto is null)
             return Errors.General.NotFound(query.IssueId).ToErrorList();
 
-        var fileLinks = (await _filesContracts.GetLinkFiles(issueDto.Files)).Value;
+        var fileLinks = await _filesContracts.GetLinkFiles(issueDto.Files);
 
         var response = new IssueResponse(
             issueDto.Id,
@@ -37,8 +37,7 @@ public class GetIssueByIdHandler : IQueryHandlerWithResult<IssueResponse, GetIss
             issueDto.Description,
             issueDto.Position,
             issueDto.LessonId,
-            fileLinks.Select(f => new FileResponse(f.FileId, f.Link)).ToArray()
-            );
+            fileLinks.Select(f => new FileResponse(f.FileId, f.Link)).ToArray());
 
         return response;
     }
