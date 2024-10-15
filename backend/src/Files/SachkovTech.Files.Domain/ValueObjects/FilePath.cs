@@ -7,7 +7,13 @@ public class FilePath : ValueObject
 {
     public string Value { get; }
 
+    public string BucketName => GetBucketName();
+
+    public string Prefix => GetPrefix();
+
     public string FileName => GetFileName();
+    
+    public string FileNameWithPrefix => Prefix + FileName;
 
     public string FileExtension => GetFileExtension();
 
@@ -18,6 +24,11 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(string filePath)
     {
+        var pathParts = filePath.Split('/');
+
+        if(pathParts.Count() < 2)
+            return Errors.General.ValueIsInvalid("file path");
+
         if (string.IsNullOrWhiteSpace(filePath))
             return Errors.General.ValueIsInvalid("file path");
 
@@ -31,6 +42,22 @@ public class FilePath : ValueObject
 
     public static implicit operator string(FilePath filePath) =>
         filePath.Value;
+
+    private string GetBucketName()
+    {
+        var filePathParts = Value.Split('/');
+
+        return filePathParts.First();
+    }
+
+    private string GetPrefix()
+    {
+        var filePathParts = Value.Split('/');
+
+        var prefixParts = filePathParts.Take(new Range(1, filePathParts.Length - 1));
+
+        return string.Join("/", prefixParts);
+    }
 
     private string GetFileName()
     {

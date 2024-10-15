@@ -1,25 +1,39 @@
 ﻿using CSharpFunctionalExtensions;
+using SachkovTech.Core.Dtos;
 using SachkovTech.Files.Application.Commands.UploadFiles;
+using SachkovTech.Files.Application.Queries.GetLinkFiles;
 using SachkovTech.Files.Contracts;
 using SachkovTech.Files.Contracts.Requests;
 using SachkovTech.Files.Contracts.Responses;
 using SachkovTech.SharedKernel;
-namespace SachkovTech.Files.Presentation;
 
-internal class FilesContracts : IFilesContracts
+namespace SachkovTech.Files.Presentation
 {
-    private readonly UploadFilesHandler _uploadFilesHandler;
-
-    public FilesContracts(UploadFilesHandler uploadFilesHandler)
+    internal class FilesContracts : IFilesContracts
     {
-        _uploadFilesHandler = uploadFilesHandler;
-    }
+        private readonly UploadFilesHandler _uploadFilesHandler;
+        private readonly GetLinkFilesHandler _getLinkFilesHandler;
 
-    public async Task<Result<UploadFilesResponse, ErrorList>> UploadFiles(
-        UploadFilesRequest request, CancellationToken cancellationToken = default)
-    {
-        var command = new UploadFilesCommand(request.OwnerTypeName, request.OwnerId, request.Files);
+        public FilesContracts(UploadFilesHandler uploadFilesHandler, GetLinkFilesHandler getLinkFilesHandler)
+        {
+            _uploadFilesHandler = uploadFilesHandler;
+            _getLinkFilesHandler = getLinkFilesHandler;
+        }
 
-        return await _uploadFilesHandler.Handle(command, cancellationToken);
+        public async Task<Result<UploadFilesResponse, ErrorList>> UploadFiles(
+            UploadFilesRequest request, CancellationToken cancellationToken = default)
+        {
+            var command = new UploadFilesCommand(request.OwnerTypeName, request.OwnerId, request.Files);
+
+            return await _uploadFilesHandler.Handle(command, cancellationToken);
+        }
+
+        public async Task<IEnumerable<FileLinkDto>> GetLinkFiles(
+            IEnumerable<Guid> fileIds, CancellationToken cancellationToken = default)
+        {
+            var command = new GetLinkFilesQuery(fileIds);
+
+            return await _getLinkFilesHandler.Handle(command, cancellationToken);
+        }
     }
 }

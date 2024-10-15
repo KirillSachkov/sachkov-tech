@@ -19,11 +19,11 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("issues-solving");
+
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
-        
-        modelBuilder.HasDefaultSchema("issues_solving");
     }
 
     private ILoggerFactory CreateLoggerFactory() =>
