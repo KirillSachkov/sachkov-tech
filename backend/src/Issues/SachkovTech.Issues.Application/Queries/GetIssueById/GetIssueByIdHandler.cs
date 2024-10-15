@@ -23,7 +23,7 @@ public class GetIssueByIdHandler : IQueryHandlerWithResult<IssueResponse, GetIss
         CancellationToken cancellationToken = default)
     {
         var issueDto = await _readDbContext.Issues
-            .FirstOrDefaultAsync(i => i.Id == query.IssueId, cancellationToken);
+            .SingleOrDefaultAsync(i => i.Id == query.IssueId, cancellationToken);
 
         if (issueDto is null)
             return Errors.General.NotFound(query.IssueId).ToErrorList();

@@ -24,6 +24,8 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
+        
+        modelBuilder.HasDefaultSchema("issues_reviews");
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

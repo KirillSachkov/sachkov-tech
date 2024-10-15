@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure.DbContexts;
 
 namespace SachkovTech.IssueSolving.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly WriteDbContext _dbContext;
 

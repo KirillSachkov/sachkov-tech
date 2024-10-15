@@ -8,7 +8,6 @@ public class Constants
 
         public const int MAX_HIGH_TEXT_LENGTH = 2000;
     }
-
     public static class Files
     {
         //Bytes
@@ -25,6 +24,10 @@ public class Constants
             // Software
             ".exe", ".dll", ".msi", ".bat", ".sh", ".jar"
         };
-        
+    }
+
+    public static class Issues
+    {
+        public const int LIFETIME_AFTER_DELETION = 30;
     }
 }

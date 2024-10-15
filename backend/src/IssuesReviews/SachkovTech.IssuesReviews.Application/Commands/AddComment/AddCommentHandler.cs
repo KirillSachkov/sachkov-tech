@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -19,7 +20,7 @@ public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
 
     public AddCommentHandler(
         IIssueReviewRepository issueReviewRepository,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.IssuesReviews)] IUnitOfWork unitOfWork,
         IValidator<AddCommentCommand> validator,
         ILogger<AddCommentHandler> logger)
     {

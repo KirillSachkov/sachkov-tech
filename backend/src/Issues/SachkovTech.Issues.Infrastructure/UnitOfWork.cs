@@ -6,7 +6,7 @@ using SachkovTech.Issues.Infrastructure.DbContexts;
 
 namespace SachkovTech.Issues.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly WriteDbContext _dbContext;
 

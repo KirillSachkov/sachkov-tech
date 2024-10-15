@@ -2,9 +2,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application;
+using SachkovTech.Issues.Infrastructure.BackgroundServices;
 using SachkovTech.Issues.Infrastructure.DbContexts;
 using SachkovTech.Issues.Infrastructure.Repositories;
-using IUnitOfWork = SachkovTech.Issues.Application.IUnitOfWork;
+using SachkovTech.Issues.Infrastructure.Services;
 
 namespace SachkovTech.Issues.Infrastructure;
 
@@ -16,15 +17,17 @@ public static class DependencyInjection
         services
             .AddDbContexts()
             .AddRepositories()
-            .AddDatabase();
+            .AddDatabase()
+            .AddHostedServices()
+            .AddServices();
 
-        return services;
+        return services;   
     }
 
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(SharedKernel.Modules.Issues);
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -34,7 +37,7 @@ public static class DependencyInjection
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IModulesRepository, ModulesRepository>();
-
+        
         return services;
     }
 
@@ -42,6 +45,20 @@ public static class DependencyInjection
     {
         services.AddScoped<WriteDbContext>();
         services.AddScoped<IReadDbContext, ReadDbContext>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<DeleteExpiredIssuesBackgroundService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<DeleteExpiredIssuesService>();
 
         return services;
     }

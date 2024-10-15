@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -15,7 +16,7 @@ public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 
     public SoftDeleteIssueHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
         ILogger<SoftDeleteIssueHandler> logger)
     {

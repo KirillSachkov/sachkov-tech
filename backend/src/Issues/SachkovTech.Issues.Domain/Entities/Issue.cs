@@ -44,7 +44,8 @@ public class Issue : Entity<IssueId>, ISoftDeletable
     public LessonId LessonId { get; private set; }
 
     public IReadOnlyList<FileId> Files => _files;
-
+    
+    public DateTime? DeletionDate { get; private set; }
 
     public void UpdateFiles(IEnumerable<FileId> files)
     {
@@ -57,13 +58,19 @@ public class Issue : Entity<IssueId>, ISoftDeletable
     public void Delete()
     {
         if (_isDeleted == false)
+        {
             _isDeleted = true;
+            DeletionDate = DateTime.UtcNow;
+        }
     }
 
     public void Restore()
     {
         if (_isDeleted)
+        {
             _isDeleted = false;
+            DeletionDate = null;
+        }
     }
 
     public UnitResult<Error> MoveForward()

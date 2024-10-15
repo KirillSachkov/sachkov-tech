@@ -1,9 +1,11 @@
 using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Accounts.Infrastructure;
 
-public class UnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly AccountsDbContext _accountsDbContext;
 
@@ -12,12 +14,16 @@ public class UnitOfWork
         _accountsDbContext = accountsDbContext;
     }
 
-    public async Task<DbTransaction> BeginTransactionAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken = default)
     {
-        var transaction = await _accountsDbContext.Database
-            .BeginTransactionAsync(cancellationToken);
+        var transaction = await _accountsDbContext.Database.BeginTransactionAsync(cancellationToken);
 
         return transaction.GetDbTransaction();
+    }
+
+    public async Task SaveChanges(CancellationToken cancellationToken = default, DbTransaction? dbTransaction = null)
+    {
+        await _accountsDbContext.Database.UseTransactionAsync(dbTransaction, cancellationToken);
+        await _accountsDbContext.SaveChangesAsync(cancellationToken);
     }
 }

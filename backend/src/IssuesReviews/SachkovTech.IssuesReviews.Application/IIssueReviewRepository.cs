@@ -8,4 +8,6 @@ namespace SachkovTech.IssuesReviews.Application;
 public interface IIssueReviewRepository
 {
     Task<Result<IssueReview, Error>> GetById(IssueReviewId id, CancellationToken cancellationToken = default);
+    
+    Task<UnitResult<Error>> Add(IssueReview issueReview, CancellationToken cancellationToken = default);
 }

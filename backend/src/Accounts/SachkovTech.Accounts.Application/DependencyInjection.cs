@@ -23,7 +23,6 @@ public static class DependencyInjection
             .WithScopedLifetime());
 
         services.AddValidatorsFromAssembly(assembly);
-
         return services;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.IssueSolving.Domain.Entities;
+using SachkovTech.IssueSolving.Domain.Enums;
 using SachkovTech.IssueSolving.Domain.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 

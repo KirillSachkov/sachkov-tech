@@ -35,7 +35,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         });
 
         builder.Property(c => c.CreatedAt)
-            .HasColumnType("create_at")
+            .HasColumnName("created_at")
             .IsRequired();
     }
 }

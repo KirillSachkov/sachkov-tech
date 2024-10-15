@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
@@ -22,7 +23,7 @@ public class AddIssueHandler : ICommandHandler<Guid, AddIssueCommand>
 
     public AddIssueHandler(
         IModulesRepository modulesRepository,
-        IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.Issues)] IUnitOfWork unitOfWork,
         IValidator<AddIssueCommand> validator,
         ILogger<AddIssueHandler> logger)
     {

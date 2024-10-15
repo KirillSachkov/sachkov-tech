@@ -69,5 +69,9 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
+
+        builder.Property(i => i.DeletionDate)
+            .IsRequired(false)
+            .HasColumnName("deletion_date");
     }
 }
