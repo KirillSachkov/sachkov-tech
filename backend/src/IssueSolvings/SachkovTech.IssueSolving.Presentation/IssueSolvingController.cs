@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.IssueSolving.Application.Commands.SendOnReview;
+using SachkovTech.IssueSolving.Application.Commands.StopWorking;
 using SachkovTech.IssueSolving.Application.Commands.TakeOnWork;
 using SachkovTech.IssueSolving.Contracts.Requests;
 
@@ -42,6 +43,25 @@ public class IssueSolvingController : ApplicationController
 
         var command = new SendOnReviewCommand(userIssueId, Guid.Parse(userId), request.PullRequestUrl);
 
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("{userIssueId:guid}/cancel")]
+    public async Task<ActionResult> StopWorking(
+        [FromRoute] Guid userIssueId,
+        [FromServices] StopWorkingHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
+
+        var command = new StopWorkingCommand(userIssueId, Guid.Parse(userId));
+        
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)

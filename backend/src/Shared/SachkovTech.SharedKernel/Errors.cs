@@ -31,6 +31,11 @@ public static class Errors
         {
             return Error.Failure("failure", "Failure");
         }
+
+        public static Error NotAllowed()
+        {
+            return Error.Failure("not.allowed", "Not allowed");
+        }
     }
 
     public static class Tokens
