@@ -62,4 +62,10 @@ public class ModulesRepository : IModulesRepository
 
         return module;
     }
+
+    public async Task SetLock(ModuleId moduleId, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+            $"SELECT id, title FROM issues.modules WHERE id = {moduleId.Value} FOR UPDATE NOWAIT", cancellationToken);
+    }
 }

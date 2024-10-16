@@ -13,4 +13,5 @@ public interface IModulesRepository
     Guid Delete(Module module);
     Task<Result<Module, Error>> GetById(ModuleId moduleId, CancellationToken cancellationToken = default);
     Task<Result<Module, Error>> GetByTitle(Title title, CancellationToken cancellationToken = default);
+    Task SetLock(ModuleId moduleId, CancellationToken cancellationToken = default);
 }

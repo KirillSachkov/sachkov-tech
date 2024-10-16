@@ -11,6 +11,5 @@
 
     public record FileResponse(
         Guid Id,
-        string Link
-        );
+        string Link);
 }

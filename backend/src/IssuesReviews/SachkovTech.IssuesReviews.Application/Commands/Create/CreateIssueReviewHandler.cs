@@ -20,7 +20,8 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
 
     public CreateIssueReviewHandler(
         IIssueReviewRepository issueReviewRepository,
-        [FromKeyedServices(Modules.IssuesReviews)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.IssuesReviews)]
+        IUnitOfWork unitOfWork,
         IValidator<CreateIssueReviewCommand> validator,
         ILogger<CreateIssueReviewHandler> logger)
     {
@@ -34,28 +35,36 @@ public class CreateIssueReviewHandler : ICommandHandler<Guid, CreateIssueReviewC
         CreateIssueReviewCommand command,
         CancellationToken cancellationToken = default)
     {
-        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
-        if (validationResult.IsValid == false)
+        try
         {
-            return validationResult.ToList();
+            throw new Exception();
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToList();
+            }
+
+            var issueReview = IssueReview.Create(
+                UserIssueId.Create(command.UserIssueId),
+                UserId.Create(command.UserId),
+                PullRequestUrl.Create(command.PullRequestUrl).Value);
+
+            if (issueReview.IsFailure)
+            {
+                return issueReview.Error.ToErrorList();
+            }
+
+            await _issueReviewRepository.Add(issueReview.Value, cancellationToken);
+
+            await _unitOfWork.SaveChanges(cancellationToken);
+
+            _logger.LogInformation("IssueReview {issueReviewId} was created", issueReview.Value.Id);
+
+            return issueReview.Value.Id.Value;
         }
-
-        var issueReview = IssueReview.Create(
-            UserIssueId.Create(command.UserIssueId),
-            UserId.Create(command.UserId),
-            PullRequestUrl.Create(command.PullRequestUrl).Value);
-
-        if (issueReview.IsFailure)
+        catch (Exception e)
         {
-            return issueReview.Error.ToErrorList();
+            return Errors.General.Failure().ToErrorList();
         }
-        
-        await _issueReviewRepository.Add(issueReview.Value, cancellationToken);
-        
-        await _unitOfWork.SaveChanges(cancellationToken);
-
-        _logger.LogInformation("IssueReview {issueReviewId} was created", issueReview.Value.Id);
-
-        return issueReview.Value.Id.Value;
     }
 }

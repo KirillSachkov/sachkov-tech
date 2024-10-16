@@ -25,7 +25,7 @@ internal class UnitOfWork : IUnitOfWork
 
     public async Task SaveChanges(CancellationToken cancellationToken = default, DbTransaction? dbTransaction = null)
     {
-        await _dbContext.Database.UseTransactionAsync(dbTransaction, cancellationToken);
+        _dbContext.Database.UseTransaction(dbTransaction);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

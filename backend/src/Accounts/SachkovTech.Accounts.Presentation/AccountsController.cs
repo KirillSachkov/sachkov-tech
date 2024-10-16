@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Accounts.Application.Commands.Login;
 using SachkovTech.Accounts.Application.Commands.RefreshTokens;
+using SachkovTech.Accounts.Application.Commands.Register;
 using SachkovTech.Accounts.Contracts.Requests;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
@@ -23,21 +24,21 @@ public class AccountsController : ApplicationController
         return Ok();
     }
 
-    // [HttpPost("registration")]
-    // public async Task<IActionResult> Register(
-    //     [FromBody] RegisterUserRequest request,
-    //     [FromServices] RegisterUserHandler handler,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var result = await handler.Handle(
-    //         new RegisterUserCommand(request.Email, request.UserName, request.Password),
-    //         cancellationToken);
-    //
-    //     if (result.IsFailure)
-    //         return result.Error.ToResponse();
-    //
-    //     return Ok();
-    // }
+    [HttpPost("registration")]
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterUserRequest request,
+        [FromServices] RegisterUserHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(
+            new RegisterUserCommand(request.Email, request.UserName, request.Password),
+            cancellationToken);
+    
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+    
+        return Ok();
+    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(

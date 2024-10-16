@@ -12,7 +12,6 @@ public class UserIssue : Entity<UserIssueId>
     //ef core
     private UserIssue(UserIssueId id) : base(id)
     {
-        
     }
     public UserIssue(
         UserIssueId id,

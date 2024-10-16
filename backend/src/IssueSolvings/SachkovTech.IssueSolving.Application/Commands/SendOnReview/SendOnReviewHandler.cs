@@ -23,7 +23,8 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
     public SendOnReviewHandler(IUserIssueRepository repository,
         ILogger<SendOnReviewHandler> logger,
         IIssuesReviewsContract contract,
-        [FromKeyedServices(Modules.IssueSolving)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(Modules.IssueSolving)]
+        IUnitOfWork unitOfWork,
         IValidator<SendOnReviewCommand> validator)
     {
         _repository = repository;
@@ -42,7 +43,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
         {
             return validationResult.ToList();
         }
-        
+
         var userIssue = await _repository
             .GetUserIssueById(UserIssueId.Create(command.UserIssueId), cancellationToken);
 
@@ -70,7 +71,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
         }
 
         await _unitOfWork.SaveChanges(cancellationToken);
-        
+
         _logger.LogInformation("Issue with UserIssueId {UserIssueId} was created", command.UserIssueId);
 
         return UnitResult.Success<ErrorList>();

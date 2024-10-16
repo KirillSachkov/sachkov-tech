@@ -30,7 +30,7 @@ public class IssueSolvingController : ApplicationController
         return Ok(result.Value);
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpPost("{userIssueId:guid}/review")]
     public async Task<ActionResult> SendOnReview(
         [FromRoute] Guid userIssueId,
@@ -38,9 +38,9 @@ public class IssueSolvingController : ApplicationController
         [FromBody] SendOnReviewRequest request,
         CancellationToken cancellationToken = default)
     {
-        var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
+        //var userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
-        var command = new SendOnReviewCommand(userIssueId, Guid.Parse(userId), request.PullRequestUrl);
+        var command = new SendOnReviewCommand(userIssueId, Guid.Parse("b5e92402-28d4-4f9b-9272-0fa5fad90976"), request.PullRequestUrl);
 
         var result = await handler.Handle(command, cancellationToken);
 

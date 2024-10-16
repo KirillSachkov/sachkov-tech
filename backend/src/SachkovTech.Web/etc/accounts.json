@@ -12,7 +12,8 @@
       "issues.read",
       "solving.issues.read",
       "solving.issues.send.on.review"
-    ]
+    ],
+    "Participant": []
   },
   "Permissions": {
     "Issues": [

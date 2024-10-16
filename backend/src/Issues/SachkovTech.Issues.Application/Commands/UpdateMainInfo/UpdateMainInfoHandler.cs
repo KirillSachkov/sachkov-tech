@@ -37,7 +37,10 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
         {
             return validationResult.ToList();
         }
+        
+        using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
 
+        await _modulesRepository.SetLock(command.ModuleId, cancellationToken);
         var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)
             return moduleResult.Error.ToErrorList();
@@ -48,6 +51,8 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
         moduleResult.Value.UpdateMainInfo(title, description);
 
         await _unitOfWork.SaveChanges(cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
 
         _logger.LogInformation(
             "Updated module {title}, {description} with id {moduleId}",

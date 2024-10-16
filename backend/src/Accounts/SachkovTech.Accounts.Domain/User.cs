@@ -21,4 +21,14 @@ public class User : IdentityUser<Guid>
             _roles = [role]
         };
     }
+
+    public static User CreatePartisipant(string userName, string email, Role role)
+    {
+        return new User
+        {
+            UserName = userName,
+            Email = email,
+            _roles = [role]
+        };
+    }
 }

@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data.Common;
+using CSharpFunctionalExtensions;
 using SachkovTech.IssuesReviews.Contracts.Requests;
 using SachkovTech.SharedKernel;
 
@@ -11,10 +12,12 @@ public interface IIssuesReviewsContract
         Guid userId,
         AddCommentRequest request,
         CancellationToken cancellationToken = default);
-    
+
     Task<UnitResult<ErrorList>> CreateIssueReview(
         Guid userIssueId,
         Guid userId,
         CreateIssueReviewRequest request,
         CancellationToken cancellationToken = default);
+
+    Task SaveChanges(DbTransaction transaction, CancellationToken cancellationToken = default);
 }
