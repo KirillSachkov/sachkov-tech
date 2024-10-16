@@ -24,7 +24,8 @@ public class FilePath : ValueObject
 
     public static Result<FilePath, Error> Create(string filePath)
     {
-        var pathParts = filePath.Split('/');
+        var pathParts = filePath.Split('/')
+            .Where(p => string.IsNullOrWhiteSpace(p) == false);
 
         if(pathParts.Count() < 2)
             return Errors.General.ValueIsInvalid("file path");
@@ -32,7 +33,7 @@ public class FilePath : ValueObject
         if (string.IsNullOrWhiteSpace(filePath))
             return Errors.General.ValueIsInvalid("file path");
 
-        return new FilePath(filePath);
+        return new FilePath(string.Join("/", pathParts));
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

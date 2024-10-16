@@ -8,6 +8,7 @@ using SachkovTech.Files.Domain;
 using SachkovTech.Files.Domain.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SachkovTech.Files.Contracts.Dtos;
 
 namespace SachkovTech.Files.Application.Commands.UploadFiles;
 
@@ -31,11 +32,24 @@ public class UploadFilesHandler : ICommandHandler<UploadFilesResponse, UploadFil
     {
         List<FileId> fileIds = [];
 
-        var uploadAsyncEnum = _fileProvider.UploadFiles(command.Files, cancellationToken);
+        var uploadFiles = new List<UploadFileData>();
+
+        foreach (var file in command.Files)
+        {
+            var mimeTypeResult = MimeType.Parse(file.FileName);
+            if (mimeTypeResult.IsFailure)
+                continue;
+
+            var prefix = mimeTypeResult.Value.Value.ToLower();
+
+            uploadFiles.Add(new UploadFileData(file.Content, command.OwnerTypeName.ToLower(), file.FileName, prefix));
+        }
+
+        var uploadAsyncEnum = _fileProvider.UploadFiles(uploadFiles, cancellationToken);
 
         await foreach (var uploadFileResult in uploadAsyncEnum)
         {
-            if (!uploadFileResult.IsSuccess) continue;
+            if (uploadFileResult.IsFailure) continue;
 
             var uploadResult = uploadFileResult.Value;
 

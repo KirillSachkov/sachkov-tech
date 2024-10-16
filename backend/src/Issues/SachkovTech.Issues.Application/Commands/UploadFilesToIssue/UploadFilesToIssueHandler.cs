@@ -60,11 +60,7 @@ public class UploadFilesToIssueHandler : ICommandHandler<UploadFilesResponse, Up
         if (issueResult.IsFailure)
             return issueResult.Error.ToErrorList();
 
-        List<UploadFileData> filesData = (
-            from file in command.Files
-            select new UploadFileData(file.Content, BUCKET_NAME, file.FileName)).ToList();
-
-        var request = new UploadFilesRequest(nameof(Issue), command.IssueId, filesData);
+        var request = new UploadFilesRequest(nameof(Issue), command.IssueId, command.Files);
 
         var uploadFileResult = await _filesContracts.UploadFiles(request, cancellationToken);
 
