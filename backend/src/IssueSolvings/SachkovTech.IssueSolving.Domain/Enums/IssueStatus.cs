@@ -4,5 +4,6 @@ public enum IssueStatus
 {
     AtWork,
     UnderReview,
-    Completed
+    Completed,
+    NotAtWork
 }

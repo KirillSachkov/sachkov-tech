@@ -72,6 +72,17 @@ public class UserIssue : Entity<UserIssueId>
         return Error.Failure("issue.status.invalid", "issue status should be not completed or under review");
     }
 
+    public UnitResult<Error> StopWorking()
+    {
+        if (Status != IssueStatus.AtWork)
+            return Error.Failure("issue.status.invalid", "issue status should be at work");
+
+        Status = IssueStatus.NotAtWork;
+        
+        return Result.Success<Error>();
+
+    }
+
     public UnitResult<Error> CompleteTask()
     {
         if (Status != IssueStatus.UnderReview)
