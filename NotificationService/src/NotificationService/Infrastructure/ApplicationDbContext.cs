@@ -16,34 +16,24 @@ public class ApplicationDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .ToTable("user");
-        
-        modelBuilder.Entity<Role>()
-            .ToTable("role");
-        
         modelBuilder.Entity<Notifications>()
             .ToTable("notifications");
-        
+
         modelBuilder.Entity<Notifications>()
             .HasKey(x => x.Id);
 
         modelBuilder.Entity<Notifications>()
-            .HasMany(n => n.Users)
-            .WithOne();
-        
+            .Property(n => n.UserIds)
+            .HasColumnType("uuid[]");
+
         modelBuilder.Entity<Notifications>()
-            .HasMany(n => n.Roles)
-            .WithOne();
+            .Property(n => n.RoleIds)
+            .HasColumnType("uuid[]");
         
         modelBuilder.Entity<NotificationSettings>()
             .ToTable("notification_settings");
         
         modelBuilder.Entity<NotificationSettings>()
-            .HasKey(n => n.Id);
-
-        modelBuilder.Entity<NotificationSettings>()
-            .HasOne<User>()
-            .WithOne();
+            .HasKey(x => x.Id);
     }
 }
