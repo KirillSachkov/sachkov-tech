@@ -2,9 +2,13 @@
 
 public class NotificationSettings
 {
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public bool Email { get; set; } = true;
-    public bool Telegram { get; set; } = false;
-    public bool Web { get; set; } = true;
+    public Guid Id { get; init; }
+
+    public Guid UserId { get; init; }
+
+    public bool Email { get; init; } = true;
+
+    public bool Telegram { get; init; }
+
+    public bool Web { get; init; } = true;
 }

@@ -22,10 +22,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\" />
-      <Folder Include="Migrations\" />
-      <Folder Include="Presentation\" />
-    </ItemGroup>
-
 </Project>
