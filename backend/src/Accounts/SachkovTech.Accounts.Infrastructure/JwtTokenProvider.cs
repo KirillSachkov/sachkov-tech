@@ -18,16 +18,16 @@ namespace SachkovTech.Accounts.Infrastructure;
 public class JwtTokenProvider : ITokenProvider
 {
     private readonly PermissionManager _permissionManager;
-    private readonly AccountsDbContext _accountContext;
+    private readonly AccountsWriteDbContext _accountWriteContext;
     private readonly JwtOptions _jwtOptions;
 
     public JwtTokenProvider(
         IOptions<JwtOptions> options,
         PermissionManager permissionManager,
-        AccountsDbContext accountContext)
+        AccountsWriteDbContext accountWriteContext)
     {
         _permissionManager = permissionManager;
-        _accountContext = accountContext;
+        _accountWriteContext = accountWriteContext;
         _jwtOptions = options.Value;
     }
 
@@ -78,8 +78,8 @@ public class JwtTokenProvider : ITokenProvider
             RefreshToken = Guid.NewGuid()
         };
 
-        _accountContext.Add(refreshSession);
-        await _accountContext.SaveChangesAsync(cancellationToken);
+        _accountWriteContext.Add(refreshSession);
+        await _accountWriteContext.SaveChangesAsync(cancellationToken);
 
         return refreshSession.RefreshToken;
     }

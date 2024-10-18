@@ -1,13 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Issues.Domain;
+using SachkovTech.Core.Dtos;
+using SachkovTech.Issues.Application;
 
 namespace SachkovTech.Issues.Infrastructure.DbContexts;
 
-public class WriteDbContext(IConfiguration configuration) : DbContext
+public class IssuesReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
-    public DbSet<Module> Modules => Set<Module>();
+    public IQueryable<ModuleDto> Modules => Set<ModuleDto>();
+    public IQueryable<IssueDto> Issues => Set<IssueDto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -15,15 +17,19 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("issues");
-
+        
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(WriteDbContext).Assembly,
-            type => type.FullName?.Contains("Configurations.Write") ?? false);
+            typeof(IsssuesWriteDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Read") ?? false);
+
+        modelBuilder.Entity<IssueDto>().HasQueryFilter(i => !i.IsDeleted);
     }
 
     private ILoggerFactory CreateLoggerFactory() =>
