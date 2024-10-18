@@ -6,7 +6,7 @@ using SachkovTech.IssueSolving.Application;
 
 namespace SachkovTech.IssueSolving.Infrastructure.DbContexts;
 
-public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+public class IssueSolvingReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
     public IQueryable<UserIssueDto> UserIssues => Set<UserIssueDto>();
 
@@ -25,7 +25,7 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
         modelBuilder.HasDefaultSchema("issues-solving");
 
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(ReadDbContext).Assembly,
+            typeof(IssueSolvingReadDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);
     }
 

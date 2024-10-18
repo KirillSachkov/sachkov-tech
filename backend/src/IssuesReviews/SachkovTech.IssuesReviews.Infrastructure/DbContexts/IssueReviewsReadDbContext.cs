@@ -6,7 +6,7 @@ using SachkovTech.IssuesReviews.Application;
 
 namespace SachkovTech.IssuesReviews.Infrastructure.DbContexts;
 
-public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+public class IssueReviewsReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
     public IQueryable<IssueReviewDto> IssueReviewDtos => Set<IssueReviewDto>();
     public IQueryable<CommentDto> Comments => Set<CommentDto>();
@@ -26,7 +26,7 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
         modelBuilder.HasDefaultSchema("issues-reviews");
 
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(WriteDbContext).Assembly,
+            typeof(IssueReviewsWriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);
     }
 

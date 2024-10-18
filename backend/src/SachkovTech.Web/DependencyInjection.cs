@@ -1,21 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using SachkovTech.Accounts.Infrastructure;
-using SachkovTech.Files.Application;
 using SachkovTech.Files.Infrastructure;
 using SachkovTech.Files.Presentation;
 using SachkovTech.Framework.Authorization;
-using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using SachkovTech.Issues.Presentation;
-using SachkovTech.IssueSolving.Application;
 using SachkovTech.IssueSolving.Infrastructure;
-using SachkovTech.IssuesReviews.Application;
 using Serilog.Events;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SachkovTech.Core.Options;
-using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Presentation;
+using SachkovTech.Core.Abstractions;
 using SachkovTech.Framework;
 using SachkovTech.IssuesReviews.Infrastructure;
 using SachkovTech.IssuesReviews.Presentation;
@@ -28,7 +25,6 @@ public static class DependencyInjection
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAccountsInfrastructure(configuration);
-        services.AddAccountsApplication();
         services.AddAccountsPresentation();
 
         return services;
@@ -37,7 +33,6 @@ public static class DependencyInjection
     public static IServiceCollection AddIssuesReviewsModule(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIssuesReviewsApplication();
         services.AddIssuesReviewsPresentation();
         services.AddIssuesReviewsInfrastructure(configuration);
 
@@ -47,7 +42,6 @@ public static class DependencyInjection
     public static IServiceCollection AddFilesModule(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddFilesApplication();
         services.AddFilesInfrastructure(configuration);
         services.AddFilesPresentation();
 
@@ -57,7 +51,6 @@ public static class DependencyInjection
     public static IServiceCollection AddIssuesModule(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIssuesApplication();
         services.AddIssuesInfrastructure(configuration);
         services.AddIssuesPresentation();
 
@@ -67,7 +60,6 @@ public static class DependencyInjection
     public static IServiceCollection AddIssueSolvingModule(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIssueSolvingApplication();
         services.AddIssueSolvingInfrastructure(configuration);
 
         return services;
@@ -115,6 +107,33 @@ public static class DependencyInjection
 
         services.AddSerilog();
 
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationLayers(this IServiceCollection services)
+    {
+        var assemblies = new[]
+        {
+            typeof(SachkovTech.Accounts.Application.DependencyInjection).Assembly,
+            typeof(SachkovTech.Files.Application.DependencyInjection).Assembly,
+            typeof(SachkovTech.Issues.Application.DependencyInjection).Assembly,
+            typeof(SachkovTech.IssueSolving.Application.DependencyInjection).Assembly,
+            typeof(SachkovTech.IssuesReviews.Application.DependencyInjection).Assembly
+        };
+
+        services.Scan(scan => scan.FromAssemblies(assemblies)
+            .AddClasses(classes => classes
+                .AssignableToAny(typeof(ICommandHandler<,>), typeof(ICommandHandler<>)))
+            .AsSelfWithInterfaces()
+            .WithScopedLifetime());
+
+        services.Scan(scan => scan.FromAssemblies(assemblies)
+            .AddClasses(classes => classes
+                .AssignableToAny(typeof(IQueryHandler<,>), typeof(IQueryHandlerWithResult<,>)))
+            .AsSelfWithInterfaces()
+            .WithScopedLifetime());
+
+        services.AddValidatorsFromAssemblies(assemblies);
         return services;
     }
 }

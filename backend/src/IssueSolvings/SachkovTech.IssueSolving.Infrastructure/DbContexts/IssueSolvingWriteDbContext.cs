@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SachkovTech.IssuesReviews.Domain;
+using SachkovTech.IssueSolving.Domain.Entities;
 
-namespace SachkovTech.IssuesReviews.Infrastructure.DbContexts;
+namespace SachkovTech.IssueSolving.Infrastructure.DbContexts;
 
-public class WriteDbContext(IConfiguration configuration) : DbContext
+public class IssueSolvingWriteDbContext(IConfiguration configuration) : DbContext
 {
-    public DbSet<IssueReview> IssueReviews => Set<IssueReview>();
+    public DbSet<UserIssue> UserIssues => Set<UserIssue>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -19,13 +19,11 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("issues-reviews");
+        modelBuilder.HasDefaultSchema("issues-solving");
 
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(WriteDbContext).Assembly,
+            typeof(IssueSolvingWriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
-        
-        modelBuilder.HasDefaultSchema("issues_reviews");
     }
 
     private ILoggerFactory CreateLoggerFactory() =>

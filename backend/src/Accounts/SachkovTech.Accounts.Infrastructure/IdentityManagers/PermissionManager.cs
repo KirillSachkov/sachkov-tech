@@ -3,32 +3,32 @@ using SachkovTech.Accounts.Domain;
 
 namespace SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
-public class PermissionManager(AccountsDbContext accountsContext)
+public class PermissionManager(AccountsWriteDbContext accountsWriteContext)
 {
     public async Task<Permission?> FindByCode(string code)
-        => await accountsContext.Permissions.FirstOrDefaultAsync(p => p.Code == code);
+        => await accountsWriteContext.Permissions.FirstOrDefaultAsync(p => p.Code == code);
 
     public async Task AddRangeIfExist(
         IEnumerable<string> permissions, CancellationToken cancellationToken = default)
     {
         foreach (var permissionCode in permissions)
         {
-            var isPermissionExist = await accountsContext.Permissions
+            var isPermissionExist = await accountsWriteContext.Permissions
                 .AnyAsync(p => p.Code == permissionCode, cancellationToken);
 
             if (isPermissionExist)
                 return;
 
-            await accountsContext.Permissions.AddAsync(new Permission { Code = permissionCode }, cancellationToken);
+            await accountsWriteContext.Permissions.AddAsync(new Permission { Code = permissionCode }, cancellationToken);
         }
 
-        await accountsContext.SaveChangesAsync(cancellationToken);
+        await accountsWriteContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<HashSet<string>> GetUserPermissionCodes(
         Guid userId, CancellationToken cancellationToken = default)
     {
-        var permissions = await accountsContext.Users
+        var permissions = await accountsWriteContext.Users
             .Include(u => u.Roles)
             .Where(u => u.Id == userId)
             .SelectMany(u => u.Roles)

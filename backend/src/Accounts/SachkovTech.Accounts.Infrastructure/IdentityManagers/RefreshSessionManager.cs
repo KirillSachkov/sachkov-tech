@@ -6,12 +6,12 @@ using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
-public class RefreshSessionManager(AccountsDbContext accountsContext) : IRefreshSessionManager
+public class RefreshSessionManager(AccountsWriteDbContext accountsWriteContext) : IRefreshSessionManager
 {
     public async Task<Result<RefreshSession, Error>> GetByRefreshToken(
         Guid refreshToken, CancellationToken cancellationToken)
     {
-        var refreshSession = await accountsContext.RefreshSessions
+        var refreshSession = await accountsWriteContext.RefreshSessions
             .Include(r => r.User)
             .FirstOrDefaultAsync(r => r.RefreshToken == refreshToken, cancellationToken);
 
@@ -23,6 +23,6 @@ public class RefreshSessionManager(AccountsDbContext accountsContext) : IRefresh
 
     public void Delete(RefreshSession refreshSession)
     {
-        accountsContext.RefreshSessions.Remove(refreshSession);
+        accountsWriteContext.RefreshSessions.Remove(refreshSession);
     }
 }
