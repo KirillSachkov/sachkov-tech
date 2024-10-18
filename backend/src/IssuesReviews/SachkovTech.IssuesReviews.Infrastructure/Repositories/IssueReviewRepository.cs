@@ -10,9 +10,9 @@ namespace SachkovTech.IssuesReviews.Infrastructure.Repositories;
 
 public class IssueReviewRepository : IIssueReviewRepository
 {
-    private readonly WriteDbContext _dbContext;
+    private readonly IssueReviewsWriteDbContext _dbContext;
 
-    public IssueReviewRepository(WriteDbContext dbContext)
+    public IssueReviewRepository(IssueReviewsWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

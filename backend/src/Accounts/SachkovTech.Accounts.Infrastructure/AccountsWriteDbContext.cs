@@ -7,7 +7,7 @@ using SachkovTech.Accounts.Domain;
 
 namespace SachkovTech.Accounts.Infrastructure;
 
-public class AccountsDbContext(IConfiguration configuration)
+public class AccountsWriteDbContext(IConfiguration configuration)
     : IdentityDbContext<User, Role, Guid>
 {
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();

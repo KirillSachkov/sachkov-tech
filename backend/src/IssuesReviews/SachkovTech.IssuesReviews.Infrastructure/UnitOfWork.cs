@@ -9,9 +9,9 @@ namespace SachkovTech.IssuesReviews.Infrastructure;
 
 internal class UnitOfWork : IUnitOfWork
 {
-    private readonly WriteDbContext _dbContext;
+    private readonly IssueReviewsWriteDbContext _dbContext;
 
-    public UnitOfWork(WriteDbContext dbContext)
+    public UnitOfWork(IssueReviewsWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -23,9 +23,8 @@ internal class UnitOfWork : IUnitOfWork
         return transaction.GetDbTransaction();
     }
 
-    public async Task SaveChanges(CancellationToken cancellationToken = default, DbTransaction? dbTransaction = null)
+    public async Task SaveChanges(CancellationToken cancellationToken = default)
     {
-        await _dbContext.Database.UseTransactionAsync(dbTransaction, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

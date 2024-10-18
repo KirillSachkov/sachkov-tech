@@ -7,12 +7,12 @@ namespace SachkovTech.Issues.Infrastructure.Services;
 
 public class DeleteExpiredIssuesService
 {
-    private readonly WriteDbContext _writeDbContext;
+    private readonly IssuesWriteDbContext _issuesWriteDbContext;
 
     public DeleteExpiredIssuesService(
-        WriteDbContext writeDbContext)
+        IssuesWriteDbContext issuesWriteDbContext)
     {
-        _writeDbContext = writeDbContext;
+        _issuesWriteDbContext = issuesWriteDbContext;
     }
     
     public async Task Process(CancellationToken cancellationToken)
@@ -24,11 +24,11 @@ public class DeleteExpiredIssuesService
             module.DeleteExpiredIssues();
         }
 
-        await _writeDbContext.SaveChangesAsync(cancellationToken);
+        await _issuesWriteDbContext.SaveChangesAsync(cancellationToken);
     }
 
     private async Task<IEnumerable<Module>> GetModulesWithIssuesAsync(CancellationToken cancellationToken)
     {
-        return await _writeDbContext.Modules.Include(m => m.Issues).ToListAsync(cancellationToken);
+        return await _issuesWriteDbContext.Modules.Include(m => m.Issues).ToListAsync(cancellationToken);
     }
 }

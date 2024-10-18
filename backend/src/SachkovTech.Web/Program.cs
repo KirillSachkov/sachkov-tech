@@ -46,6 +46,7 @@ builder.Services.AddFilesModule(builder.Configuration);
 builder.Services.AddIssuesModule(builder.Configuration);
 builder.Services.AddIssuesReviewsModule(builder.Configuration);
 builder.Services.AddIssueSolvingModule(builder.Configuration);
+builder.Services.AddApplicationLayers();
 
 builder.Services.AddControllers();
 

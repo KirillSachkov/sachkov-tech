@@ -40,8 +40,8 @@ public static class DepedencyInjection
 
     private static IServiceCollection AddDbContexts(this IServiceCollection services)
     {
-        services.AddScoped<WriteDbContext>();
-        services.AddScoped<IReadDbContext, ReadDbContext>();
+        services.AddScoped<IssueReviewsWriteDbContext>();
+        services.AddScoped<IReadDbContext, IssueReviewsReadDbContext>();
 
         return services;
     }

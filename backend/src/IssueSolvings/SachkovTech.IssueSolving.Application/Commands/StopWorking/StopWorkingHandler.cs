@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.SharedKernel;
@@ -14,7 +15,7 @@ public class StopWorkingHandler : ICommandHandler<StopWorkingCommand>
     public StopWorkingHandler(
         IUserIssueRepository repository,
         ILogger<StopWorkingHandler> logger,
-        IUnitOfWork unitOfWork)
+        [FromKeyedServices(Modules.IssueSolving)]IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _logger = logger;
